@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Services - HomeServe</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>🏠 HomeServe</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="buyer-login.html" class="btn-secondary">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Browse Services</h1>
+                <p>Find the perfect service provider for your needs - All with 0% commission!</p>
+            </div>
+
+            <div class="dashboard-grid" id="servicesContainer">
+                <!-- Sample Service 1 -->
+                <div class="dashboard-card">
+                    <h3>🔧 Professional Plumbing</h3>
+                    <div class="service-listing">
+                        <h4>John's Plumbing Services</h4>
+                        <p>Expert plumbing repairs, installations, and maintenance. 10+ years of experience.</p>
+                        <div class="service-meta">
+                            <span class="price">$50/hr</span>
+                            <button class="btn btn-primary" onclick="contactProvider('John')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Service 2 -->
+                <div class="dashboard-card">
+                    <h3>⚡ Electrical Services</h3>
+                    <div class="service-listing">
+                        <h4>Mike's Electric Solutions</h4>
+                        <p>Licensed electrician providing all electrical services. Safety guaranteed.</p>
+                        <div class="service-meta">
+                            <span class="price">$60/hr</span>
+                            <button class="btn btn-primary" onclick="contactProvider('Mike')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Service 3 -->
+                <div class="dashboard-card">
+                    <h3>🧹 House Cleaning</h3>
+                    <div class="service-listing">
+                        <h4>Sarah's Cleaning Services</h4>
+                        <p>Professional house cleaning with eco-friendly products. Detail-oriented.</p>
+                        <div class="service-meta">
+                            <span class="price">$40/hr</span>
+                            <button class="btn btn-primary" onclick="contactProvider('Sarah')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Service 4 -->
+                <div class="dashboard-card">
+                    <h3>🎨 Painting Services</h3>
+                    <div class="service-listing">
+                        <h4>David's Painting Co.</h4>
+                        <p>Interior and exterior painting. Quality finish every time.</p>
+                        <div class="service-meta">
+                            <span class="price">$45/hr</span>
+                            <button class="btn btn-primary" onclick="contactProvider('David')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Service 5 -->
+                <div class="dashboard-card">
+                    <h3>🛠️ Carpentry</h3>
+                    <div class="service-listing">
+                        <h4>Tom's Woodworks</h4>
+                        <p>Custom furniture, repairs, and renovations. Craftsmanship you can trust.</p>
+                        <div class="service-meta">
+                            <span class="price">$55/hr</span>
+                            <button class="btn btn-primary" onclick="contactProvider('Tom')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Service 6 -->
+                <div class="dashboard-card">
+                    <h3>🌱 Gardening & Landscaping</h3>
+                    <div class="service-listing">
+                        <h4>Green Thumb Gardens</h4>
+                        <p>Lawn care, garden design, and maintenance services.</p>
+                        <div class="service-meta">
+                            <span class="price">$35/hr</span>
+                            <button class="btn btn-primary" onclick="contactProvider('Green Thumb')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 HomeServe - 0% Commission Marketplace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
