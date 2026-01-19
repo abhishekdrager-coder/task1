@@ -515,6 +515,13 @@
                 const data = JSON.parse(localStorage.getItem('providerProfile') || '{}');
                 
                 // Direct updates with innerHTML
+                const providerNameDisplay = document.getElementById('providerNameDisplay');
+                if (providerNameDisplay && data.businessName) {
+                    providerNameDisplay.textContent = data.businessName;
+                } else if (providerNameDisplay && data.name) {
+                    providerNameDisplay.textContent = data.name;
+                }
+                
                 if (data.businessName) {
                     document.getElementById('displayName').innerHTML = data.businessName;
                 }
