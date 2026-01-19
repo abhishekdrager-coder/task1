@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Task Masters - Connect with skilled professionals for all your service needs">
+    <meta name="theme-color" content="#4A90E2">
+    <title>Task Masters - Your Trusted Service Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body.dark-mode { background: #1a1a1a !important; color: #e0e0e0; }
+        body.dark-mode .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p { color: #b0b0b0; }
+        body.dark-mode .modern-navbar { background: #0d1117 !important; }
+        body.dark-mode .service-card, body.dark-mode .feature-card { background: #0d1117; border: 1px solid #30363d; }
+        body.dark-mode .footer { background: #0d1117; border-top: 1px solid #30363d; }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e0e0; }
+    </style>
+    <script>
+        (function() {
+            try {
+                const custSettings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                const provSettings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (custSettings.darkMode === true || provSettings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🎯 Task Masters</h2>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#services">Services</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#about">About</a>
+                <a href="service-provider-login.html" class="btn-provider" id="providerBtn">Become a Provider</a>
+                <button class="btn-login" id="loginBtn" onclick="showCustomerLogin()">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Get Things Done by Skilled Professionals</h1>
+            <p class="hero-subtitle">Book trusted service providers for home repairs, cleaning, beauty, wellness, and more</p>
+            
+            <div class="commission-badge">
+                <span class="badge-icon">🎉</span>
+                <span class="badge-text">0% Commission • Providers Keep 100% of Your Payment</span>
+            </div>
+            
+            <div class="search-bar" style="position: relative;">
+                <input type="text" id="serviceSearch" placeholder="What service do you need? (e.g., plumber, cleaner, tutor)" autocomplete="off" />
+                <button class="btn-search" onclick="searchService()">🔍 Search</button>
+                <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 15px 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 400px; overflow-y: auto; z-index: 1000; margin-top: -1px;"></div>
+            </div>
+
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <strong>50,000+</strong>
+                    <span>Service Providers</span>
+                </div>
+                <div class="stat-item">
+                    <strong>500,000+</strong>
+                    <span>Happy Customers</span>
+                </div>
+                <div class="stat-item">
+                    <strong>100+</strong>
+                    <span>Services Available</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-section">
+        <h2 class="section-title">Popular Services</h2>
+        <p class="section-subtitle">Browse our most requested services</p>
+        
+        <div class="services-grid">
+            <div class="service-card" onclick="selectService('Cleaning')">
+                <div class="service-icon">🧹</div>
+                <h3>Home Cleaning</h3>
+                <p>Deep cleaning, regular maintenance</p>
+            </div>
+            <div class="service-card" onclick="selectService('Plumbing')">
+                <div class="service-icon">🔧</div>
+                <h3>Plumbing</h3>
+                <p>Repairs, installations, maintenance</p>
+            </div>
+            <div class="service-card" onclick="selectService('Electrical')">
+                <div class="service-icon">⚡</div>
+                <h3>Electrical Work</h3>
+                <p>Wiring, fixtures, troubleshooting</p>
+            </div>
+            <div class="service-card" onclick="selectService('Carpentry')">
+                <div class="service-icon">🪚</div>
+                <h3>Carpentry</h3>
+                <p>Furniture assembly, repairs</p>
+            </div>
+            <div class="service-card" onclick="selectService('Painting')">
+                <div class="service-icon">🎨</div>
+                <h3>Painting</h3>
+                <p>Interior, exterior, touch-ups</p>
+            </div>
+            <div class="service-card" onclick="selectService('Beauty')">
+                <div class="service-icon">💇</div>
+                <h3>Beauty & Salon</h3>
+                <p>Hair, makeup, spa services</p>
+            </div>
+            <div class="service-card" onclick="selectService('Tutoring')">
+                <div class="service-icon">📚</div>
+                <h3>Tutoring</h3>
+                <p>Academic subjects, skills training</p>
+            </div>
+            <div class="service-card" onclick="selectService('Pest Control')">
+                <div class="service-icon">🐛</div>
+                <h3>Pest Control</h3>
+                <p>Inspection, treatment, prevention</p>
+            </div>
+            <div class="service-card" onclick="selectService('AC Repair')">
+                <div class="service-icon">❄️</div>
+                <h3>AC Repair</h3>
+                <p>Installation, servicing, repair</p>
+            </div>
+            <div class="service-card" onclick="selectService('Babysitting')">
+                <div class="service-icon">👶</div>
+                <h3>Babysitting</h3>
+                <p>Childcare, nanny services</p>
+            </div>
+            <div class="service-card" onclick="selectService('Moving')">
+                <div class="service-icon">📦</div>
+                <h3>Moving & Packing</h3>
+                <p>Relocation, packing services</p>
+            </div>
+            <div class="service-card" onclick="selectService('Fitness')">
+                <div class="service-icon">💪</div>
+                <h3>Personal Training</h3>
+                <p>Fitness, yoga, nutrition coaching</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Choose a Service</h3>
+                <p>Browse and select the service you need</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Pick a Provider</h3>
+                <p>View profiles, ratings, and prices</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Book & Pay</h3>
+                <p>Schedule a time and make secure payment</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h3>Get It Done</h3>
+                <p>Professional service at your doorstep</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Provider CTA -->
+    <section class="provider-cta">
+        <div class="cta-content">
+            <h2>Want to Earn as a Service Provider?</h2>
+            <p>Join thousands of professionals earning on their own schedule</p>
+            <div class="cta-highlight">✨ Keep 100% of what you earn • Zero commission fees ✨</div>
+            <a href="service-provider-login.html" class="btn-cta">Register as Provider</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <h2 class="section-title">Why Choose Task Masters?</h2>
+        <div class="features-grid">
+            <div class="feature-box">
+                <div class="feature-icon">💰</div>
+                <h3>0% Commission</h3>
+                <p>100% of your payment goes directly to the service provider</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon">✅</div>
+                <h3>Verified Professionals</h3>
+                <p>All providers are background-checked and verified</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon">💯</div>
+                <h3>Quality Guaranteed</h3>
+                <p>Money-back guarantee if you're not satisfied</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon">💳</div>
+                <h3>Secure Payments</h3>
+                <p>Safe and encrypted payment processing</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-icon">🕐</div>
+                <h3>24/7 Support</h3>
+                <p>Customer support available anytime</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="careers.html">Careers</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="safety.html">Safety</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Providers</h4>
+                <a href="service-provider-login.html">Provider Login</a>
+                <a href="service-provider-login.html">Become a Provider</a>
+                <a href="provider-resources.html">Provider Resources</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Customer Login</h2>
+            <form class="login-form" onsubmit="handleCustomerLogin(event)">
+                <input type="email" id="customerEmail" placeholder="Email Address" required />
+                <input type="password" id="customerPassword" placeholder="Password" required />
+                <div style="text-align: left; margin: 10px 0;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="customerRememberMe" style="width: auto; margin: 0;" />
+                        <span style="color: #666; font-size: 14px;">Remember me</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn-submit">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Update navigation based on login status
+        window.addEventListener('DOMContentLoaded', () => {
+            const customerAuth = Auth.isLoggedIn('customer');
+            const providerAuth = Auth.isLoggedIn('provider');
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const providerBtn = document.getElementById('providerBtn');
+            
+            if (customerAuth) {
+                // Replace login button with dashboard link
+                loginBtn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
+                // Keep provider button as-is for customers
+            } else if (providerAuth) {
+                // Replace both buttons for providers
+                loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
+                providerBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Task Masters</title>
+    <link rel="stylesheet" href="styles.css?v=5.0">
+    <style>
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        body.dark-mode .modern-navbar {
+            background: #0d1117 !important;
+        }
+        body.dark-mode .icon-dashboard-container {
+            background: #1a1a1a;
+        }
+        body.dark-mode .icon-dashboard-header h1 {
+            color: #ffffff;
+        }
+        body.dark-mode .icon-dashboard-header p {
+            color: #b0b0b0;
+        }
+        body.dark-mode .profile-form-container {
+            background: #0d1117 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        body.dark-mode .profile-header h2 {
+            color: #ffffff;
+        }
+        body.dark-mode .form-section h3 {
+            color: #e0e0e0;
+        }
+        body.dark-mode .form-group label {
+            color: #b0b0b0;
+        }
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background: #161b22;
+            color: #e0e0e0;
+            border: 1px solid #30363d;
+        }
+        body.dark-mode .form-group input:focus,
+        body.dark-mode .form-group select:focus,
+        body.dark-mode .form-group textarea:focus {
+            border-color: #667eea;
+            background: #1a1f2e;
+        }
+        body.dark-mode .footer {
+            background: #0d1117;
+            border-top: 1px solid #30363d;
+        }
+        body.dark-mode .footer h3,
+        body.dark-mode .footer h4,
+        body.dark-mode .footer p,
+        body.dark-mode .footer a {
+            color: #e0e0e0;
+        }
+    </style>
+    <script>
+        // Check and apply dark mode on page load
+        (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {
+                console.error('Error loading dark mode:', e);
+            }
+        })();
+    </script>
+</head>
+<body>
+    <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0;">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="customer-dashboard.html" style="text-decoration: none;">
+                    <div class="logo-wrapper" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <span class="logo-icon" style="font-size: 2.5em;">🎯</span>
+                        <span class="logo-text" style="font-size: 32px; font-weight: 700; color: #ffffff;">Task Masters</span>
+                    </div>
+                </a>
+            </div>
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 30px;">
+                <a href="customer-dashboard.html" class="nav-btn" style="display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 25px; text-decoration: none; color: white; font-weight: 600; font-size: 15px; cursor: pointer;">← Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="icon-dashboard-container">
+        <div class="icon-dashboard-header">
+            <h1>👤 Profile Settings</h1>
+            <p>Update your information</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+            <form id="profileForm" style="max-width: 500px; margin: 0 auto;" onsubmit="saveProfile(event)">
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Full Name <span style="color: #dc3545;">*</span></label>
+                    <input type="text" id="customerName" placeholder="Enter your full name" required style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                    <span id="nameError" style="display: block; color: #dc3545; font-size: 0.9em; margin-top: 5px; font-weight: 500;">Field required</span>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Email <span style="color: #dc3545;">*</span></label>
+                    <input type="email" id="customerEmail" placeholder="Enter your email" required style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                    <span id="emailError" style="display: block; color: #dc3545; font-size: 0.9em; margin-top: 5px; font-weight: 500;">Field required</span>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Phone (Optional)</label>
+                    <input type="tel" id="customerPhone" placeholder="Enter your phone number" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Location (Optional)</label>
+                    <input type="text" id="customerLocation" placeholder="e.g., Vancouver, BC" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                </div>
+                
+                <!-- Address Section -->
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                    <h3 style="margin: 0 0 20px 0; color: #2c3e50; font-size: 1.2em;">📍 Address Information</h3>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">House/Building Number (Optional)</label>
+                        <input type="text" id="houseNumber" placeholder="e.g., 123" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Apartment/Unit Number (Optional)</label>
+                        <input type="text" id="apartmentNumber" placeholder="e.g., Apt 4B, Unit 201" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Street Name (Optional)</label>
+                        <input type="text" id="streetName" placeholder="e.g., Main Street" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">City (Auto-filled from Postal Code)</label>
+                        <input type="text" id="city" placeholder="e.g., Vancouver" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Province (Auto-filled from Postal Code)</label>
+                        <select id="province" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; background: white;">
+                            <option value="">Select Province</option>
+                            <option value="AB">Alberta</option>
+                            <option value="BC">British Columbia</option>
+                            <option value="MB">Manitoba</option>
+                            <option value="NB">New Brunswick</option>
+                            <option value="NL">Newfoundland and Labrador</option>
+                            <option value="NS">Nova Scotia</option>
+                            <option value="NT">Northwest Territories</option>
+                            <option value="NU">Nunavut</option>
+                            <option value="ON">Ontario</option>
+                            <option value="PE">Prince Edward Island</option>
+                            <option value="QC">Quebec</option>
+                            <option value="SK">Saskatchewan</option>
+                            <option value="YT">Yukon</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom: 0;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Postal Code <span style="color: #dc3545;">*</span></label>
+                        <input type="text" id="postalCode" placeholder="e.g., V6B 1A1" required maxlength="7" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; text-transform: uppercase;">
+                        <span id="postalCodeError" style="display: block; color: #dc3545; font-size: 0.9em; margin-top: 5px; font-weight: 500;">Field required</span>
+                    </div>
+                </div>
+                
+                <button type="submit" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; margin-top: 10px;">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Canadian Postal Code Database (FSA - Forward Sortation Area)
+        const postalCodeDatabase = {
+            // British Columbia - More precise
+            'V0': { province: 'BC', city: 'Various BC' },
+            'V1A': { province: 'BC', city: 'Vernon' },
+            'V1B': { province: 'BC', city: 'Salmon Arm' },
+            'V1C': { province: 'BC', city: 'Trail' },
+            'V1E': { province: 'BC', city: 'Nelson' },
+            'V1G': { province: 'BC', city: 'Cranbrook' },
+            'V1H': { province: 'BC', city: 'Kelowna' },
+            'V1J': { province: 'BC', city: 'Kamloops' },
+            'V1K': { province: 'BC', city: 'Kamloops' },
+            'V1L': { province: 'BC', city: 'Kelowna' },
+            'V1M': { province: 'BC', city: 'Penticton' },
+            'V1N': { province: 'BC', city: 'Lumby' },
+            'V1P': { province: 'BC', city: 'Kelowna' },
+            'V1S': { province: 'BC', city: 'Kamloops' },
+            'V1T': { province: 'BC', city: 'Summerland' },
+            'V1V': { province: 'BC', city: 'Vernon' },
+            'V1W': { province: 'BC', city: 'Kelowna' },
+            'V1X': { province: 'BC', city: 'Kelowna' },
+            'V1Y': { province: 'BC', city: 'Kelowna' },
+            'V1Z': { province: 'BC', city: 'Kelowna' },
+            'V2A': { province: 'BC', city: 'Penticton' },
+            'V2B': { province: 'BC', city: 'West Kelowna' },
+            'V2C': { province: 'BC', city: 'Kamloops' },
+            'V2E': { province: 'BC', city: 'Kamloops' },
+            'V2G': { province: 'BC', city: 'Armstrong' },
+            'V2H': { province: 'BC', city: 'Kamloops' },
+            'V2S': { province: 'BC', city: 'Prince George' },
+            'V3A': { province: 'BC', city: 'Burnaby' },
+            'V3B': { province: 'BC', city: 'Port Moody' },
+            'V3C': { province: 'BC', city: 'Port Coquitlam' },
+            'V3E': { province: 'BC', city: 'Coquitlam' },
+            'V3G': { province: 'BC', city: 'Burnaby' },
+            'V3H': { province: 'BC', city: 'Burnaby' },
+            'V3J': { province: 'BC', city: 'Burnaby' },
+            'V3K': { province: 'BC', city: 'Coquitlam' },
+            'V3L': { province: 'BC', city: 'Coquitlam' },
+            'V3M': { province: 'BC', city: 'Port Coquitlam' },
+            'V3N': { province: 'BC', city: 'Burnaby' },
+            'V3R': { province: 'BC', city: 'Surrey' },
+            'V3S': { province: 'BC', city: 'Surrey' },
+            'V3T': { province: 'BC', city: 'Surrey' },
+            'V3V': { province: 'BC', city: 'Mission' },
+            'V3W': { province: 'BC', city: 'Surrey' },
+            'V3X': { province: 'BC', city: 'Surrey' },
+            'V3Y': { province: 'BC', city: 'Port Moody' },
+            'V3Z': { province: 'BC', city: 'Surrey' },
+            'V4A': { province: 'BC', city: 'Surrey' },
+            'V4B': { province: 'BC', city: 'Surrey' },
+            'V4C': { province: 'BC', city: 'Surrey' },
+            'V4E': { province: 'BC', city: 'Surrey' },
+            'V4G': { province: 'BC', city: 'Burnaby' },
+            'V4K': { province: 'BC', city: 'Delta' },
+            'V4L': { province: 'BC', city: 'Delta' },
+            'V4M': { province: 'BC', city: 'Delta' },
+            'V4N': { province: 'BC', city: 'Surrey' },
+            'V4P': { province: 'BC', city: 'Surrey' },
+            'V4R': { province: 'BC', city: 'Surrey' },
+            'V4W': { province: 'BC', city: 'Richmond' },
+            'V4X': { province: 'BC', city: 'Richmond' },
+            'V5A': { province: 'BC', city: 'Burnaby' },
+            'V5B': { province: 'BC', city: 'Burnaby' },
+            'V5C': { province: 'BC', city: 'Burnaby' },
+            'V5E': { province: 'BC', city: 'Burnaby' },
+            'V5G': { province: 'BC', city: 'Burnaby' },
+            'V5H': { province: 'BC', city: 'Burnaby' },
+            'V5J': { province: 'BC', city: 'Burnaby' },
+            'V5K': { province: 'BC', city: 'Vancouver' },
+            'V5L': { province: 'BC', city: 'Vancouver' },
+            'V5M': { province: 'BC', city: 'Vancouver' },
+            'V5N': { province: 'BC', city: 'Vancouver' },
+            'V5P': { province: 'BC', city: 'Vancouver' },
+            'V5R': { province: 'BC', city: 'Vancouver' },
+            'V5S': { province: 'BC', city: 'Vancouver' },
+            'V5T': { province: 'BC', city: 'Vancouver' },
+            'V5V': { province: 'BC', city: 'Vancouver' },
+            'V5W': { province: 'BC', city: 'Vancouver' },
+            'V5X': { province: 'BC', city: 'Vancouver' },
+            'V5Y': { province: 'BC', city: 'Vancouver' },
+            'V5Z': { province: 'BC', city: 'Vancouver' },
+            'V6A': { province: 'BC', city: 'Vancouver' },
+            'V6B': { province: 'BC', city: 'Vancouver' },
+            'V6C': { province: 'BC', city: 'Vancouver' },
+            'V6E': { province: 'BC', city: 'Vancouver' },
+            'V6G': { province: 'BC', city: 'Vancouver' },
+            'V6H': { province: 'BC', city: 'Vancouver' },
+            'V6J': { province: 'BC', city: 'Vancouver' },
+            'V6K': { province: 'BC', city: 'Vancouver' },
+            'V6L': { province: 'BC', city: 'Vancouver' },
+            'V6M': { province: 'BC', city: 'Vancouver' },
+            'V6N': { province: 'BC', city: 'Vancouver' },
+            'V6P': { province: 'BC', city: 'Vancouver' },
+            'V6R': { province: 'BC', city: 'Vancouver' },
+            'V6S': { province: 'BC', city: 'Vancouver' },
+            'V6T': { province: 'BC', city: 'Vancouver' },
+            'V6V': { province: 'BC', city: 'Richmond' },
+            'V6W': { province: 'BC', city: 'Vancouver' },
+            'V6X': { province: 'BC', city: 'Richmond' },
+            'V6Y': { province: 'BC', city: 'Richmond' },
+            'V6Z': { province: 'BC', city: 'Vancouver' },
+            'V7A': { province: 'BC', city: 'North Vancouver' },
+            'V7C': { province: 'BC', city: 'Coquitlam' },
+            'V7E': { province: 'BC', city: 'Vancouver' },
+            'V7G': { province: 'BC', city: 'North Vancouver' },
+            'V7H': { province: 'BC', city: 'North Vancouver' },
+            'V7J': { province: 'BC', city: 'North Vancouver' },
+            'V7K': { province: 'BC', city: 'North Vancouver' },
+            'V7L': { province: 'BC', city: 'North Vancouver' },
+            'V7M': { province: 'BC', city: 'North Vancouver' },
+            'V7N': { province: 'BC', city: 'North Vancouver' },
+            'V7P': { province: 'BC', city: 'North Vancouver' },
+            'V7R': { province: 'BC', city: 'North Vancouver' },
+            'V7S': { province: 'BC', city: 'West Vancouver' },
+            'V7T': { province: 'BC', city: 'West Vancouver' },
+            'V7V': { province: 'BC', city: 'West Vancouver' },
+            'V7W': { province: 'BC', city: 'West Vancouver' },
+            'V7X': { province: 'BC', city: 'Pitt Meadows' },
+            'V7Y': { province: 'BC', city: 'Maple Ridge' },
+            'V8A': { province: 'BC', city: 'Victoria' },
+            'V8B': { province: 'BC', city: 'Victoria' },
+            'V8C': { province: 'BC', city: 'Victoria' },
+            'V8N': { province: 'BC', city: 'Victoria' },
+            'V8P': { province: 'BC', city: 'Victoria' },
+            'V8R': { province: 'BC', city: 'Victoria' },
+            'V8S': { province: 'BC', city: 'Victoria' },
+            'V8T': { province: 'BC', city: 'Victoria' },
+            'V8V': { province: 'BC', city: 'Victoria' },
+            'V8W': { province: 'BC', city: 'Victoria' },
+            'V8X': { province: 'BC', city: 'Victoria' },
+            'V8Y': { province: 'BC', city: 'Victoria' },
+            'V8Z': { province: 'BC', city: 'Victoria' },
+            'V9A': { province: 'BC', city: 'Sidney' },
+            'V9B': { province: 'BC', city: 'Brentwood Bay' },
+            'V9C': { province: 'BC', city: 'Central Saanich' },
+            'V9E': { province: 'BC', city: 'Sooke' },
+            'V9G': { province: 'BC', city: 'Langford' },
+            'V9L': { province: 'BC', city: 'Nanaimo' },
+            'V9M': { province: 'BC', city: 'Qualicum Beach' },
+            'V9N': { province: 'BC', city: 'Parksville' },
+            'V9P': { province: 'BC', city: 'Port Alberni' },
+            'V9R': { province: 'BC', city: 'Nanaimo' },
+            'V9S': { province: 'BC', city: 'Nanaimo' },
+            'V9T': { province: 'BC', city: 'Nanaimo' },
+            'V9V': { province: 'BC', city: 'Nanaimo' },
+            'V9W': { province: 'BC', city: 'Nanaimo' },
+            'V9X': { province: 'BC', city: 'Nanaimo' },
+            'V9Y': { province: 'BC', city: 'Courtenay' },
+            
+            // Alberta - Comprehensive
+            'T0': { province: 'AB', city: 'Various AB' },
+            'T1A': { province: 'AB', city: 'Lethbridge' },
+            'T1B': { province: 'AB', city: 'Lethbridge' },
+            'T1G': { province: 'AB', city: 'Calgary' },
+            'T1H': { province: 'AB', city: 'Lethbridge' },
+            'T1J': { province: 'AB', city: 'Lethbridge' },
+            'T1K': { province: 'AB', city: 'Lethbridge' },
+            'T1L': { province: 'AB', city: 'Calgary' },
+            'T1M': { province: 'AB', city: 'Okotoks' },
+            'T1P': { province: 'AB', city: 'Calgary' },
+            'T1R': { province: 'AB', city: 'Calgary' },
+            'T1S': { province: 'AB', city: 'Calgary' },
+            'T1V': { province: 'AB', city: 'Airdrie' },
+            'T1W': { province: 'AB', city: 'Calgary' },
+            'T1X': { province: 'AB', city: 'Calgary' },
+            'T1Y': { province: 'AB', city: 'Calgary' },
+            'T2A': { province: 'AB', city: 'Calgary' },
+            'T2B': { province: 'AB', city: 'Calgary' },
+            'T2C': { province: 'AB', city: 'Calgary' },
+            'T2E': { province: 'AB', city: 'Calgary' },
+            'T2G': { province: 'AB', city: 'Calgary' },
+            'T2H': { province: 'AB', city: 'Calgary' },
+            'T2J': { province: 'AB', city: 'Calgary' },
+            'T2K': { province: 'AB', city: 'Calgary' },
+            'T2L': { province: 'AB', city: 'Calgary' },
+            'T2M': { province: 'AB', city: 'Calgary' },
+            'T2N': { province: 'AB', city: 'Calgary' },
+            'T2P': { province: 'AB', city: 'Calgary' },
+            'T2R': { province: 'AB', city: 'Calgary' },
+            'T2S': { province: 'AB', city: 'Calgary' },
+            'T2T': { province: 'AB', city: 'Calgary' },
+            'T2V': { province: 'AB', city: 'Calgary' },
+            'T2W': { province: 'AB', city: 'Calgary' },
+            'T2X': { province: 'AB', city: 'Calgary' },
+            'T2Y': { province: 'AB', city: 'Calgary' },
+            'T2Z': { province: 'AB', city: 'Calgary' },
+            'T3A': { province: 'AB', city: 'Calgary' },
+            'T3B': { province: 'AB', city: 'Calgary' },
+            'T3C': { province: 'AB', city: 'Calgary' },
+            'T3E': { province: 'AB', city: 'Calgary' },
+            'T3G': { province: 'AB', city: 'Calgary' },
+            'T3H': { province: 'AB', city: 'Calgary' },
+            'T3J': { province: 'AB', city: 'Calgary' },
+            'T3K': { province: 'AB', city: 'Calgary' },
+            'T3L': { province: 'AB', city: 'Calgary' },
+            'T3M': { province: 'AB', city: 'Calgary' },
+            'T3N': { province: 'AB', city: 'Calgary' },
+            'T3P': { province: 'AB', city: 'Calgary' },
+            'T3R': { province: 'AB', city: 'Calgary' },
+            'T3S': { province: 'AB', city: 'Calgary' },
+            'T3Z': { province: 'AB', city: 'Calgary' },
+            'T4A': { province: 'AB', city: 'Airdrie' },
+            'T4B': { province: 'AB', city: 'Airdrie' },
+            'T4C': { province: 'AB', city: 'Red Deer' },
+            'T4E': { province: 'AB', city: 'Red Deer' },
+            'T4G': { province: 'AB', city: 'Red Deer' },
+            'T4L': { province: 'AB', city: 'Lacombe' },
+            'T4N': { province: 'AB', city: 'Red Deer' },
+            'T4P': { province: 'AB', city: 'Red Deer' },
+            'T4R': { province: 'AB', city: 'Red Deer' },
+            'T4S': { province: 'AB', city: 'Sylvan Lake' },
+            'T4T': { province: 'AB', city: 'Camrose' },
+            'T4V': { province: 'AB', city: 'Camrose' },
+            'T4X': { province: 'AB', city: 'Stettler' },
+            'T5A': { province: 'AB', city: 'Edmonton' },
+            'T5B': { province: 'AB', city: 'Edmonton' },
+            'T5C': { province: 'AB', city: 'Edmonton' },
+            'T5E': { province: 'AB', city: 'Edmonton' },
+            'T5G': { province: 'AB', city: 'Edmonton' },
+            'T5H': { province: 'AB', city: 'Edmonton' },
+            'T5J': { province: 'AB', city: 'Edmonton' },
+            'T5K': { province: 'AB', city: 'Edmonton' },
+            'T5L': { province: 'AB', city: 'Edmonton' },
+            'T5M': { province: 'AB', city: 'Edmonton' },
+            'T5N': { province: 'AB', city: 'Edmonton' },
+            'T5P': { province: 'AB', city: 'Edmonton' },
+            'T5R': { province: 'AB', city: 'Edmonton' },
+            'T5S': { province: 'AB', city: 'Edmonton' },
+            'T5T': { province: 'AB', city: 'Edmonton' },
+            'T5V': { province: 'AB', city: 'Edmonton' },
+            'T5W': { province: 'AB', city: 'Edmonton' },
+            'T5X': { province: 'AB', city: 'Edmonton' },
+            'T5Y': { province: 'AB', city: 'Edmonton' },
+            'T5Z': { province: 'AB', city: 'Edmonton' },
+            'T6A': { province: 'AB', city: 'Edmonton' },
+            'T6B': { province: 'AB', city: 'Edmonton' },
+            'T6C': { province: 'AB', city: 'Edmonton' },
+            'T6E': { province: 'AB', city: 'Edmonton' },
+            'T6G': { province: 'AB', city: 'Edmonton' },
+            'T6H': { province: 'AB', city: 'Edmonton' },
+            'T6J': { province: 'AB', city: 'Edmonton' },
+            'T6K': { province: 'AB', city: 'Edmonton' },
+            'T6L': { province: 'AB', city: 'Edmonton' },
+            'T6M': { province: 'AB', city: 'Edmonton' },
+            'T6N': { province: 'AB', city: 'Edmonton' },
+            'T6P': { province: 'AB', city: 'Edmonton' },
+            'T6R': { province: 'AB', city: 'Edmonton' },
+            'T6S': { province: 'AB', city: 'Edmonton' },
+            'T6T': { province: 'AB', city: 'Edmonton' },
+            'T6V': { province: 'AB', city: 'Edmonton' },
+            'T6W': { province: 'AB', city: 'Edmonton' },
+            'T6X': { province: 'AB', city: 'Edmonton' },
+            'T7A': { province: 'AB', city: 'Camrose' },
+            'T7E': { province: 'AB', city: 'Drayton Valley' },
+            'T7N': { province: 'AB', city: 'Wetaskiwin' },
+            'T7P': { province: 'AB', city: 'Leduc' },
+            'T7S': { province: 'AB', city: 'Spruce Grove' },
+            'T7V': { province: 'AB', city: 'Stony Plain' },
+            'T7X': { province: 'AB', city: 'Spruce Grove' },
+            'T7Y': { province: 'AB', city: 'Fort Saskatchewan' },
+            'T7Z': { province: 'AB', city: 'Sherwood Park' },
+            'T8A': { province: 'AB', city: 'Sherwood Park' },
+            'T8B': { province: 'AB', city: 'Sherwood Park' },
+            'T8C': { province: 'AB', city: 'Fort McMurray' },
+            'T8E': { province: 'AB', city: 'Cold Lake' },
+            'T8G': { province: 'AB', city: 'Bonnyville' },
+            'T8H': { province: 'AB', city: 'Fort McMurray' },
+            'T8L': { province: 'AB', city: 'Lloydminster' },
+            'T8N': { province: 'AB', city: 'Grande Prairie' },
+            'T8S': { province: 'AB', city: 'Grande Prairie' },
+            'T8V': { province: 'AB', city: 'Grande Prairie' },
+            'T8W': { province: 'AB', city: 'Grande Prairie' },
+            'T8X': { province: 'AB', city: 'Peace River' },
+            'T9A': { province: 'AB', city: 'Fort McMurray' },
+            'T9C': { province: 'AB', city: 'Lac La Biche' },
+            'T9E': { province: 'AB', city: 'Slave Lake' },
+            'T9G': { province: 'AB', city: 'Athabasca' },
+            'T9H': { province: 'AB', city: 'Fort McMurray' },
+            'T9J': { province: 'AB', city: 'Fort McMurray' },
+            'T9K': { province: 'AB', city: 'Fort McMurray' },
+            'T9M': { province: 'AB', city: 'High Prairie' },
+            'T9N': { province: 'AB', city: 'High Level' },
+            'T9S': { province: 'AB', city: 'Whitecourt' },
+            'T9V': { province: 'AB', city: 'Edson' },
+            'T9W': { province: 'AB', city: 'Hinton' },
+            'T9X': { province: 'AB', city: 'Jasper' },
+            
+            // Alberta
+            'T0': { province: 'AB', city: 'Various AB' },
+            'T1': { province: 'AB', city: 'Calgary' },
+            'T2': { province: 'AB', city: 'Calgary' },
+            'T3': { province: 'AB', city: 'Calgary' },
+            'T4': { province: 'AB', city: 'Red Deer' },
+            'T5': { province: 'AB', city: 'Edmonton' },
+            'T6': { province: 'AB', city: 'Edmonton' },
+            'T7': { province: 'AB', city: 'Camrose' },
+            'T8': { province: 'AB', city: 'Grande Prairie' },
+            'T9': { province: 'AB', city: 'Fort McMurray' },
+            
+            // Ontario
+            'K0': { province: 'ON', city: 'Various ON' },
+            'K1': { province: 'ON', city: 'Ottawa' },
+            'K2': { province: 'ON', city: 'Ottawa' },
+            'K4': { province: 'ON', city: 'Nepean' },
+            'K6': { province: 'ON', city: 'Cornwall' },
+            'K7': { province: 'ON', city: 'Kingston' },
+            'K8': { province: 'ON', city: 'Pembroke' },
+            'K9': { province: 'ON', city: 'Peterborough' },
+            'L0': { province: 'ON', city: 'Various ON' },
+            'L1': { province: 'ON', city: 'Oshawa' },
+            'L2': { province: 'ON', city: 'St. Catharines' },
+            'L3': { province: 'ON', city: 'Markham' },
+            'L4': { province: 'ON', city: 'Richmond Hill' },
+            'L5': { province: 'ON', city: 'Mississauga' },
+            'L6': { province: 'ON', city: 'Brampton' },
+            'L7': { province: 'ON', city: 'Burlington' },
+            'L8': { province: 'ON', city: 'Hamilton' },
+            'L9': { province: 'ON', city: 'Orangeville' },
+            'M1': { province: 'ON', city: 'Toronto' },
+            'M2': { province: 'ON', city: 'Toronto' },
+            'M3': { province: 'ON', city: 'Toronto' },
+            'M4': { province: 'ON', city: 'Toronto' },
+            'M5': { province: 'ON', city: 'Toronto' },
+            'M6': { province: 'ON', city: 'Toronto' },
+            'M7': { province: 'ON', city: 'Toronto' },
+            'M8': { province: 'ON', city: 'Toronto' },
+            'M9': { province: 'ON', city: 'Toronto' },
+            'N0': { province: 'ON', city: 'Various ON' },
+            'N1': { province: 'ON', city: 'Kitchener' },
+            'N2': { province: 'ON', city: 'Waterloo' },
+            'N3': { province: 'ON', city: 'Cambridge' },
+            'N4': { province: 'ON', city: 'Brantford' },
+            'N5': { province: 'ON', city: 'London' },
+            'N6': { province: 'ON', city: 'London' },
+            'N7': { province: 'ON', city: 'Sarnia' },
+            'N8': { province: 'ON', city: 'Chatham' },
+            'N9': { province: 'ON', city: 'Windsor' },
+            'P0': { province: 'ON', city: 'Various ON' },
+            'P1': { province: 'ON', city: 'Sudbury' },
+            'P2': { province: 'ON', city: 'Sudbury' },
+            'P3': { province: 'ON', city: 'North Bay' },
+            'P4': { province: 'ON', city: 'Timmins' },
+            'P5': { province: 'ON', city: 'Sault Ste. Marie' },
+            'P6': { province: 'ON', city: 'Sault Ste. Marie' },
+            'P7': { province: 'ON', city: 'Thunder Bay' },
+            
+            // Quebec
+            'G0': { province: 'QC', city: 'Various QC' },
+            'G1': { province: 'QC', city: 'Quebec City' },
+            'G2': { province: 'QC', city: 'Quebec City' },
+            'G3': { province: 'QC', city: 'Quebec City' },
+            'G4': { province: 'QC', city: 'Trois-Rivières' },
+            'G5': { province: 'QC', city: 'Shawinigan' },
+            'G6': { province: 'QC', city: 'Drummondville' },
+            'G7': { province: 'QC', city: 'Chicoutimi' },
+            'G8': { province: 'QC', city: 'Rimouski' },
+            'H1': { province: 'QC', city: 'Montreal' },
+            'H2': { province: 'QC', city: 'Montreal' },
+            'H3': { province: 'QC', city: 'Montreal' },
+            'H4': { province: 'QC', city: 'Montreal' },
+            'H5': { province: 'QC', city: 'Montreal' },
+            'H7': { province: 'QC', city: 'Laval' },
+            'H8': { province: 'QC', city: 'Laval' },
+            'H9': { province: 'QC', city: 'Laval' },
+            'J0': { province: 'QC', city: 'Various QC' },
+            'J1': { province: 'QC', city: 'Sherbrooke' },
+            'J2': { province: 'QC', city: 'Granby' },
+            'J3': { province: 'QC', city: 'Saint-Jean-sur-Richelieu' },
+            'J4': { province: 'QC', city: 'Longueuil' },
+            'J5': { province: 'QC', city: 'Saint-Hyacinthe' },
+            'J6': { province: 'QC', city: 'Joliette' },
+            'J7': { province: 'QC', city: 'Saint-Jérôme' },
+            
+            // Manitoba
+            'R0': { province: 'MB', city: 'Various MB' },
+            'R1': { province: 'MB', city: 'Winnipeg' },
+            'R2': { province: 'MB', city: 'Winnipeg' },
+            'R3': { province: 'MB', city: 'Winnipeg' },
+            'R4': { province: 'MB', city: 'Winnipeg' },
+            'R5': { province: 'MB', city: 'Brandon' },
+            'R6': { province: 'MB', city: 'Portage la Prairie' },
+            'R7': { province: 'MB', city: 'Dauphin' },
+            
+            // Saskatchewan
+            'S0': { province: 'SK', city: 'Various SK' },
+            'S2': { province: 'SK', city: 'Moose Jaw' },
+            'S3': { province: 'SK', city: 'Prince Albert' },
+            'S4': { province: 'SK', city: 'Regina' },
+            'S6': { province: 'SK', city: 'Saskatoon' },
+            'S7': { province: 'SK', city: 'Saskatoon' },
+            'S9': { province: 'SK', city: 'Yorkton' },
+            
+            // Nova Scotia
+            'B0': { province: 'NS', city: 'Various NS' },
+            'B1': { province: 'NS', city: 'Sydney' },
+            'B2': { province: 'NS', city: 'Glace Bay' },
+            'B3': { province: 'NS', city: 'Halifax' },
+            'B4': { province: 'NS', city: 'Dartmouth' },
+            
+            // New Brunswick
+            'E1': { province: 'NB', city: 'Moncton' },
+            'E2': { province: 'NB', city: 'Saint John' },
+            'E3': { province: 'NB', city: 'Fredericton' },
+            'E4': { province: 'NB', city: 'Miramichi' },
+            'E5': { province: 'NB', city: 'Bathurst' },
+            
+            // Newfoundland
+            'A0': { province: 'NL', city: 'Various NL' },
+            'A1': { province: 'NL', city: 'St. John\'s' },
+            'A2': { province: 'NL', city: 'Mount Pearl' },
+            
+            // PEI
+            'C0': { province: 'PE', city: 'Various PE' },
+            'C1': { province: 'PE', city: 'Charlottetown' },
+            
+            // Yukon
+            'Y0': { province: 'YT', city: 'Dawson City' },
+            'Y1': { province: 'YT', city: 'Whitehorse' },
+            
+            // NWT
+            'X0': { province: 'NT', city: 'Various NT' },
+            'X1': { province: 'NT', city: 'Yellowknife' },
+            
+            // Nunavut
+            'X0A': { province: 'NU', city: 'Iqaluit' },
+            'X0B': { province: 'NU', city: 'Cambridge Bay' },
+            'X0C': { province: 'NU', city: 'Rankin Inlet' }
+        };
+        
+        // Auto-fill city and province based on postal code
+        function lookupPostalCode() {
+            const postalCodeInput = document.getElementById('postalCode');
+            const postalCode = postalCodeInput.value.trim().toUpperCase().replace(/\s/g, '');
+            
+            if (postalCode.length >= 2) {
+                const fsa = postalCode.substring(0, 2);
+                const fsa3 = postalCode.substring(0, 3);
+                
+                // Try 3-character lookup first, then 2-character
+                const locationData = postalCodeDatabase[fsa3] || postalCodeDatabase[fsa];
+                
+                if (locationData) {
+                    // Auto-fill province
+                    const provinceField = document.getElementById('province');
+                    provinceField.value = locationData.province;
+                    validateField('province');
+                    
+                    // Auto-fill city (user can override if needed)
+                    const cityField = document.getElementById('city');
+                    if (!cityField.value.trim()) {
+                        cityField.value = locationData.city;
+                        validateField('city');
+                    }
+                    
+                    // Show success indicator
+                    postalCodeInput.style.borderColor = '#28a745';
+                    document.getElementById('postalCodeError').style.display = 'none';
+                    
+                    // Show helpful message
+                    showNotification('✅ Location auto-filled based on postal code!');
+                } else {
+                    // Postal code not found in database
+                    postalCodeInput.style.borderColor = '#ffc107';
+                }
+            }
+        }
+        
+        // Show notification message
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 10000;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Load existing profile data
+        function loadProfileData() {
+            try {
+                const data = JSON.parse(localStorage.getItem('customerProfile') || '{}');
+                
+                // Load basic info
+                if (data.name) document.getElementById('customerName').value = data.name;
+                if (data.phone) document.getElementById('customerPhone').value = data.phone;
+                if (data.location) document.getElementById('customerLocation').value = data.location;
+                
+                // Check for registered email from multiple sources
+                let registeredEmail = data.email;
+                if (!registeredEmail) {
+                    // Check if email was saved during registration
+                    const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+                    registeredEmail = customerData.email;
+                }
+                if (!registeredEmail) {
+                    // Check if email was saved in user session
+                    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    registeredEmail = userData.email;
+                }
+                
+                // Auto-fill email if found
+                if (registeredEmail) {
+                    document.getElementById('customerEmail').value = registeredEmail;
+                    validateField('email');
+                }
+                
+                // Load address fields
+                if (data.houseNumber) document.getElementById('houseNumber').value = data.houseNumber;
+                if (data.apartmentNumber) document.getElementById('apartmentNumber').value = data.apartmentNumber;
+                if (data.streetName) document.getElementById('streetName').value = data.streetName;
+                if (data.city) document.getElementById('city').value = data.city;
+                if (data.province) document.getElementById('province').value = data.province;
+                if (data.postalCode) document.getElementById('postalCode').value = data.postalCode;
+                
+                // Hide error messages for filled required fields
+                validateField('customerName');
+                validateField('email');
+                validateField('postalCode');
+            } catch(e) {
+                console.error('Error loading profile:', e);
+            }
+        }
+        
+        // Validate individual field
+        function validateField(fieldId) {
+            const field = document.getElementById(fieldId);
+            const error = document.getElementById(fieldId + 'Error');
+            
+            if (field && error) {
+                if (field.value.trim() !== '') {
+                    error.style.display = 'none';
+                    field.style.borderColor = '#28a745';
+                } else {
+                    error.style.display = 'block';
+                    field.style.borderColor = '#e0e0e0';
+                }
+            }
+        }
+        
+        // Add real-time validation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfileData();
+            
+            const requiredFields = ['customerName', 'email', 'postalCode'];
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('input', () => validateField(fieldId));
+                    field.addEventListener('blur', () => validateField(fieldId));
+                }
+            });
+            
+            // Add postal code lookup on input
+            const postalCodeField = document.getElementById('postalCode');
+            if (postalCodeField) {
+                postalCodeField.addEventListener('input', function() {
+                    // Format postal code as user types
+                    let value = this.value.toUpperCase().replace(/\s/g, '');
+                    if (value.length > 3) {
+                        value = value.substring(0, 3) + ' ' + value.substring(3, 6);
+                    }
+                    this.value = value;
+                    
+                    // Lookup after 3 characters
+                    if (value.replace(/\s/g, '').length >= 3) {
+                        lookupPostalCode();
+                    }
+                });
+            }
+        });
+        
+        // Save profile data
+        function saveProfile(event) {
+            event.preventDefault();
+            
+            // Validate required fields: name, email, postal code
+            const name = document.getElementById('customerName').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+            const postalCode = document.getElementById('postalCode').value.trim();
+            
+            if (!name || !email || !postalCode) {
+                alert('⚠️ Please fill in all required fields: Name, Email, and Postal Code');
+                
+                // Show errors for empty required fields
+                if (!name) {
+                    document.getElementById('nameError').style.display = 'block';
+                    document.getElementById('customerName').style.borderColor = '#dc3545';
+                }
+                if (!email) {
+                    document.getElementById('emailError').style.display = 'block';
+                    document.getElementById('email').style.borderColor = '#dc3545';
+                }
+                if (!postalCode) {
+                    document.getElementById('postalCodeError').style.display = 'block';
+                    document.getElementById('postalCode').style.borderColor = '#dc3545';
+                }
+                
+                return false;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('⚠️ Please enter a valid email address');
+                document.getElementById('email').style.borderColor = '#dc3545';
+                return false;
+            }
+            
+            // Validate postal code format (Canadian)
+            const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+            if (!postalCodeRegex.test(postalCode)) {
+                alert('⚠️ Please enter a valid Canadian postal code (e.g., V6B 1A1)');
+                document.getElementById('postalCode').style.borderColor = '#dc3545';
+                return false;
+            }
+            
+            const profileData = {
+                name: name,
+                email: email,
+                phone: document.getElementById('customerPhone').value.trim(),
+                location: document.getElementById('customerLocation').value.trim(),
+                houseNumber: document.getElementById('houseNumber').value.trim(),
+                apartmentNumber: document.getElementById('apartmentNumber').value.trim(),
+                streetName: document.getElementById('streetName').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                province: document.getElementById('province').value,
+                postalCode: postalCode.toUpperCase()
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('customerProfile', JSON.stringify(profileData));
+            
+            alert('✅ Profile saved successfully!');
+            
+            // Redirect back to dashboard
+            setTimeout(function() {
+                window.location.href = 'customer-dashboard.html';
+            }, 500);
+        }
+        
+        window.onload = loadProfileData;
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="careers.html">Careers</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="safety.html">Safety</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Providers</h4>
+                <a href="service-provider-login.html">Provider Login</a>
+                <a href="service-provider-login.html">Become a Provider</a>
+                <a href="provider-resources.html">Provider Resources</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

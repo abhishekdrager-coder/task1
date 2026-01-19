@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Task Masters</title>
+    <link rel="stylesheet" href="styles.css?v=4.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <style>
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        body.dark-mode .modern-navbar {
+            background: #0d1117 !important;
+        }
+        body.dark-mode .icon-dashboard-container {
+            background: #1a1a1a;
+        }
+        body.dark-mode .icon-dashboard-header h1 {
+            color: #ffffff;
+        }
+        body.dark-mode .icon-dashboard-header p {
+            color: #b0b0b0;
+        }
+        body.dark-mode .stats-grid,
+        body.dark-mode .quick-actions,
+        body.dark-mode .recent-bookings,
+        body.dark-mode .profile-section {
+            background: #0d1117;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        body.dark-mode .stat-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+        }
+        body.dark-mode .stat-card h3,
+        body.dark-mode .stat-card p {
+            color: #e0e0e0;
+        }
+        body.dark-mode .action-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+        }
+        body.dark-mode .action-card span {
+            color: #e0e0e0;
+        }
+        body.dark-mode .booking-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+        }
+        body.dark-mode .footer {
+            background: #0d1117;
+            border-top: 1px solid #30363d;
+        }
+        body.dark-mode .footer h3,
+        body.dark-mode .footer h4,
+        body.dark-mode .footer p,
+        body.dark-mode .footer a {
+            color: #e0e0e0;
+        }
+        body.dark-mode .dropdown-menu {
+            background: #161b22 !important;
+            border: 1px solid #30363d !important;
+        }
+        body.dark-mode .dropdown-menu a {
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .dropdown-menu a:hover {
+            background: #0d1117 !important;
+        }
+    </style>
+    <script>
+        // Check and apply dark mode on page load
+        (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {
+                console.error('Error loading dark mode:', e);
+            }
+        })();
+    </script></head>
+<body>
+    <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0;">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="text-decoration: none;">
+                    <div class="logo-wrapper" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <span class="logo-icon" style="font-size: 2.5em;">🎯</span>
+                        <span class="logo-text" style="font-size: 32px; font-weight: 700; color: #ffffff;">Task Masters</span>
+                    </div>
+                </a>
+            </div>
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 30px;">
+                <a href="index.html" style="text-decoration: none;">
+                    <div style="position: relative; width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                        <i class="fas fa-home" style="font-size: 28px; color: #ffffff;"></i>
+                    </div>
+                </a>
+                <div class="nav-notifications" style="position: relative; width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease;" onclick="toggleNotifications(event)">
+                    <i class="fas fa-bell" style="font-size: 28px; color: #ffffff;"></i>
+                    <span class="notification-badge" id="notificationBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; font-size: 14px; font-weight: 700; padding: 4px 8px; border-radius: 12px; min-width: 22px; text-align: center;">0</span>
+                    <div class="notification-dropdown" id="notificationDropdown" style="display: none; position: absolute; top: 70px; right: 0; width: 380px; max-height: 450px; background: white; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); overflow-y: auto; z-index: 2000;">
+                        <div style="padding: 20px; border-bottom: 1px solid #e9ecef;">
+                            <h3 style="margin: 0; color: #2c3e50; font-size: 18px; font-weight: 600;">Notifications</h3>
+                        </div>
+                        <div id="notificationList" style="padding: 40px 20px; text-align: center;">
+                            <i class="fas fa-bell-slash" style="font-size: 48px; color: #e9ecef; margin-bottom: 15px;"></i>
+                            <p style="margin: 0; color: #6c757d; font-size: 15px;">No notifications yet</p>
+                            <p style="margin: 8px 0 0 0; color: #9ca3af; font-size: 13px;">We'll notify you when something arrives</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-user-menu" style="position: relative; display: flex; align-items: center; gap: 15px; padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 30px; cursor: pointer; transition: all 0.3s ease;" onclick="toggleUserMenu(event)">
+                    <div class="user-avatar-small" style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8em;">👤</div>
+                    <span class="user-name-nav" style="font-weight: 600; color: #ffffff; font-size: 16px;">Customer</span>
+                    <i class="fas fa-chevron-down" style="color: #ffffff; font-size: 16px;"></i>
+                    <div class="user-dropdown" id="userDropdown" style="display: none; position: absolute; top: 70px; right: 0; width: 220px; background: white; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); overflow: hidden; z-index: 2000;">
+                        <div style="padding: 20px; border-bottom: 1px solid #e9ecef; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8em;">👤</div>
+                                <div>
+                                    <p style="margin: 0; color: white; font-weight: 600; font-size: 15px;">Customer</p>
+                                    <p style="margin: 3px 0 0 0; color: rgba(255,255,255,0.8); font-size: 12px;">Service Customer</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 8px 0;">
+                            <a href="customer-profile.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; text-decoration: none; color: #2c3e50; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                                <i class="fas fa-user" style="font-size: 16px; color: #667eea; width: 20px;"></i>
+                                <span style="font-size: 14px; font-weight: 500;">Profile</span>
+                            </a>
+                            <a href="customer-settings.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; text-decoration: none; color: #2c3e50; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                                <i class="fas fa-cog" style="font-size: 16px; color: #667eea; width: 20px;"></i>
+                                <span style="font-size: 14px; font-weight: 500;">Settings</span>
+                            </a>
+                        </div>
+                        <div style="border-top: 1px solid #e9ecef; padding: 8px 0;">
+                            <a href="index.html" onclick="handleLogout('customer'); return false;" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; text-decoration: none; color: #dc3545; transition: background 0.2s;" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='white'">
+                                <i class="fas fa-sign-out-alt" style="font-size: 16px; width: 20px;"></i>
+                                <span style="font-size: 14px; font-weight: 500;">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div style="max-width: 1200px; margin: 0 auto; padding: 40px;">
+        <!-- Full Width Dashboard -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            <!-- Profile Section -->
+            <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center;">
+                <div style="width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 5em; box-shadow: 0 8px 24px rgba(102,126,234,0.3);">
+                    👤
+                </div>
+                <h2 style="margin: 0 0 10px 0; font-size: 2em; color: #2c3e50;">Welcome <span id="displayName">Customer</span>! 👋</h2>
+                <p id="displayEmail" style="margin: 0 0 20px 0; font-size: 1.2em; color: #7f8c8d; font-weight: 500;">customer@email.com</p>
+                <div style="display: inline-block; background: #f0f4ff; padding: 12px 24px; border-radius: 12px;">
+                    <p style="margin: 0; color: #667eea; font-weight: 600;"><i class="fas fa-map-marker-alt"></i> <span id="displayLocation">Vancouver, BC</span></p>
+                </div>
+            </div>
+
+            <!-- Today's Activity Section -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(102,126,234,0.3); color: white;">
+                <h3 style="margin: 0 0 25px 0; font-size: 1.8em; display: flex; align-items: center; gap: 10px;">
+                    <span>📋</span> Your Bookings Overview
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                    <!-- Active Bookings -->
+                    <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <span style="font-size: 1.8em;">📅</span>
+                            <div>
+                                <p style="margin: 0; font-size: 0.85em; opacity: 0.9;">Active Bookings</p>
+                                <p id="activeBookings" style="margin: 4px 0 0 0; font-size: 1.3em; font-weight: 700;">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completed -->
+                    <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <span style="font-size: 1.8em;">✅</span>
+                            <div>
+                                <p style="margin: 0; font-size: 0.85em; opacity: 0.9;">Completed</p>
+                                <p id="completedBookings" style="margin: 4px 0 0 0; font-size: 1.3em; font-weight: 700;">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                    <!-- Quick Book -->
+                    <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <span style="font-size: 1.8em;">🔍</span>
+                            <div style="flex: 1;">
+                                <p style="margin: 0; font-size: 0.85em; opacity: 0.9;">Need a Service?</p>
+                                <p style="margin: 4px 0 0 0; font-size: 1.1em; font-weight: 600;">Browse trusted professionals</p>
+                            </div>
+                            <a href="services.html?service=all" style="background: white; color: #667eea; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; white-space: nowrap;">Browse Services</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Grid -->
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                <h3 style="margin: 0 0 20px 0; color: #2c3e50; font-size: 1.5em;">⚡ Quick Actions</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <a href="services.html?service=cleaning" style="text-decoration: none; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(240,147,251,0.3); display: flex; align-items: center; gap: 15px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <span style="font-size: 2.5em;">🧹</span>
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: white; font-size: 1.2em;">House Cleaning</h4>
+                            <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.9em;">Book a cleaner</p>
+                        </div>
+                    </a>
+
+                    <a href="services.html?service=plumbing" style="text-decoration: none; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(79,172,254,0.3); display: flex; align-items: center; gap: 15px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <span style="font-size: 2.5em;">🔧</span>
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: white; font-size: 1.2em;">Plumbing</h4>
+                            <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.9em;">Find a plumber</p>
+                        </div>
+                    </a>
+
+                    <a href="services.html?service=electrical" style="text-decoration: none; background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%); padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(250,208,196,0.3); display: flex; align-items: center; gap: 15px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <span style="font-size: 2.5em;">⚡</span>
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: #333; font-size: 1.2em;">Electrical</h4>
+                            <p style="margin: 0; color: #666; font-size: 0.9em;">Get an electrician</p>
+                        </div>
+                    </a>
+
+                    <a href="services.html?service=painting" style="text-decoration: none; background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(161,196,253,0.3); display: flex; align-items: center; gap: 15px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <span style="font-size: 2.5em;">🎨</span>
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: #333; font-size: 1.2em;">Painting</h4>
+                            <p style="margin: 0; color: #666; font-size: 0.9em;">Hire a painter</p>
+                        </div>
+                    </a>
+                </div>
+                <a href="services.html?service=all" style="display: block; margin-top: 20px; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600;">View All Services →</a>
+            </div>
+
+            <!-- Upcoming Bookings Section -->
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                <h3 style="margin: 0 0 20px 0; color: #2c3e50; font-size: 1.5em;">📅 Upcoming Bookings</h3>
+                <div id="upcomingBookingsList" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="text-align: center; padding: 40px; background: #f9fafb; border-radius: 12px;">
+                        <div style="font-size: 4em; margin-bottom: 15px;">📭</div>
+                        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">No upcoming bookings</h4>
+                        <p style="margin: 0; color: #666;">Browse services to book your first provider</p>
+                        <a href="services.html?service=all" style="display: inline-block; margin-top: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Browse Services</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking History Section -->
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                <h3 style="margin: 0 0 20px 0; color: #2c3e50; font-size: 1.5em;">📜 Booking History</h3>
+                <div id="bookingHistoryList" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="text-align: center; padding: 40px; background: #f9fafb; border-radius: 12px;">
+                        <div style="font-size: 4em; margin-bottom: 15px;">📋</div>
+                        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">No booking history</h4>
+                        <p style="margin: 0; color: #666;">Your completed and cancelled bookings will appear here</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spending Overview Section -->
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                <h3 style="margin: 0 0 20px 0; color: #2c3e50; font-size: 1.5em;">💰 Spending Overview</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div style="background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 4px 12px rgba(76,175,80,0.3);">
+                        <p style="margin: 0 0 10px 0; color: rgba(255,255,255,0.9); font-size: 0.9em; font-weight: 500;">This Month</p>
+                        <h2 style="margin: 0; color: white; font-size: 2em;">$0</h2>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #ff9800 0%, #ffa726 100%); padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 4px 12px rgba(255,152,0,0.3);">
+                        <p style="margin: 0 0 10px 0; color: rgba(255,255,255,0.9); font-size: 0.9em; font-weight: 500;">Total Spent</p>
+                        <h2 style="margin: 0; color: white; font-size: 2em;">$0</h2>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 4px 12px rgba(102,126,234,0.3);">
+                        <p style="margin: 0 0 10px 0; color: rgba(255,255,255,0.9); font-size: 0.9em; font-weight: 500;">Favorites</p>
+                        <h2 style="margin: 0; color: white; font-size: 2em;">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Access Cards -->
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                <h3 style="margin: 0 0 20px 0; color: #2c3e50; font-size: 1.5em;">🔗 Quick Access</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    
+                    <a href="customer-bookings.html" class="icon-menu-card" style="margin: 0;">
+                        <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=200&h=200&fit=crop" alt="Bookings" class="icon-image">
+                        <div class="icon">📅</div>
+                        <h3>My Bookings</h3>
+                        <p>Track appointments</p>
+                    </a>
+
+                    <a href="customer-profile.html" class="icon-menu-card" style="margin: 0;">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Profile" class="icon-image">
+                        <div class="icon">👤</div>
+                        <h3>Profile</h3>
+                        <p>Edit your profile</p>
+                    </a>
+
+                    <a href="help.html" class="icon-menu-card" style="margin: 0;">
+                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=200&h=200&fit=crop" alt="Help" class="icon-image">
+                        <div class="icon">❓</div>
+                        <h3>Help & Support</h3>
+                        <p>Get assistance</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleNotifications(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('notificationDropdown');
+            const userDropdown = document.getElementById('userDropdown');
+            if (userDropdown) userDropdown.style.display = 'none';
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleUserMenu(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('userDropdown');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            if (notificationDropdown) notificationDropdown.style.display = 'none';
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', function(event) {
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationBtn = document.querySelector('.nav-notifications');
+            if (notificationDropdown && !notificationBtn.contains(event.target)) {
+                notificationDropdown.style.display = 'none';
+            }
+
+            const userDropdown = document.getElementById('userDropdown');
+            const userMenuBtn = document.querySelector('.nav-user-menu');
+            if (userDropdown && !userMenuBtn.contains(event.target)) {
+                userDropdown.style.display = 'none';
+            }
+        });
+
+        // Load customer data
+        function loadCustomerData() {
+            try {
+                const customerData = JSON.parse(localStorage.getItem('customerProfile') || '{}');
+                
+                if (customerData.name) {
+                    // Extract first name for the welcome message
+                    const firstName = customerData.name.split(' ')[0];
+                    document.getElementById('displayName').textContent = firstName;
+                }
+                
+                if (customerData.email) {
+                    document.getElementById('displayEmail').textContent = customerData.email;
+                }
+                
+                if (customerData.location) {
+                    document.getElementById('displayLocation').textContent = customerData.location;
+                }
+                
+                // Load bookings data (placeholder)
+                const bookingsData = JSON.parse(localStorage.getItem('customerBookings') || '[]');
+                document.getElementById('activeBookings').textContent = bookingsData.filter(b => b.status === 'active').length || 0;
+                document.getElementById('completedBookings').textContent = bookingsData.filter(b => b.status === 'completed').length || 0;
+                
+            } catch(e) {
+                console.error('Error loading customer data:', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCustomerData();
+        });
+
+        window.onload = function() {
+            setTimeout(loadCustomerData, 100);
+        };
+        
+        // IMMEDIATE EXECUTION - Load data right away
+        (function() {
+            const data = JSON.parse(localStorage.getItem('customerProfile') || '{}');
+            
+            setTimeout(function() {
+                // Update name
+                if (data.name) {
+                    const firstName = data.name.split(' ')[0];
+                    const nameEl = document.getElementById('displayName');
+                    if (nameEl) {
+                        nameEl.textContent = firstName;
+                    }
+                }
+                
+                // Update email
+                if (data.email) {
+                    const emailEl = document.getElementById('displayEmail');
+                    if (emailEl) {
+                        emailEl.textContent = data.email;
+                    }
+                }
+                
+                // Update location
+                if (data.location) {
+                    const locEl = document.getElementById('displayLocation');
+                    if (locEl) {
+                        locEl.textContent = data.location;
+                    }
+                }
+                
+                // Update nav name
+                const navName = document.querySelector('.user-name-nav');
+                if (navName && data.name) {
+                    const firstName = data.name.split(' ')[0];
+                    navName.textContent = firstName;
+                }
+            }, 50);
+        })();
+    </script>
+    
+    <script src="dashboard.js"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="careers.html">Careers</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="safety.html">Safety</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Providers</h4>
+                <a href="service-provider-login.html">Provider Login</a>
+                <a href="service-provider-login.html">Become a Provider</a>
+                <a href="provider-resources.html">Provider Resources</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Services - Task Masters</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body.dark-mode { background: #1a1a1a; color: #e0e0e0; }
+        body.dark-mode .modern-navbar { background: #0d1117 !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p { color: #b0b0b0; }
+        body.dark-mode .service-card { background: #0d1117; border: 1px solid #30363d; }
+        body.dark-mode .footer { background: #0d1117; border-top: 1px solid #30363d; }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e0e0; }
+    </style>
+    <script>
+        (function() {
+            try {
+                const custSettings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                const provSettings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (custSettings.darkMode === true || provSettings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><h2>🎯 Task Masters</h2></a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="index.html#services">Services</a>
+                <a href="index.html#how-it-works">How it Works</a>
+                <a href="index.html#about">About</a>
+                <a href="service-provider-login.html" class="btn-provider" id="providerBtn">Become a Provider</a>
+                <button class="btn-login" id="loginBtn" onclick="showCustomerLogin()">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Service Header -->
+    <section class="service-header">
+        <div class="service-header-content">
+            <h1 id="serviceTitle">Service Providers</h1>
+            <p id="serviceDescription">Browse available professionals in your area</p>
+            
+            <div class="search-filter-bar">
+                <input type="text" id="locationInput" placeholder="Enter your location" value="Your Area" />
+                <select id="sortBy">
+                    <option value="rating">Sort by Rating</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="experience">Experience</option>
+                </select>
+                <button class="btn-filter" onclick="applyFilters()">Apply</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Providers Section -->
+    <section class="providers-section">
+        <div class="providers-container">
+            <div class="filters-sidebar">
+                <h3>Filters</h3>
+                
+                <div class="filter-group">
+                    <h4>Price Range</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="budget" onchange="applyFilters()"> Budget ($0-$50)
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="medium" onchange="applyFilters()"> Medium ($50-$150)
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="premium" onchange="applyFilters()"> Premium ($150+)
+                    </label>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Rating</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="5" onchange="applyFilters()"> ⭐ 5 Stars
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="4" onchange="applyFilters()"> ⭐ 4+ Stars
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="3" onchange="applyFilters()"> ⭐ 3+ Stars
+                    </label>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Availability</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="today" onchange="applyFilters()"> Available Today
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="weekend" onchange="applyFilters()"> Weekend Available
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="verified" onchange="applyFilters()"> Verified Only
+                    </label>
+                </div>
+
+                <button class="btn-clear-filters" onclick="clearFilters()">Clear All Filters</button>
+            </div>
+
+            <div class="providers-list" id="providersList">
+                <!-- Providers will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Customer Login</h2>
+            <form class="login-form" onsubmit="handleCustomerLogin(event)">
+                <input type="email" placeholder="Email Address" required />
+                <input type="password" placeholder="Password" required />
+                <button type="submit" class="btn-submit">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="index.html#about">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Safety</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Providers</h4>
+                <a href="service-provider-login.html">Provider Login</a>
+                <a href="service-provider-login.html">Become a Provider</a>
+                <a href="#">Provider Resources</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="services.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Update navigation based on login status
+        window.addEventListener('DOMContentLoaded', () => {
+            const customerAuth = Auth.isLoggedIn('customer');
+            const providerAuth = Auth.isLoggedIn('provider');
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const providerBtn = document.getElementById('providerBtn');
+            
+            if (loginBtn && providerBtn) {
+                if (customerAuth) {
+                    loginBtn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
+                } else if (providerAuth) {
+                    loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
+                    providerBtn.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

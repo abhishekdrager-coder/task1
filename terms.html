@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Task Masters</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body.dark-mode { background: #1a1a1a; color: #e0e0e0; }
+        body.dark-mode .modern-navbar { background: #0d1117 !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p { color: #b0b0b0; }
+        body.dark-mode .terms-section { background: #0d1117; border: 1px solid #30363d; }
+        body.dark-mode .footer { background: #0d1117; border-top: 1px solid #30363d; }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e0e0; }
+    </style>
+    <script>
+        (function() {
+            try {
+                const custSettings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                const provSettings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (custSettings.darkMode === true || provSettings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="modern-navbar" style="background: #2c3e50; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <a href="index.html" style="text-decoration: none;">
+            <div class="logo" style="display: flex; align-items: center; gap: 15px;">
+                <i class="fas fa-bullseye" style="color: white; font-size: 2.5em;"></i>
+                <span class="logo-text" style="color: white; font-size: 32px; font-weight: bold;">Task Masters</span>
+            </div>
+        </a>
+        
+        <div style="display: flex; gap: 30px; align-items: center;">
+            <a href="services.html" style="color: white; text-decoration: none; font-size: 18px; font-weight: 500;">Services</a>
+            <a href="about.html" style="color: white; text-decoration: none; font-size: 18px; font-weight: 500;">About</a>
+            <button id="loginBtn" class="btn-login" onclick="openModal()">Login</button>
+            <a href="service-provider-login.html" id="providerBtn" class="btn-provider">Become a Provider</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div style="max-width: 1200px; margin: 80px auto 40px; padding: 40px;">
+        <h1 style="font-size: 48px; color: #2c3e50; margin-bottom: 20px; text-align: center;">Terms of Service</h1>
+        
+        <!-- Language Toggle -->
+        <div style="text-align: center; margin: 30px 0;">
+            <button onclick="showEnglish()" id="btnEnglish" style="padding: 12px 30px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin: 0 10px;">English</button>
+            <button onclick="showFrench()" id="btnFrench" style="padding: 12px 30px; background: #e0e0e0; color: #333; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin: 0 10px;">Français</button>
+        </div>
+
+        <!-- ENGLISH CONTENT -->
+        <div id="englishContent" style="display: block;">
+            
+            <!-- PDF 1: Customer Terms (English) -->
+            <div style="background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 40px;">
+                <h2 style="color: #667eea; border-bottom: 3px solid #667eea; padding-bottom: 15px; margin-bottom: 30px;">📄 TASK MASTERS – TERMS & CONDITIONS<br><span style="font-size: 0.7em; color: #666;">(Customers & General Users)</span></h2>
+                
+                <p style="color: #666; margin-bottom: 30px;"><strong>Last Updated:</strong> January 18, 2026</p>
+                
+                <p style="line-height: 1.8; margin-bottom: 20px;">By accessing or using the Task Masters website, mobile application, or related services (the "Platform"), you agree to be legally bound by these Terms & Conditions ("Terms"). If you do not agree, do not use the Platform.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">1. Platform Role (Marketplace Only)</h3>
+                <p style="line-height: 1.8; margin-bottom: 15px;">Task Masters is a neutral online marketplace that connects customers with independent service providers.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;"><strong>Task Masters:</strong></p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Does not provide services</li>
+                    <li>Does not employ or supervise service providers</li>
+                    <li>Does not guarantee completion, quality, accuracy, safety, or legality of services</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Any service agreement exists solely between the customer and the service provider.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">2. Definitions</h3>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li><strong>Customer:</strong> Any person booking or requesting services</li>
+                    <li><strong>Service Provider:</strong> An independent contractor offering services</li>
+                    <li><strong>Service:</strong> Any task performed by a service provider</li>
+                    <li><strong>Platform:</strong> Task Masters website, app, and systems</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">3. Recommendation to Review Terms</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Users are strongly advised to read these Terms in full before booking any service provider. Use of the Platform constitutes acceptance.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">4. Advertising, Featured Listings & No Endorsement</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Task Masters may display advertisements, featured listings, or promoted service providers.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Such placement does not constitute endorsement, certification, approval, or guarantee of:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Skill</li>
+                    <li>Reliability</li>
+                    <li>Completion</li>
+                    <li>Safety</li>
+                    <li>Pricing</li>
+                    <li>Accuracy</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">5. Verification & Third-Party Checks (No Liability)</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">All background checks, criminal record checks, identity verification, and document reviews are conducted exclusively by independent third-party verification providers.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;"><strong>Task Masters:</strong></p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Does not perform verification</li>
+                    <li>Does not control verification methods or databases</li>
+                    <li>Does not guarantee accuracy or completeness</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">The third party is solely responsible for verification results. Task Masters shall not be liable in court for verification errors, omissions, or inaccuracies.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">6. "Verified" Badge (Limited Meaning)</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">A "Verified" badge indicates only that limited checks were completed at a point in time.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;">It does not guarantee:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Service quality</li>
+                    <li>Completion</li>
+                    <li>Ongoing monitoring</li>
+                    <li>Licensing</li>
+                    <li>Insurance</li>
+                    <li>Safety</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">7. One-Time PIN (OTP) Identification</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Task Masters may issue a one-time PIN to service providers for identification purposes.</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Customers may enter the PIN on their device</li>
+                    <li>A photo supplied by the service provider may be displayed</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 10px;"><strong>Customer Responsibility:</strong> Customers are solely responsible for confirming the provider's identity in person.</p>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters is not liable for impersonation, identity errors, or reliance on OTPs or photos.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">8. Side Deals Outside Task Masters (Total Liability Exclusion)</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">If a customer and service provider enter into any agreement, payment, or service outside the Platform, Task Masters is completely excluded from:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Legal liability</li>
+                    <li>Payment disputes</li>
+                    <li>Service outcomes</li>
+                    <li>Injuries or damages</li>
+                    <li>Data use</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Such activity is at the parties' sole risk.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">9. Payments, Fraud & Financial Institutions</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Payments are processed by third-party payment processors.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;"><strong>Task Masters:</strong></p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Does not process or store payment data</li>
+                    <li>Is not responsible for fees, fraud, chargebacks, or failures</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Users must contact their bank or financial institution for all payment issues.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">10. Pricing, Taxes & Zero Commission</h3>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Task Masters charges 0% commission</li>
+                    <li>Prices are set solely by service providers</li>
+                    <li>Prices exclude applicable federal and provincial taxes</li>
+                    <li>Any deductions are made solely by the third-party payment processor</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">11. Fake Listings & Reporting</h3>
+                <p style="line-height: 1.8; margin-bottom: 15px;">Service providers are responsible for listing accuracy.</p>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Fake or incorrect listings may be reported via the Platform.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">12. Data Use, Retention & Loss</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Task Masters may retain data for legal compliance, court proceedings, training, and quality purposes.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Task Masters is not liable for data loss due to:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Server failure</li>
+                    <li>System crash</li>
+                    <li>Cyber incidents</li>
+                    <li>Force majeure</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters does not intentionally leak personal information.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">13. No Duty of Care / No Reliance</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">No action by Task Masters creates a duty of care or fiduciary obligation.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Users agree they do not rely on:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Verification</li>
+                    <li>Reviews</li>
+                    <li>Badges</li>
+                    <li>Advertising</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">14. Limitation of Liability</h3>
+                <p style="line-height: 1.8; margin-bottom: 15px;">To the maximum extent permitted by Canadian law, Task Masters and its team shall not be liable for any damages.</p>
+                <p style="line-height: 1.8; margin-bottom: 20px;">If liability cannot be excluded, it is limited to the minimum amount required by law.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">15. Indemnification</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Users agree to indemnify and hold harmless Task Masters and its team from all claims arising from Platform use or side deals.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">16. Arbitration & Governing Law</h3>
+                <p style="line-height: 1.8; margin-bottom: 15px;">Disputes involving Task Masters shall be resolved by binding arbitration in Canada, except where prohibited by law.</p>
+                <p style="line-height: 1.8; margin-bottom: 20px;">These Terms are governed by Canadian law.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">17. Quebec Carve-Out</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Certain provisions may not apply to Quebec residents where prohibited by law.</p>
+            </div>
+
+            <!-- PDF 2: Service Provider Terms (English) -->
+            <div style="background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 40px;">
+                <h2 style="color: #764ba2; border-bottom: 3px solid #764ba2; padding-bottom: 15px; margin-bottom: 30px;">📄 TASK MASTERS – SERVICE PROVIDER TERMS & CONDITIONS</h2>
+                
+                <p style="color: #666; margin-bottom: 30px;"><strong>Last Updated:</strong> January 18, 2026</p>
+                
+                <p style="line-height: 1.8; margin-bottom: 20px;">These Service Provider Terms & Conditions ("Provider Terms") constitute a legally binding agreement between you ("Service Provider") and Task Masters ("Task Masters", "we", "us").</p>
+                <p style="line-height: 1.8; margin-bottom: 20px;">By registering, listing services, or providing services through the Platform, you agree to these Provider Terms.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">1. Independent Contractor Status</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You acknowledge and agree that:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>You are an independent contractor</li>
+                    <li>You are not an employee, agent, partner, or representative of Task Masters</li>
+                    <li>You have no authority to bind Task Masters in any manner</li>
+                    <li>Nothing in these Provider Terms creates an employment, agency, partnership, or joint venture relationship</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">2. Sole Responsibility for Services</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You are solely and fully responsible for:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Performing services</li>
+                    <li>Completing services</li>
+                    <li>Quality, accuracy, and safety of services</li>
+                    <li>Tools, equipment, and materials</li>
+                    <li>Compliance with all applicable laws and regulations</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters does not supervise, direct, control, or guarantee your services.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">3. Listings, Representations & Accuracy</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You represent and warrant that all information you provide, including:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Listings</li>
+                    <li>Descriptions</li>
+                    <li>Photos</li>
+                    <li>Pricing</li>
+                    <li>Qualifications</li>
+                    <li>Availability</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">is true, accurate, current, and not misleading. Providing false, altered, misleading, or fraudulent information constitutes a material breach of these Terms.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">4. Fraud, Misrepresentation & Legal Consequences</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Any submission of false information, fake photos, altered documents, impersonation, or misrepresentation:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>May constitute fraud under Canadian law</li>
+                    <li>Is grounds for immediate termination</li>
+                    <li>May result in referral to law enforcement</li>
+                    <li>Makes you solely liable in court</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters bears no responsibility for your misrepresentations.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">5. Verification & Third-Party Background Checks</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You consent to background checks, identity verification, and document review conducted by independent third-party verification providers.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You acknowledge that:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Task Masters does not conduct verification itself</li>
+                    <li>Verification results are not guaranteed</li>
+                    <li>Third-party providers are solely responsible for accuracy</li>
+                    <li>Task Masters bears no liability for verification errors, omissions, or outcomes</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">6. "Verified" Badge – No Guarantee</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">A "Verified" badge:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Reflects limited checks at a point in time</li>
+                    <li>Does not guarantee trustworthiness, skill, legality, or service completion</li>
+                    <li>Does not imply endorsement or approval</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">7. One-Time PIN (OTP) Identification</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You may be issued a one-time PIN for identification purposes.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You acknowledge that:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>OTPs do not guarantee identity</li>
+                    <li>Customers are responsible for confirming identity</li>
+                    <li>Task Masters is not liable for impersonation</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">8. Side Deals & Platform Circumvention</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">If you enter into any agreement, payment, or service outside the Platform:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Task Masters is fully excluded from all liability</li>
+                    <li>You assume all legal, financial, and operational risk</li>
+                    <li>Task Masters owes no duties to you or the customer</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">9. Payments, Fees & Zero Commission</h3>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Task Masters charges 0% commission</li>
+                    <li>Payments are processed solely by third-party processors</li>
+                    <li>Any fees or deductions are imposed by the payment processor</li>
+                    <li>You must contact your bank or financial institution for payment issues</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters is not liable for payment fraud, failures, or chargebacks.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">10. Taxes & Regulatory Compliance</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You are solely responsible for:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Reporting income</li>
+                    <li>Paying taxes</li>
+                    <li>Obtaining licenses or permits</li>
+                    <li>Insurance coverage</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters does not provide tax or legal advice.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">11. Data Submission & Retention</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You authorize Task Masters to retain your data for:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Legal compliance</li>
+                    <li>Court proceedings</li>
+                    <li>Quality assurance</li>
+                    <li>Training purposes</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters is not liable for data loss due to system failures.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">12. Indemnification (Very Broad)</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">You agree to defend, indemnify, and hold harmless Task Masters and its owners, directors, officers, employees, contractors, and affiliates from all claims, including:</p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Customer claims</li>
+                    <li>Government claims</li>
+                    <li>Tax claims</li>
+                    <li>Injury or damage claims</li>
+                    <li>Fraud or misrepresentation claims</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">13. Limitation of Liability</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">To the maximum extent permitted by Canadian law, Task Masters shall not be liable for any damages arising from your use of the Platform.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">14. Termination</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters may suspend or terminate your account at any time, without notice or liability, for any reason.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">15. Governing Law & Arbitration</h3>
+                <p style="line-height: 1.8; margin-bottom: 15px;">These Provider Terms are governed by the laws of Canada and the applicable province.</p>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Disputes involving Task Masters shall be resolved by binding arbitration in Canada, except where prohibited by law.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">16. Quebec Carve-Out</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Certain provisions may not apply to Quebec residents where prohibited by law.</p>
+            </div>
+        </div>
+
+        <!-- FRENCH CONTENT -->
+        <div id="frenchContent" style="display: none;">
+            
+            <!-- PDF 3: Customer Terms (French) -->
+            <div style="background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 40px;">
+                <h2 style="color: #667eea; border-bottom: 3px solid #667eea; padding-bottom: 15px; margin-bottom: 30px;">📄 TASK MASTERS – CONDITIONS GÉNÉRALES<br><span style="font-size: 0.7em; color: #666;">(Clients et utilisateurs)</span></h2>
+                
+                <p style="color: #666; margin-bottom: 30px;"><strong>Dernière mise à jour :</strong> 18 janvier 2026</p>
+                
+                <p style="line-height: 1.8; margin-bottom: 20px;">En accédant à la plateforme Task Masters ou en l'utilisant, vous acceptez d'être légalement lié par les présentes Conditions générales.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">1. Rôle de la plateforme (Place de marché uniquement)</h3>
+                <p style="line-height: 1.8; margin-bottom: 10px;">Task Masters agit uniquement comme place de marché technologique neutre reliant des clients à des prestataires de services indépendants.</p>
+                <p style="line-height: 1.8; margin-bottom: 10px;"><strong>Task Masters :</strong></p>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 15px;">
+                    <li>Ne fournit aucun service</li>
+                    <li>Ne supervise ni ne contrôle les prestataires</li>
+                    <li>Ne garantit ni l'exécution, ni la qualité, ni l'exactitude des services</li>
+                </ul>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Tout contrat de service est conclu exclusivement entre le client et le prestataire.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">2. Définitions</h3>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li><strong>Client :</strong> Toute personne réservant un service</li>
+                    <li><strong>Prestataire de services :</strong> Travailleur indépendant offrant des services</li>
+                    <li><strong>Service :</strong> Toute tâche effectuée par un prestataire</li>
+                    <li><strong>Plateforme :</strong> Site web et applications Task Masters</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">3. Recommandation de lecture</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Les utilisateurs sont fortement invités à lire l'intégralité des présentes conditions avant toute réservation.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">4. Publicité et absence d'endossement</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Les annonces, mises en avant ou promotions ne constituent pas une approbation, certification ou garantie.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">5. Vérification par des tiers (Aucune responsabilité)</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Toutes les vérifications sont effectuées par des prestataires tiers indépendants. Task Masters n'est pas responsable de l'exactitude des résultats.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">6. Badge « Vérifié » – Portée limitée</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Le badge « Vérifié » indique uniquement qu'une vérification limitée a eu lieu à un moment donné.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">7. Code PIN à usage unique</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Le client est seul responsable de vérifier l'identité du prestataire.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">8. Ententes hors plateforme</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Toute entente conclue en dehors de Task Masters exclut totalement Task Masters de toute responsabilité.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">9. Paiements et fraude</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Les utilisateurs doivent contacter leur banque ou institution financière en cas de problème.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">10. Prix, taxes et commission</h3>
+                <ul style="line-height: 1.8; margin-left: 30px; margin-bottom: 20px;">
+                    <li>Task Masters prélève 0 % de commission</li>
+                    <li>Les prix n'incluent pas les taxes applicables</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">11. Données et perte de données</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters n'est pas responsable de la perte de données due à des défaillances techniques.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">12. Absence de devoir de diligence</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Aucune obligation fiduciaire ou devoir de diligence n'est créé.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">13. Limitation de responsabilité</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">La responsabilité de Task Masters est exclue dans la mesure maximale permise par la loi canadienne.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">14. Indemnisation</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Les utilisateurs acceptent d'indemniser Task Masters contre toute réclamation.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">15. Droit applicable et arbitrage</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Les présentes conditions sont régies par le droit canadien.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">16. Disposition spécifique au Québec</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Certaines dispositions peuvent ne pas s'appliquer aux résidents du Québec.</p>
+            </div>
+
+            <!-- PDF 4: Service Provider Terms (French) -->
+            <div style="background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 40px;">
+                <h2 style="color: #764ba2; border-bottom: 3px solid #764ba2; padding-bottom: 15px; margin-bottom: 30px;">📄 TASK MASTERS – CONDITIONS DES PRESTATAIRES DE SERVICES</h2>
+                
+                <p style="color: #666; margin-bottom: 30px;"><strong>Dernière mise à jour :</strong> 18 janvier 2026</p>
+                
+                <p style="line-height: 1.8; margin-bottom: 20px;">Document juridiquement contraignant régissant la relation entre Task Masters et les prestataires indépendants.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">1. Statut de travailleur indépendant</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Le prestataire reconnaît qu'il agit à titre de travailleur indépendant et non comme employé.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">2. Responsabilité exclusive</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Le prestataire est entièrement responsable de ses services, de leur exécution et de leur conformité légale.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">3. Exactitude et fraude</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Toute fausse déclaration peut constituer une fraude et entraîner une résiliation immédiate.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">4. Vérifications par des tiers</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Les vérifications sont effectuées par des tiers indépendants. Task Masters décline toute responsabilité.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">5. Paiements et fiscalité</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Le prestataire est responsable de ses impôts, taxes et obligations légales.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">6. Ententes hors plateforme</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Toute entente hors plateforme exclut Task Masters de toute responsabilité.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">7. Indemnisation</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Le prestataire accepte d'indemniser Task Masters pour toute réclamation.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">8. Résiliation</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Task Masters peut résilier l'accès sans préavis ni responsabilité.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">9. Droit applicable</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Les présentes conditions sont régies par le droit canadien.</p>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">10. Disposition spécifique au Québec</h3>
+                <p style="line-height: 1.8; margin-bottom: 20px;">Certaines clauses peuvent ne pas s'appliquer au Québec.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showEnglish() {
+            document.getElementById('englishContent').style.display = 'block';
+            document.getElementById('frenchContent').style.display = 'none';
+            document.getElementById('btnEnglish').style.background = '#667eea';
+            document.getElementById('btnEnglish').style.color = 'white';
+            document.getElementById('btnFrench').style.background = '#e0e0e0';
+            document.getElementById('btnFrench').style.color = '#333';
+        }
+
+        function showFrench() {
+            document.getElementById('englishContent').style.display = 'none';
+            document.getElementById('frenchContent').style.display = 'block';
+            document.getElementById('btnEnglish').style.background = '#e0e0e0';
+            document.getElementById('btnEnglish').style.color = '#333';
+            document.getElementById('btnFrench').style.background = '#667eea';
+            document.getElementById('btnFrench').style.color = 'white';
+        }
+    </script>
+
+    <script src="script.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const customerAuth = Auth.isLoggedIn('customer');
+            const providerAuth = Auth.isLoggedIn('provider');
+            const loginBtn = document.getElementById('loginBtn');
+            const providerBtn = document.getElementById('providerBtn');
+            
+            if (customerAuth) {
+                loginBtn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
+            } else if (providerAuth) {
+                loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
+                providerBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Test - Provider Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-title {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.pass {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        .code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Provider Dashboard - Features Test Page</h1>
+    <p>This page tests if all features are properly implemented in provider-dashboard.html</p>
+
+    <!-- TEST 1: Location Tab Exists -->
+    <div class="test-section">
+        <div class="test-title">
+            Test 1: Location Tab & Province Selector
+            <span class="status" id="test1-status">Testing...</span>
+        </div>
+        <p>Checking if Location tab and Province selector exist...</p>
+        <button onclick="runTest1()">Run Test 1</button>
+        <div class="result" id="test1-result" style="display:none;"></div>
+    </div>
+
+    <!-- TEST 2: Cities Functionality -->
+    <div class="test-section">
+        <div class="test-title">
+            Test 2: Cities Loading Function
+            <span class="status" id="test2-status">Testing...</span>
+        </div>
+        <p>Checking if loadProvinceCities() function exists in dashboard.js...</p>
+        <button onclick="runTest2()">Run Test 2</button>
+        <div class="result" id="test2-result" style="display:none;"></div>
+    </div>
+
+    <!-- TEST 3: Advanced Scheduling Mode -->
+    <div class="test-section">
+        <div class="test-title">
+            Test 3: Advanced Scheduling Mode
+            <span class="status" id="test3-status">Testing...</span>
+        </div>
+        <p>Checking if Advanced City Mode section exists...</p>
+        <button onclick="runTest3()">Run Test 3</button>
+        <div class="result" id="test3-result" style="display:none;"></div>
+    </div>
+
+    <!-- TEST 4: Tab Switching Function -->
+    <div class="test-section">
+        <div class="test-title">
+            Test 4: Settings Tab Navigation
+            <span class="status" id="test4-status">Testing...</span>
+        </div>
+        <p>Checking if showSettingsTab() function exists...</p>
+        <button onclick="runTest4()">Run Test 4</button>
+        <div class="result" id="test4-result" style="display:none;"></div>
+    </div>
+
+    <!-- Interactive Demo -->
+    <div class="test-section" style="background: #e3f2fd;">
+        <div class="test-title" style="border-bottom-color: #2196f3;">
+            📍 Interactive Demo: Province & Cities
+        </div>
+        <p><strong>Select a province to see cities:</strong></p>
+        <select id="demoProvince" onchange="showDemoCities()" style="width: 100%; padding: 8px; margin: 10px 0;">
+            <option value="">Select province...</option>
+            <option value="ON">Ontario</option>
+            <option value="BC">British Columbia</option>
+            <option value="AB">Alberta</option>
+            <option value="QC">Quebec</option>
+        </select>
+        <div id="demoCities" style="margin-top: 15px;"></div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script>
+        // Test 1: Check if location tab exists in provider-dashboard.html
+        function runTest1() {
+            const statusEl = document.getElementById('test1-status');
+            const resultEl = document.getElementById('test1-result');
+            
+            // Load provider-dashboard.html and check for location tab
+            fetch('provider-dashboard.html')
+                .then(response => response.text())
+                .then(html => {
+                    const hasLocationTab = html.includes('id="location"');
+                    const hasProvinceSelect = html.includes('id="serviceProvince"');
+                    const hasLocationButton = html.includes("showSettingsTab('location'");
+                    
+                    if (hasLocationTab && hasProvinceSelect && hasLocationButton) {
+                        statusEl.textContent = '✅ PASS';
+                        statusEl.className = 'status pass';
+                        resultEl.innerHTML = `
+                            <strong>✅ All components found!</strong><br>
+                            • Location tab div: <span class="code">id="location"</span> ✓<br>
+                            • Province selector: <span class="code">id="serviceProvince"</span> ✓<br>
+                            • Location tab button: ✓<br><br>
+                            <strong>How to access:</strong> Click Profile Settings → Click "Location" tab
+                        `;
+                    } else {
+                        statusEl.textContent = '❌ FAIL';
+                        statusEl.className = 'status fail';
+                        resultEl.innerHTML = `
+                            <strong>❌ Missing components:</strong><br>
+                            • Location tab: ${hasLocationTab ? '✓' : '✗'}<br>
+                            • Province select: ${hasProvinceSelect ? '✓' : '✗'}<br>
+                            • Tab button: ${hasLocationButton ? '✓' : '✗'}
+                        `;
+                    }
+                    resultEl.style.display = 'block';
+                })
+                .catch(err => {
+                    statusEl.textContent = '❌ ERROR';
+                    statusEl.className = 'status fail';
+                    resultEl.innerHTML = `Error: ${err.message}`;
+                    resultEl.style.display = 'block';
+                });
+        }
+
+        // Test 2: Check if loadProvinceCities function exists
+        function runTest2() {
+            const statusEl = document.getElementById('test2-status');
+            const resultEl = document.getElementById('test2-result');
+            
+            if (typeof loadProvinceCities === 'function') {
+                statusEl.textContent = '✅ PASS';
+                statusEl.className = 'status pass';
+                resultEl.innerHTML = `
+                    <strong>✅ Function exists!</strong><br>
+                    The <span class="code">loadProvinceCities()</span> function is properly loaded.<br>
+                    This function automatically populates cities when you select a province.
+                `;
+            } else {
+                statusEl.textContent = '❌ FAIL';
+                statusEl.className = 'status fail';
+                resultEl.innerHTML = `
+                    <strong>❌ Function not found!</strong><br>
+                    The <span class="code">loadProvinceCities()</span> function is missing from dashboard.js
+                `;
+            }
+            resultEl.style.display = 'block';
+        }
+
+        // Test 3: Check if advanced scheduling mode exists
+        function runTest3() {
+            const statusEl = document.getElementById('test3-status');
+            const resultEl = document.getElementById('test3-result');
+            
+            fetch('provider-dashboard.html')
+                .then(response => response.text())
+                .then(html => {
+                    const hasAdvancedMode = html.includes('id="advancedCityMode"');
+                    const hasDayCityAssignment = html.includes('id="dayCityAssignment"');
+                    const hasMondayCities = html.includes('id="mondayCities"');
+                    
+                    if (hasAdvancedMode && hasDayCityAssignment && hasMondayCities) {
+                        statusEl.textContent = '✅ PASS';
+                        statusEl.className = 'status pass';
+                        resultEl.innerHTML = `
+                            <strong>✅ Advanced scheduling found!</strong><br>
+                            • Advanced mode container: <span class="code">id="advancedCityMode"</span> ✓<br>
+                            • Day assignment section: ✓<br>
+                            • City checkboxes for each day: ✓<br><br>
+                            <strong>How to access:</strong> Go to Availability → Select "Advanced Mode" radio button
+                        `;
+                    } else {
+                        statusEl.textContent = '❌ FAIL';
+                        statusEl.className = 'status fail';
+                        resultEl.innerHTML = `
+                            <strong>❌ Missing components:</strong><br>
+                            • Advanced mode: ${hasAdvancedMode ? '✓' : '✗'}<br>
+                            • Day assignment: ${hasDayCityAssignment ? '✓' : '✗'}<br>
+                            • City checkboxes: ${hasMondayCities ? '✓' : '✗'}
+                        `;
+                    }
+                    resultEl.style.display = 'block';
+                });
+        }
+
+        // Test 4: Check if showSettingsTab function exists
+        function runTest4() {
+            const statusEl = document.getElementById('test4-status');
+            const resultEl = document.getElementById('test4-result');
+            
+            if (typeof showSettingsTab === 'function') {
+                statusEl.textContent = '✅ PASS';
+                statusEl.className = 'status pass';
+                resultEl.innerHTML = `
+                    <strong>✅ Function exists!</strong><br>
+                    The <span class="code">showSettingsTab()</span> function is properly loaded.<br>
+                    This function switches between tabs (Basic Info, Services, Location, Business Details).
+                `;
+            } else {
+                statusEl.textContent = '❌ FAIL';
+                statusEl.className = 'status fail';
+                resultEl.innerHTML = `
+                    <strong>❌ Function not found!</strong><br>
+                    The <span class="code">showSettingsTab()</span> function is missing from dashboard.js
+                `;
+            }
+            resultEl.style.display = 'block';
+        }
+
+        // Interactive demo
+        function showDemoCities() {
+            const province = document.getElementById('demoProvince').value;
+            const demoCitiesEl = document.getElementById('demoCities');
+            
+            if (!province) {
+                demoCitiesEl.innerHTML = '';
+                return;
+            }
+            
+            const provinceCities = {
+                'ON': ['Toronto', 'Ottawa', 'Mississauga', 'Brampton', 'Hamilton'],
+                'BC': ['Vancouver', 'Surrey', 'Burnaby', 'Richmond', 'Abbotsford'],
+                'AB': ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'St. Albert'],
+                'QC': ['Montreal', 'Quebec City', 'Laval', 'Gatineau', 'Longueuil']
+            };
+            
+            const cities = provinceCities[province] || [];
+            demoCitiesEl.innerHTML = `
+                <strong>Cities available in this province (showing first 5):</strong>
+                <ul style="margin-top: 10px;">
+                    ${cities.map(city => `<li>${city}</li>`).join('')}
+                </ul>
+                <p style="margin-top: 10px; color: #666; font-style: italic;">
+                    In the actual dashboard, you can select multiple cities from the complete list!
+                </p>
+            `;
+        }
+
+        // Run all tests on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                runTest1();
+                runTest2();
+                runTest3();
+                runTest4();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

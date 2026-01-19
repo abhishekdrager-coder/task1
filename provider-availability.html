@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Availability - Provider Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body.dark-mode { background: #1a1a1a; color: #e0e0e0; }
+        body.dark-mode .modern-navbar { background: #0d1117 !important; }
+        body.dark-mode .icon-dashboard-container { background: #1a1a1a; }
+        body.dark-mode .icon-dashboard-header h1 { color: #ffffff; }
+        body.dark-mode .icon-dashboard-header p { color: #b0b0b0; }
+        body.dark-mode form, body.dark-mode .schedule-section { background: #0d1117 !important; border: 1px solid #30363d; }
+        body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p, body.dark-mode label { color: #b0b0b0; }
+        body.dark-mode input[type="time"], body.dark-mode input[type="checkbox"] { background: #161b22; color: #e0e0e0; border: 1px solid #30363d; }
+        body.dark-mode .footer { background: #0d1117; border-top: 1px solid #30363d; }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e0e0; }
+        body.dark-mode .dropdown-menu { background: #161b22 !important; border: 1px solid #30363d !important; }
+        body.dark-mode .dropdown-menu a { color: #e0e0e0 !important; }
+        body.dark-mode .dropdown-menu a:hover { background: #0d1117 !important; }
+    </style>
+    <script>
+        (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) { console.error('Error loading dark mode:', e); }
+        })();
+    </script>
+</head>
+<body>
+    <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0;">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="provider.html" style="text-decoration: none;">
+                    <div class="logo-wrapper" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <span class="logo-icon" style="font-size: 2.5em;">🎯</span>
+                        <span class="logo-text" style="font-size: 32px; font-weight: 700; color: #ffffff;">Task Masters</span>
+                    </div>
+                </a>
+            </div>
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 30px;">
+                <a href="provider.html" class="nav-btn" style="display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 25px; text-decoration: none; color: white; font-weight: 600; font-size: 15px; cursor: pointer;">← Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="icon-dashboard-container">
+        <div class="icon-dashboard-header">
+            <h1>🕐 Availability</h1>
+            <p>Set your schedule and service locations</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+            <!-- Mode Selection -->
+            <div style="margin-bottom: 30px;">
+                <h3 style="margin: 0 0 15px 0; color: #2c3e50;">Choose Your Scheduling Mode</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="scheduleMode" value="basic" checked onchange="switchMode('basic')" style="margin-right: 10px;">
+                        <div style="display: inline-block; padding: 20px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 12px; width: 100%;">
+                            <strong style="color: #667eea; font-size: 1.1em;">📅 Basic Mode</strong>
+                            <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9em;">Same schedule for all service cities</p>
+                        </div>
+                    </label>
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="scheduleMode" value="advanced" onchange="switchMode('advanced')" style="margin-right: 10px;">
+                        <div style="display: inline-block; padding: 20px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 12px; width: 100%;">
+                            <strong style="color: #2c3e50; font-size: 1.1em;">🎯 Advanced Mode</strong>
+                            <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9em;">Different cities on different days</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Basic Mode -->
+            <div id="basicMode" style="display: block;">
+                <h2 style="margin: 0 0 20px 0;">Weekly Working Hours</h2>
+                <div style="display: grid; gap: 15px;" id="weeklySchedule">
+                    <!-- Monday -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #667eea;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <input type="checkbox" id="monday-enabled" checked onchange="toggleDay('monday')" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: 600; width: 100px;">Monday</span>
+                        </div>
+                        <div id="monday-times" style="display: flex; gap: 10px; align-items: center;">
+                            <input type="time" id="monday-start" value="09:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                            <span style="font-weight: 500;">to</span>
+                            <input type="time" id="monday-end" value="17:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                        </div>
+                    </div>
+
+                    <!-- Tuesday -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #667eea;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <input type="checkbox" id="tuesday-enabled" checked onchange="toggleDay('tuesday')" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: 600; width: 100px;">Tuesday</span>
+                        </div>
+                        <div id="tuesday-times" style="display: flex; gap: 10px; align-items: center;">
+                            <input type="time" id="tuesday-start" value="09:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                            <span style="font-weight: 500;">to</span>
+                            <input type="time" id="tuesday-end" value="17:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                        </div>
+                    </div>
+
+                    <!-- Wednesday -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #667eea;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <input type="checkbox" id="wednesday-enabled" checked onchange="toggleDay('wednesday')" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: 600; width: 100px;">Wednesday</span>
+                        </div>
+                        <div id="wednesday-times" style="display: flex; gap: 10px; align-items: center;">
+                            <input type="time" id="wednesday-start" value="09:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                            <span style="font-weight: 500;">to</span>
+                            <input type="time" id="wednesday-end" value="17:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                        </div>
+                    </div>
+
+                    <!-- Thursday -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #667eea;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <input type="checkbox" id="thursday-enabled" checked onchange="toggleDay('thursday')" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: 600; width: 100px;">Thursday</span>
+                        </div>
+                        <div id="thursday-times" style="display: flex; gap: 10px; align-items: center;">
+                            <input type="time" id="thursday-start" value="09:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                            <span style="font-weight: 500;">to</span>
+                            <input type="time" id="thursday-end" value="17:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                        </div>
+                    </div>
+
+                    <!-- Friday -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #667eea;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <input type="checkbox" id="friday-enabled" checked onchange="toggleDay('friday')" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: 600; width: 100px;">Friday</span>
+                        </div>
+                        <div id="friday-times" style="display: flex; gap: 10px; align-items: center;">
+                            <input type="time" id="friday-start" value="09:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                            <span style="font-weight: 500;">to</span>
+                            <input type="time" id="friday-end" value="17:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                        </div>
+                    </div>
+
+                    <!-- Saturday -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #e0e0e0;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <input type="checkbox" id="saturday-enabled" onchange="toggleDay('saturday')" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: 600; width: 100px;">Saturday</span>
+                        </div>
+                        <div id="saturday-times" style="display: none; gap: 10px; align-items: center;">
+                            <input type="time" id="saturday-start" value="09:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                            <span style="font-weight: 500;">to</span>
+                            <input type="time" id="saturday-end" value="17:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                        </div>
+                    </div>
+
+                    <!-- Sunday -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #e0e0e0;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <input type="checkbox" id="sunday-enabled" onchange="toggleDay('sunday')" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span style="font-weight: 600; width: 100px;">Sunday</span>
+                        </div>
+                        <div id="sunday-times" style="display: none; gap: 10px; align-items: center;">
+                            <input type="time" id="sunday-start" value="09:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                            <span style="font-weight: 500;">to</span>
+                            <input type="time" id="sunday-end" value="17:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Mode -->
+            <div id="advancedMode" style="display: none;">
+                <h2 style="margin: 0 0 10px 0;">Advanced Scheduling</h2>
+                <p style="color: #666; margin-bottom: 25px;">Assign specific cities to different days of the week</p>
+                <div id="advancedSchedule" style="display: grid; gap: 20px;">
+                    <p style="color: #999; text-align: center; padding: 40px; background: #f8f9fa; border-radius: 10px;">Please set your service cities in Profile Settings first</p>
+                </div>
+            </div>
+
+            <button onclick="saveSchedule(event)" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 1.1em; width: 100%; margin-top: 30px; box-shadow: 0 4px 12px rgba(102,126,234,0.3);">Save Schedule</button>
+        </div>
+    </div>
+
+    <script>
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+        function toggleDay(day) {
+            const checkbox = document.getElementById(day + '-enabled');
+            const timesDiv = document.getElementById(day + '-times');
+            timesDiv.style.display = checkbox.checked ? 'flex' : 'none';
+        }
+
+        function switchMode(mode) {
+            document.getElementById('basicMode').style.display = mode === 'basic' ? 'block' : 'none';
+            document.getElementById('advancedMode').style.display = mode === 'advanced' ? 'block' : 'none';
+            
+            if (mode === 'advanced') {
+                loadAdvancedMode();
+            }
+        }
+
+        function loadAdvancedMode() {
+            const profileData = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            const cities = profileData.cities || [];
+            
+            const container = document.getElementById('advancedSchedule');
+            
+            if (cities.length === 0) {
+                container.innerHTML = '<p style="color: #999; text-align: center; padding: 40px; background: #f8f9fa; border-radius: 10px;">Please set your service cities in Profile Settings first</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            days.forEach(day => {
+                const dayName = day.charAt(0).toUpperCase() + day.slice(1);
+                const div = document.createElement('div');
+                div.style.cssText = 'padding: 20px; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #667eea;';
+                
+                let html = `
+                    <h4 style="margin: 0 0 15px 0; color: #2c3e50;">📍 ${dayName}</h4>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="time" id="adv-${day}-start" value="09:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                        <span style="line-height: 40px; font-weight: 500;">to</span>
+                        <input type="time" id="adv-${day}-end" value="17:00" style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
+                `;
+                
+                cities.forEach(city => {
+                    html += `
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: white; border-radius: 6px; cursor: pointer;">
+                            <input type="checkbox" name="adv-${day}-cities" value="${city}" style="width: 18px; height: 18px;">
+                            <span style="font-size: 0.9em;">${city}</span>
+                        </label>
+                    `;
+                });
+                
+                html += '</div>';
+                div.innerHTML = html;
+                container.appendChild(div);
+            });
+        }
+
+        function saveSchedule(event) {
+            event.preventDefault();
+            
+            const mode = document.querySelector('input[name="scheduleMode"]:checked').value;
+            const scheduleData = { mode: mode, schedule: {} };
+            
+            if (mode === 'basic') {
+                days.forEach(day => {
+                    const enabled = document.getElementById(day + '-enabled').checked;
+                    if (enabled) {
+                        scheduleData.schedule[day] = {
+                            start: document.getElementById(day + '-start').value,
+                            end: document.getElementById(day + '-end').value,
+                            enabled: true
+                        };
+                    } else {
+                        scheduleData.schedule[day] = { enabled: false };
+                    }
+                });
+            } else {
+                days.forEach(day => {
+                    const checkboxes = document.querySelectorAll(`input[name="adv-${day}-cities"]:checked`);
+                    const selectedCities = Array.from(checkboxes).map(cb => cb.value);
+                    scheduleData.schedule[day] = {
+                        start: document.getElementById(`adv-${day}-start`).value,
+                        end: document.getElementById(`adv-${day}-end`).value,
+                        cities: selectedCities,
+                        enabled: selectedCities.length > 0
+                    };
+                });
+            }
+            
+            // Save to localStorage
+            try {
+                localStorage.setItem('providerAvailability', JSON.stringify(scheduleData));
+                console.log('Saved schedule:', scheduleData);
+                
+                // Verify save
+                const saved = localStorage.getItem('providerAvailability');
+                console.log('Verified saved data:', JSON.parse(saved));
+                
+                // Show success message
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Schedule Saved!';
+                btn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    window.location.href = 'provider.html';
+                }, 1500);
+            } catch (error) {
+                console.error('Error saving schedule:', error);
+                alert('Error saving schedule: ' + error.message);
+            }
+        }
+
+        // Load existing schedule on page load
+        window.onload = function() {
+            const scheduleData = JSON.parse(localStorage.getItem('providerAvailability') || '{}');
+            if (scheduleData.mode && scheduleData.schedule) {
+                // Load saved schedule
+                if (scheduleData.mode === 'basic') {
+                    days.forEach(day => {
+                        if (scheduleData.schedule[day]) {
+                            const dayData = scheduleData.schedule[day];
+                            document.getElementById(day + '-enabled').checked = dayData.enabled || false;
+                            if (dayData.start) document.getElementById(day + '-start').value = dayData.start;
+                            if (dayData.end) document.getElementById(day + '-end').value = dayData.end;
+                            toggleDay(day);
+                        }
+                    });
+                } else {
+                    document.querySelector('input[name="scheduleMode"][value="advanced"]').checked = true;
+                    switchMode('advanced');
+                    
+                    // Wait for advanced mode to load then populate saved data
+                    setTimeout(() => {
+                        days.forEach(day => {
+                            if (scheduleData.schedule[day]) {
+                                const dayData = scheduleData.schedule[day];
+                                if (dayData.start) document.getElementById(`adv-${day}-start`).value = dayData.start;
+                                if (dayData.end) document.getElementById(`adv-${day}-end`).value = dayData.end;
+                                
+                                // Check saved cities
+                                if (dayData.cities && Array.isArray(dayData.cities)) {
+                                    dayData.cities.forEach(cityName => {
+                                        const checkbox = document.querySelector(`input[name="adv-${day}-cities"][value="${cityName}"]`);
+                                        if (checkbox) checkbox.checked = true;
+                                    });
+                                }
+                            }
+                        });
+                    }, 200);
+                }
+            }
+        };
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="careers.html">Careers</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="safety.html">Safety</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Providers</h4>
+                <a href="service-provider-login.html">Provider Login</a>
+                <a href="service-provider-login.html">Become a Provider</a>
+                <a href="provider-resources.html">Provider Resources</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

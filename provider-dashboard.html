@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard - Task Masters</title>
+    <link rel="stylesheet" href="styles.css?v=3.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Modern Top Navigation -->
+    <nav class="modern-navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="#" onclick="showSection('overview'); return false;">
+                    <div class="logo-wrapper">
+                        <span class="logo-icon">🎯</span>
+                        <span class="logo-text">Task Masters</span>
+                    </div>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <div class="nav-notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </div>
+                <div class="nav-user-menu">
+                    <div class="user-avatar-small" id="navAvatar">👨‍💼</div>
+                    <span class="user-name-nav" id="navProviderName">Professional</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="modern-dashboard-container">
+        <!-- Modern Sidebar -->
+        <aside class="modern-sidebar">
+            <div class="sidebar-user-card">
+                <div class="user-avatar-large" id="profileAvatar">👨‍💼</div>
+                <h3 class="user-name-large" style="margin: 15px 0 10px 0; text-align: center;">Welcome <span id="providerName">John Smith</span></h3>
+                <p id="providerPhone" class="user-email">+1 (555) 123-4567</p>
+                <div class="user-stats-mini">
+                    <div class="mini-stat">
+                        <span class="mini-stat-value">0</span>
+                        <span class="mini-stat-label">Jobs</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-value">$0</span>
+                        <span class="mini-stat-label">Earned</span>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="modern-sidebar-nav">
+                <a href="#" class="modern-nav-item active" onclick="showSection('overview'); return false;">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                    <i class="fas fa-chevron-right nav-arrow"></i>
+                </a>
+                <a href="#" class="modern-nav-item" onclick="showSection('bookings'); return false;">
+                    <i class="fas fa-briefcase"></i>
+                    <span>My Jobs</span>
+                    <span class="nav-badge">0</span>
+                    <i class="fas fa-chevron-right nav-arrow"></i>
+                </a>
+                <a href="#" class="modern-nav-item" onclick="showSection('earnings'); return false;">
+                    <i class="fas fa-wallet"></i>
+                    <span>Earnings</span>
+                    <i class="fas fa-chevron-right nav-arrow"></i>
+                </a>
+                <a href="#" class="modern-nav-item" onclick="showSection('profile'); return false;">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Profile Settings</span>
+                    <i class="fas fa-chevron-right nav-arrow"></i>
+                </a>
+                <a href="#" class="modern-nav-item" onclick="showSection('availability'); return false;">
+                    <i class="fas fa-clock"></i>
+                    <span>Availability</span>
+                    <i class="fas fa-chevron-right nav-arrow"></i>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="index.html" class="modern-nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                    <i class="fas fa-chevron-right nav-arrow"></i>
+                </a>
+            </nav>
+            
+            <div class="sidebar-promo-card">
+                <div class="promo-icon">⭐</div>
+                <h4>Pro Membership</h4>
+                <p>Get more visibility!</p>
+                <button class="promo-btn">Upgrade Now</button>
+            </div>
+        </aside>
+
+        <main class="modern-dashboard-main">
+            <!-- Dashboard Title -->
+            <div style="text-align: center; padding: 30px 0 20px 0; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+                <h1 style="font-size: 32px; font-weight: 700; color: #2c3e50; margin: 0; letter-spacing: -0.5px;">Professional Dashboard</h1>
+            </div>
+            
+            <!-- Overview Section -->
+            <section id="overview" class="dashboard-section active">
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="modern-page-title">Welcome Back, <span id="welcomeName">Professional</span>! 👋</h1>
+                        <p class="modern-page-subtitle">Here's what's happening with your services today</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-modern-outline" onclick="showSection('profile')">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </button>
+                        <button class="btn-modern-primary" onclick="showSection('availability')">
+                            <i class="fas fa-calendar-alt"></i>
+                            Set Availability
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Profile Completion Widget -->
+                <div class="profile-completion-card">
+                    <div class="completion-header">
+                        <div>
+                            <h3>🎯 Complete Your Profile</h3>
+                            <p>Increase your chances of getting booked</p>
+                        </div>
+                        <div class="completion-circle">
+                            <svg width="80" height="80">
+                                <circle cx="40" cy="40" r="35" fill="none" stroke="#e0e0e0" stroke-width="6"></circle>
+                                <circle id="progressCircle" cx="40" cy="40" r="35" fill="none" stroke="url(#gradient)" stroke-width="6" stroke-dasharray="220" stroke-dashoffset="165" stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <span class="completion-text" id="completionPercent">25%</span>
+                        </div>
+                    </div>
+                    <div class="completion-steps" id="completionSteps">
+                        <div class="step-item incomplete">
+                            <span class="step-icon">📝</span>
+                            <span>Add service categories</span>
+                        </div>
+                        <div class="step-item incomplete">
+                            <span class="step-icon">📍</span>
+                            <span>Set service area</span>
+                        </div>
+                        <div class="step-item incomplete">
+                            <span class="step-icon">🕐</span>
+                            <span>Set availability</span>
+                        </div>
+                        <div class="step-item incomplete">
+                            <span class="step-icon">📸</span>
+                            <span>Upload profile picture</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid-modern">
+                    <div class="stat-card gradient-1">
+                        <div class="stat-content">
+                            <div class="stat-label">Active Jobs</div>
+                            <div class="stat-value">0</div>
+                            <div class="stat-trend">
+                                <span class="trend-icon">📈</span>
+                                <span>Ready for bookings</span>
+                            </div>
+                        </div>
+                        <div class="stat-icon-large">📋</div>
+                    </div>
+                    
+                    <div class="stat-card gradient-2">
+                        <div class="stat-content">
+                            <div class="stat-label">Completed Jobs</div>
+                            <div class="stat-value">0</div>
+                            <div class="stat-trend">
+                                <span class="trend-icon">✨</span>
+                                <span>Build your reputation</span>
+                            </div>
+                        </div>
+                        <div class="stat-icon-large">✅</div>
+                    </div>
+                    
+                    <div class="stat-card gradient-3">
+                        <div class="stat-content">
+                            <div class="stat-label">Your Rating</div>
+                            <div class="stat-value">5.0 ⭐</div>
+                            <div class="stat-trend">
+                                <span class="trend-icon">🎯</span>
+                                <span>Excellent start!</span>
+                            </div>
+                        </div>
+                        <div class="stat-icon-large">⭐</div>
+                    </div>
+                    
+                    <div class="stat-card gradient-4">
+                        <div class="stat-content">
+                            <div class="stat-label">Total Earnings</div>
+                            <div class="stat-value">$0</div>
+                            <div class="stat-trend">
+                                <span class="trend-icon">🎉</span>
+                                <span class="highlight-text">0% Commission!</span>
+                            </div>
+                        </div>
+                        <div class="stat-icon-large">💰</div>
+                    </div>
+                </div>
+
+                <!-- Two Column Layout -->
+                <div class="dashboard-grid">
+                    <!-- Left Column -->
+                    <div class="dashboard-column">
+                        <!-- Quick Actions -->
+                        <div class="modern-card">
+                            <h2 class="card-title">⚡ Quick Actions</h2>
+                            <div class="quick-actions-grid">
+                                <button class="quick-action-btn" onclick="showSection('profile')">
+                                    <span class="action-icon">👤</span>
+                                    <span class="action-text">Edit Profile</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showSection('availability')">
+                                    <span class="action-icon">📅</span>
+                                    <span class="action-text">Availability</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showSection('earnings')">
+                                    <span class="action-icon">💵</span>
+                                    <span class="action-text">Earnings</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showSection('bookings')">
+                                    <span class="action-icon">📋</span>
+                                    <span class="action-text">My Jobs</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showSettingsTab('services', event); showSection('profile');">
+                                    <span class="action-icon">🛠️</span>
+                                    <span class="action-text">My Services</span>
+                                </button>
+                                <button class="quick-action-btn" onclick="showSettingsTab('location', event); showSection('profile');">
+                                    <span class="action-icon">📍</span>
+                                    <span class="action-text">Service Area</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Service Categories -->
+                        <div class="modern-card">
+                            <h2 class="card-title">💼 Your Services</h2>
+                            <div class="card-content">
+                                <div class="info-row">
+                                    <span class="info-label">Categories</span>
+                                    <span class="info-value" id="infoCategories">Not set</span>
+                                </div>
+                                <button class="card-action-btn" onclick="showSection('profile')">
+                                    Update Services →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Service Area -->
+                        <div class="modern-card">
+                            <h2 class="card-title">📍 Service Area</h2>
+                            <div class="card-content">
+                                <div class="info-row">
+                                    <span class="info-label">Province</span>
+                                    <span class="info-value" id="infoProvince">Not set</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Cities</span>
+                                    <span class="info-value" id="infoCities">No cities selected</span>
+                                </div>
+                                <button class="card-action-btn" onclick="showSection('profile')">
+                                    Update Location →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="dashboard-column">
+                        <!-- Availability Status -->
+                        <div class="modern-card status-card">
+                            <div class="status-header">
+                                <h2 class="card-title">🕐 Availability Status</h2>
+                                <span class="status-badge active">● Available</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="availability-info">
+                                    <p class="availability-text">Set your schedule to start receiving bookings</p>
+                                </div>
+                                <button class="card-action-btn primary" onclick="showSection('availability')">
+                                    Manage Schedule →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Jobs -->
+                        <div class="modern-card">
+                            <h2 class="card-title">📅 Upcoming Jobs</h2>
+                            <div class="card-content">
+                                <div class="empty-state-modern">
+                                    <div class="empty-icon">📭</div>
+                                    <p class="empty-title">No bookings yet</p>
+                                    <p class="empty-text">Complete your profile to start receiving job requests</p>
+                                </div>
+                                <button class="card-action-btn" onclick="showSection('bookings')">
+                                    View All Jobs →
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="modern-card">
+                            <h2 class="card-title">📊 Recent Activity</h2>
+                            <div class="card-content">
+                                <div class="activity-timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-content">
+                                            <p class="timeline-title">Profile Created</p>
+                                            <p class="timeline-time">Welcome to Task Masters! 🎉</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Section -->
+                <div class="tips-banner">
+                    <div class="tip-icon">💡</div>
+                    <div class="tip-content">
+                        <h3>Pro Tip</h3>
+                        <p>Complete your profile and set your availability to increase your visibility to customers by 3x!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+                        </a>
+                        <a href="javascript:void(0);" onclick="showSection('availability')" class="action-card">
+                            <span class="action-icon">🕐</span>
+                            <h3>Set Availability</h3>
+                            <p>Update your schedule</p>
+                        </a>
+                        <a href="javascript:void(0);" onclick="showSection('profile')" class="action-card">
+                            <span class="action-icon">⚙️</span>
+                            <h3>Edit Profile</h3>
+                            <p>Update your info</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jobs Section -->
+            <section id="bookings" class="dashboard-section">
+                <h1>My Jobs</h1>
+                <p class="section-subtitle">Manage your service appointments</p>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="filterBookings('pending')">Pending</button>
+                    <button class="tab-btn" onclick="filterBookings('active')">Active</button>
+                    <button class="tab-btn" onclick="filterBookings('completed')">Completed</button>
+                </div>
+
+                <div class="bookings-list">
+                    <div class="empty-state">
+                        <div class="empty-icon">📅</div>
+                        <h3>No jobs yet</h3>
+                        <p>Jobs will appear here when customers book your services</p>
+                        <p><strong>Make sure your profile is complete to start receiving bookings!</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Earnings Section -->
+            <section id="earnings" class="dashboard-section">
+                <h1>Earnings</h1>
+                <p class="section-subtitle">Track your income - You keep 100%!</p>
+
+                <div class="earnings-summary">
+                    <div class="earning-card">
+                        <h3>This Week</h3>
+                        <p class="earning-amount">$0</p>
+                    </div>
+                    <div class="earning-card">
+                        <h3>This Month</h3>
+                        <p class="earning-amount">$0</p>
+                    </div>
+                    <div class="earning-card">
+                        <h3>All Time</h3>
+                        <p class="earning-amount">$0</p>
+                    </div>
+                </div>
+
+                <div class="commission-reminder">
+                    <h3>🎉 0% Commission Policy</h3>
+                    <p>Every dollar you earn goes directly to you. No hidden fees or commission cuts!</p>
+                </div>
+
+                <div class="empty-state">
+                    <div class="empty-icon">💰</div>
+                    <h3>No earnings yet</h3>
+                    <p>Complete jobs to start earning</p>
+                </div>
+            </section>
+
+            <!-- Availability Section -->
+            <section id="availability" class="dashboard-section">
+                <h1>Set Your Availability</h1>
+                <p class="section-subtitle">Manage your schedule and service locations</p>
+
+                <div class="availability-controls">
+                    <div class="control-group">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="acceptingBookings" checked onchange="toggleBookingStatus()" />
+                            <span>Available for new bookings</span>
+                        </label>
+                    </div>
+                    
+                    <div class="autofill-group">
+                        <button class="btn-secondary" onclick="showAutoFillModal()">📋 Auto-Fill Schedule</button>
+                        <p class="help-text">Copy this month's schedule to next month</p>
+                    </div>
+                </div>
+
+                <!-- Mode Selection -->
+                <div class="mode-selection">
+                    <h3>Choose Your Scheduling Mode</h3>
+                    <div class="mode-options">
+                        <label class="mode-option">
+                            <input type="radio" name="scheduleMode" value="basic" checked onchange="switchScheduleMode('basic')" />
+                            <div class="mode-card">
+                                <h4>📅 Basic Mode</h4>
+                                <p>Set same availability for all your service cities</p>
+                            </div>
+                        </label>
+                        <label class="mode-option">
+                            <input type="radio" name="scheduleMode" value="advanced" onchange="switchScheduleMode('advanced')" />
+                            <div class="mode-card">
+                                <h4>🎯 Advanced Mode</h4>
+                                <p>Different cities on different days (e.g., Mondays in Burnaby, Tuesdays in Surrey)</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Basic Calendar Mode -->
+                <div id="basicCalendarMode" class="schedule-mode active">
+                    <h3>📅 Calendar View - All Service Cities</h3>
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button class="btn-nav" onclick="previousMonth()">←</button>
+                            <h2 id="currentMonthYear">January 2026</h2>
+                            <button class="btn-nav" onclick="nextMonth()">→</button>
+                        </div>
+
+                        <div class="calendar-legend">
+                            <span class="legend-item"><span class="legend-box available"></span> Available</span>
+                            <span class="legend-item"><span class="legend-box unavailable"></span> Unavailable</span>
+                            <span class="legend-item"><span class="legend-box selected"></span> Selected</span>
+                        </div>
+
+                        <div class="calendar-grid">
+                            <div class="calendar-day-header">Sun</div>
+                            <div class="calendar-day-header">Mon</div>
+                            <div class="calendar-day-header">Tue</div>
+                            <div class="calendar-day-header">Wed</div>
+                            <div class="calendar-day-header">Thu</div>
+                            <div class="calendar-day-header">Fri</div>
+                            <div class="calendar-day-header">Sat</div>
+                            <div id="calendarDays"></div>
+                        </div>
+                    </div>
+
+                    <div class="time-slots-container" id="timeSlotsContainer" style="display: none;">
+                        <h3>Set Hours for <span id="selectedDate"></span></h3>
+                        <div class="time-slots-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Start Time</label>
+                                    <input type="time" id="startTime" value="09:00" />
+                                </div>
+                                <div class="form-group">
+                                    <label>End Time</label>
+                                    <input type="time" id="endTime" value="17:00" />
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn-primary-small" onclick="saveTimeSlot()">Save Hours</button>
+                                <button class="btn-secondary" onclick="markUnavailable()">Mark Unavailable</button>
+                                <button class="btn-secondary" onclick="closeTimeSlots()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-summary">
+                        <h3>Weekly Template (Apply to Multiple Days)</h3>
+                        <div class="template-grid">
+                            <div class="template-day">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" data-day="monday" /> Monday
+                                </label>
+                                <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                            </div>
+                            <div class="template-day">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" data-day="tuesday" /> Tuesday
+                                </label>
+                                <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                            </div>
+                            <div class="template-day">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" data-day="wednesday" /> Wednesday
+                                </label>
+                                <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                            </div>
+                            <div class="template-day">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" data-day="thursday" /> Thursday
+                                </label>
+                                <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                            </div>
+                            <div class="template-day">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" data-day="friday" /> Friday
+                                </label>
+                                <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                            </div>
+                            <div class="template-day">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" data-day="saturday" /> Saturday
+                                </label>
+                                <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                            </div>
+                            <div class="template-day">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" data-day="sunday" /> Sunday
+                                </label>
+                                <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                            </div>
+                        </div>
+                        <button class="btn-primary-small" onclick="applyTemplate()">Apply Template to Selected Days</button>
+                    </div>
+                </div>
+
+                <!-- Advanced City-Based Mode -->
+                <div id="advancedCityMode" class="schedule-mode">
+                    <h3>🎯 Advanced Scheduling - Assign Cities to Specific Days</h3>
+                    <p class="help-text">Choose which cities you serve on which days. Perfect if you travel to different areas on different days.</p>
+                    
+                    <div class="advanced-schedule-container">
+                        <div class="day-city-assignment" id="dayCityAssignment">
+                            <!-- Will be populated based on selected service cities -->
+                            <div class="assignment-card">
+                                <h4>📍 Monday</h4>
+                                <div class="time-input-group">
+                                    <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                                </div>
+                                <div class="city-checkboxes" id="mondayCities">
+                                    <p class="warning-text">⚠️ Please set your service cities in Profile Settings first</p>
+                                </div>
+                            </div>
+                            
+                            <div class="assignment-card">
+                                <h4>📍 Tuesday</h4>
+                                <div class="time-input-group">
+                                    <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                                </div>
+                                <div class="city-checkboxes" id="tuesdayCities">
+                                    <p class="warning-text">⚠️ Please set your service cities in Profile Settings first</p>
+                                </div>
+                            </div>
+                            
+                            <div class="assignment-card">
+                                <h4>📍 Wednesday</h4>
+                                <div class="time-input-group">
+                                    <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                                </div>
+                                <div class="city-checkboxes" id="wednesdayCities">
+                                    <p class="warning-text">⚠️ Please set your service cities in Profile Settings first</p>
+                                </div>
+                            </div>
+                            
+                            <div class="assignment-card">
+                                <h4>📍 Thursday</h4>
+                                <div class="time-input-group">
+                                    <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                                </div>
+                                <div class="city-checkboxes" id="thursdayCities">
+                                    <p class="warning-text">⚠️ Please set your service cities in Profile Settings first</p>
+                                </div>
+                            </div>
+                            
+                            <div class="assignment-card">
+                                <h4>📍 Friday</h4>
+                                <div class="time-input-group">
+                                    <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                                </div>
+                                <div class="city-checkboxes" id="fridayCities">
+                                    <p class="warning-text">⚠️ Please set your service cities in Profile Settings first</p>
+                                </div>
+                            </div>
+                            
+                            <div class="assignment-card">
+                                <h4>📍 Saturday</h4>
+                                <div class="time-input-group">
+                                    <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                                </div>
+                                <div class="city-checkboxes" id="saturdayCities">
+                                    <p class="warning-text">⚠️ Please set your service cities in Profile Settings first</p>
+                                </div>
+                            </div>
+                            
+                            <div class="assignment-card">
+                                <h4>📍 Sunday</h4>
+                                <div class="time-input-group">
+                                    <input type="time" value="09:00" /> - <input type="time" value="17:00" />
+                                </div>
+                                <div class="city-checkboxes" id="sundayCities">
+                                    <p class="warning-text">⚠️ Please set your service cities in Profile Settings first</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary-small" onclick="saveAdvancedSchedule()">Save Advanced Schedule</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Settings Section -->
+            <section id="profile" class="dashboard-section">
+                <div class="profile-settings-header">
+                    <div class="profile-settings-title">
+                        <h1>Profile Settings</h1>
+                        <p class="section-subtitle">Update your professional information</p>
+                    </div>
+                    <div class="header-profile-container">
+                        <div class="header-profile-avatar" id="headerProfileAvatar">👨‍💼</div>
+                        <button class="header-edit-icon" onclick="showAvatarOptions()" title="Update profile picture">
+                            <span>📷</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Test Button for Profile Picture -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <button onclick="showAvatarOptions()" style="padding: 15px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                        📷 Update Profile Picture
+                    </button>
+                </div>
+
+                <!-- Settings Navigation Tabs -->
+                <div class="settings-tabs">
+                    <button class="settings-tab active" onclick="showSettingsTab('basic', event)">
+                        <span class="tab-icon">👤</span>
+                        <span class="tab-label">Basic Info</span>
+                    </button>
+                    <button class="settings-tab" onclick="showSettingsTab('services', event)">
+                        <span class="tab-icon">🛠️</span>
+                        <span class="tab-label">Services</span>
+                    </button>
+                    <button class="settings-tab" onclick="showSettingsTab('location', event)">
+                        <span class="tab-icon">📍</span>
+                        <span class="tab-label">Location</span>
+                    </button>
+                    <button class="settings-tab" onclick="showSettingsTab('business', event)">
+                        <span class="tab-icon">💼</span>
+                        <span class="tab-label">Business Details</span>
+                    </button>
+                </div>
+
+                <div class="settings-form">
+                    <form onsubmit="saveProfile(event)">
+                        <!-- Basic Info Tab -->
+                        <div id="basic" class="settings-tab-content active">
+                            <h3>📋 Personal Information</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" value="Service Provider" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" value="provider@email.com" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" value="+1 (555) 123-4567" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Services Tab -->
+                        <div id="services" class="settings-tab-content">
+                            <h3>🛠️ Service Categories & Specializations</h3>
+                            <p class="tab-description">Select all services you provide</p>
+                            <div class="form-group">
+                                <label>Service Categories & Specializations (Select all that apply) *</label>
+                            <div class="categories-selection">
+                                <div class="categories-grid">
+                                    
+                                    <!-- Home Cleaning -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>🧹 Home Cleaning</strong>
+                                            <input type="checkbox" class="main-category" data-category="cleaning" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Cleaning - Residential" data-parent="cleaning" onchange="updateSelectedCategories()">
+                                                <span>Residential Cleaning</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Cleaning - Commercial" data-parent="cleaning" onchange="updateSelectedCategories()">
+                                                <span>Commercial Cleaning</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Cleaning - Move-In" data-parent="cleaning" onchange="updateSelectedCategories()">
+                                                <span>Move-In Cleaning</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Cleaning - Move-Out" data-parent="cleaning" onchange="updateSelectedCategories()">
+                                                <span>Move-Out Cleaning</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Cleaning - Construction Cleanup" data-parent="cleaning" onchange="updateSelectedCategories()">
+                                                <span>Construction Cleanup</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Cleaning - Deep Cleaning" data-parent="cleaning" onchange="updateSelectedCategories()">
+                                                <span>Deep Cleaning</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Plumbing -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>🔧 Plumbing</strong>
+                                            <input type="checkbox" class="main-category" data-category="plumbing" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Plumbing - Residential" data-parent="plumbing" onchange="updateSelectedCategories()">
+                                                <span>Residential Plumbing</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Plumbing - Commercial" data-parent="plumbing" onchange="updateSelectedCategories()">
+                                                <span>Commercial Plumbing</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Plumbing - Emergency Repairs" data-parent="plumbing" onchange="updateSelectedCategories()">
+                                                <span>Emergency Repairs</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Plumbing - Drain Cleaning" data-parent="plumbing" onchange="updateSelectedCategories()">
+                                                <span>Drain Cleaning</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Plumbing - Water Heater" data-parent="plumbing" onchange="updateSelectedCategories()">
+                                                <span>Water Heater Service</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Plumbing - Pipe Installation" data-parent="plumbing" onchange="updateSelectedCategories()">
+                                                <span>Pipe Installation</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Electrical Work -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>⚡ Electrical Work</strong>
+                                            <input type="checkbox" class="main-category" data-category="electrical" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Electrical - Residential" data-parent="electrical" onchange="updateSelectedCategories()">
+                                                <span>Residential Electrical</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Electrical - Commercial" data-parent="electrical" onchange="updateSelectedCategories()">
+                                                <span>Commercial Electrical</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Electrical - Wiring" data-parent="electrical" onchange="updateSelectedCategories()">
+                                                <span>Wiring & Rewiring</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Electrical - Lighting" data-parent="electrical" onchange="updateSelectedCategories()">
+                                                <span>Lighting Installation</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Electrical - Panel Upgrades" data-parent="electrical" onchange="updateSelectedCategories()">
+                                                <span>Panel Upgrades</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Electrical - Emergency" data-parent="electrical" onchange="updateSelectedCategories()">
+                                                <span>Emergency Repairs</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Carpentry -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>🪚 Carpentry</strong>
+                                            <input type="checkbox" class="main-category" data-category="carpentry" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Carpentry - Furniture Assembly" data-parent="carpentry" onchange="updateSelectedCategories()">
+                                                <span>Furniture Assembly</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Carpentry - Custom Furniture" data-parent="carpentry" onchange="updateSelectedCategories()">
+                                                <span>Custom Furniture</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Carpentry - Cabinet Installation" data-parent="carpentry" onchange="updateSelectedCategories()">
+                                                <span>Cabinet Installation</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Carpentry - Deck Building" data-parent="carpentry" onchange="updateSelectedCategories()">
+                                                <span>Deck Building</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Carpentry - Door Installation" data-parent="carpentry" onchange="updateSelectedCategories()">
+                                                <span>Door Installation</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Carpentry - Home Repairs" data-parent="carpentry" onchange="updateSelectedCategories()">
+                                                <span>Home Repairs</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Painting -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>🎨 Painting</strong>
+                                            <input type="checkbox" class="main-category" data-category="painting" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Painting - Interior" data-parent="painting" onchange="updateSelectedCategories()">
+                                                <span>Interior Painting</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Painting - Exterior" data-parent="painting" onchange="updateSelectedCategories()">
+                                                <span>Exterior Painting</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Painting - Commercial" data-parent="painting" onchange="updateSelectedCategories()">
+                                                <span>Commercial Painting</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Painting - Cabinet" data-parent="painting" onchange="updateSelectedCategories()">
+                                                <span>Cabinet Painting</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Painting - Wallpaper" data-parent="painting" onchange="updateSelectedCategories()">
+                                                <span>Wallpaper Installation</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Painting - Pressure Washing" data-parent="painting" onchange="updateSelectedCategories()">
+                                                <span>Pressure Washing</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Beauty & Salon -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>💄 Beauty & Salon</strong>
+                                            <input type="checkbox" class="main-category" data-category="beauty" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Beauty - Hair Styling" data-parent="beauty" onchange="updateSelectedCategories()">
+                                                <span>Hair Styling</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Beauty - Makeup" data-parent="beauty" onchange="updateSelectedCategories()">
+                                                <span>Makeup Services</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Beauty - Nails" data-parent="beauty" onchange="updateSelectedCategories()">
+                                                <span>Nail Services</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Beauty - Spa" data-parent="beauty" onchange="updateSelectedCategories()">
+                                                <span>Spa Services</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Beauty - Bridal" data-parent="beauty" onchange="updateSelectedCategories()">
+                                                <span>Bridal Services</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Beauty - Mobile" data-parent="beauty" onchange="updateSelectedCategories()">
+                                                <span>Mobile Beauty</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tutoring -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>📚 Tutoring & Education</strong>
+                                            <input type="checkbox" class="main-category" data-category="tutoring" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Tutoring - Elementary" data-parent="tutoring" onchange="updateSelectedCategories()">
+                                                <span>Elementary Tutoring</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Tutoring - High School" data-parent="tutoring" onchange="updateSelectedCategories()">
+                                                <span>High School Tutoring</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Tutoring - College" data-parent="tutoring" onchange="updateSelectedCategories()">
+                                                <span>College/University</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Tutoring - Test Prep" data-parent="tutoring" onchange="updateSelectedCategories()">
+                                                <span>Test Prep (SAT/ACT)</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Tutoring - Language" data-parent="tutoring" onchange="updateSelectedCategories()">
+                                                <span>Language Learning</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Tutoring - Special Needs" data-parent="tutoring" onchange="updateSelectedCategories()">
+                                                <span>Special Needs</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Pest Control -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>🐛 Pest Control</strong>
+                                            <input type="checkbox" class="main-category" data-category="pest" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Pest Control - Residential" data-parent="pest" onchange="updateSelectedCategories()">
+                                                <span>Residential Pest Control</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Pest Control - Commercial" data-parent="pest" onchange="updateSelectedCategories()">
+                                                <span>Commercial Pest Control</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Pest Control - Termite" data-parent="pest" onchange="updateSelectedCategories()">
+                                                <span>Termite Control</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Pest Control - Rodent" data-parent="pest" onchange="updateSelectedCategories()">
+                                                <span>Rodent Control</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Pest Control - Bed Bugs" data-parent="pest" onchange="updateSelectedCategories()">
+                                                <span>Bed Bug Treatment</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Pest Control - Preventive" data-parent="pest" onchange="updateSelectedCategories()">
+                                                <span>Preventive Services</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- HVAC Services -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>❄️ HVAC Services</strong>
+                                            <input type="checkbox" class="main-category" data-category="hvac" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="HVAC - AC Repair" data-parent="hvac" onchange="updateSelectedCategories()">
+                                                <span>AC Repair</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="HVAC - AC Installation" data-parent="hvac" onchange="updateSelectedCategories()">
+                                                <span>AC Installation</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="HVAC - Heating Repair" data-parent="hvac" onchange="updateSelectedCategories()">
+                                                <span>Heating Repair</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="HVAC - Furnace Service" data-parent="hvac" onchange="updateSelectedCategories()">
+                                                <span>Furnace Service</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="HVAC - Duct Cleaning" data-parent="hvac" onchange="updateSelectedCategories()">
+                                                <span>Duct Cleaning</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="HVAC - Maintenance" data-parent="hvac" onchange="updateSelectedCategories()">
+                                                <span>Maintenance Plans</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Childcare -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>👶 Childcare</strong>
+                                            <input type="checkbox" class="main-category" data-category="childcare" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Childcare - Babysitting" data-parent="childcare" onchange="updateSelectedCategories()">
+                                                <span>Babysitting</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Childcare - Nanny" data-parent="childcare" onchange="updateSelectedCategories()">
+                                                <span>Nanny Services</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Childcare - After School" data-parent="childcare" onchange="updateSelectedCategories()">
+                                                <span>After-School Care</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Childcare - Special Needs" data-parent="childcare" onchange="updateSelectedCategories()">
+                                                <span>Special Needs Care</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Childcare - Newborn" data-parent="childcare" onchange="updateSelectedCategories()">
+                                                <span>Newborn Care</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Childcare - Overnight" data-parent="childcare" onchange="updateSelectedCategories()">
+                                                <span>Overnight Care</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Moving & Packing -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>📦 Moving & Packing</strong>
+                                            <input type="checkbox" class="main-category" data-category="moving" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Moving - Local" data-parent="moving" onchange="updateSelectedCategories()">
+                                                <span>Local Moving</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Moving - Long Distance" data-parent="moving" onchange="updateSelectedCategories()">
+                                                <span>Long Distance Moving</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Moving - Packing" data-parent="moving" onchange="updateSelectedCategories()">
+                                                <span>Packing Services</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Moving - Unpacking" data-parent="moving" onchange="updateSelectedCategories()">
+                                                <span>Unpacking Services</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Moving - Furniture" data-parent="moving" onchange="updateSelectedCategories()">
+                                                <span>Furniture Moving</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Moving - Office" data-parent="moving" onchange="updateSelectedCategories()">
+                                                <span>Office Moving</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Personal Training -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>💪 Personal Training & Fitness</strong>
+                                            <input type="checkbox" class="main-category" data-category="fitness" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Fitness - Weight Loss" data-parent="fitness" onchange="updateSelectedCategories()">
+                                                <span>Weight Loss Training</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Fitness - Strength Training" data-parent="fitness" onchange="updateSelectedCategories()">
+                                                <span>Strength Training</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Fitness - Yoga" data-parent="fitness" onchange="updateSelectedCategories()">
+                                                <span>Yoga Instruction</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Fitness - Sports Coaching" data-parent="fitness" onchange="updateSelectedCategories()">
+                                                <span>Sports Coaching</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Fitness - Senior" data-parent="fitness" onchange="updateSelectedCategories()">
+                                                <span>Senior Fitness</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Fitness - Online Training" data-parent="fitness" onchange="updateSelectedCategories()">
+                                                <span>Online Training</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Landscaping -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>🌳 Landscaping & Gardening</strong>
+                                            <input type="checkbox" class="main-category" data-category="landscaping" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Landscaping - Lawn Mowing" data-parent="landscaping" onchange="updateSelectedCategories()">
+                                                <span>Lawn Mowing</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Landscaping - Garden Design" data-parent="landscaping" onchange="updateSelectedCategories()">
+                                                <span>Garden Design</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Landscaping - Tree Services" data-parent="landscaping" onchange="updateSelectedCategories()">
+                                                <span>Tree Services</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Landscaping - Irrigation" data-parent="landscaping" onchange="updateSelectedCategories()">
+                                                <span>Irrigation Systems</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Landscaping - Seasonal Cleanup" data-parent="landscaping" onchange="updateSelectedCategories()">
+                                                <span>Seasonal Cleanup</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Landscaping - Hardscaping" data-parent="landscaping" onchange="updateSelectedCategories()">
+                                                <span>Hardscaping</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Handyman Services -->
+                                    <div class="category-group">
+                                        <label class="category-main">
+                                            <strong>🔨 Handyman Services</strong>
+                                            <input type="checkbox" class="main-category" data-category="handyman" onchange="toggleMainCategory(this)">
+                                            <span class="select-all-text">Select All</span>
+                                        </label>
+                                        <div class="subcategories">
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Handyman - General Repairs" data-parent="handyman" onchange="updateSelectedCategories()">
+                                                <span>General Repairs</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Handyman - Furniture Assembly" data-parent="handyman" onchange="updateSelectedCategories()">
+                                                <span>Furniture Assembly</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Handyman - TV Mounting" data-parent="handyman" onchange="updateSelectedCategories()">
+                                                <span>TV Mounting</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Handyman - Drywall Repair" data-parent="handyman" onchange="updateSelectedCategories()">
+                                                <span>Drywall Repair</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Handyman - Door Installation" data-parent="handyman" onchange="updateSelectedCategories()">
+                                                <span>Door Installation</span>
+                                            </label>
+                                            <label class="checkbox-label sub">
+                                                <input type="checkbox" name="serviceCategory" value="Handyman - Maintenance" data-parent="handyman" onchange="updateSelectedCategories()">
+                                                <span>Home Maintenance</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="selected-categories" id="selectedCategories">
+                                    <strong>Selected: </strong><span id="selectedCategoriesText">None</span>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <!-- Location Tab -->
+                        <div id="location" class="settings-tab-content">
+                            <h3>📍 Service Area</h3>
+                            <p class="tab-description">Choose where you provide services</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Service Province *</label>
+                                    <select id="serviceProvince" onchange="loadProvinceCities()" required>
+                                        <option value="">Select your service province</option>
+                                        <option value="ON">Ontario</option>
+                                        <option value="QC">Quebec</option>
+                                        <option value="BC">British Columbia</option>
+                                        <option value="AB">Alberta</option>
+                                        <option value="MB">Manitoba</option>
+                                        <option value="SK">Saskatchewan</option>
+                                        <option value="NS">Nova Scotia</option>
+                                        <option value="NB">New Brunswick</option>
+                                        <option value="NL">Newfoundland and Labrador</option>
+                                        <option value="PE">Prince Edward Island</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="citiesGroup" style="display: none;">
+                                <label>Service Area - Select Cities (Multiple selection allowed) *</label>
+                                <div class="cities-selection">
+                                    <div class="city-search">
+                                        <input type="text" id="citySearchInput" placeholder="Search cities..." onkeyup="filterCities()" />
+                                    </div>
+                                    <div class="cities-grid" id="citiesGrid">
+                                        <!-- Cities will be populated based on province selection -->
+                                    </div>
+                                    <div class="selected-cities" id="selectedCities">
+                                        <strong>Selected: </strong><span id="selectedCitiesText">None</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Business Details Tab -->
+                        <div id="business" class="settings-tab-content">
+                            <h3>💼 Business Information</h3>
+                            <p class="tab-description">Tell customers about your expertise and rates</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Years of Experience</label>
+                                    <input type="number" value="5" min="0" />
+                                </div>
+                                <div class="form-group">
+                            <label>Hourly Rate ($)</label>
+                            <input type="number" value="50" min="0" />
+                        </div>
+                            </div>
+                            <div class="form-group">
+                            <label>Service Description</label>
+                            <textarea rows="4" placeholder="Describe your services and expertise"></textarea>
+                        </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary-small">Save Changes</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Auto-Fill Modal -->
+    <div id="autoFillModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAutoFillModal()">&times;</span>
+            <h2>Auto-Fill Schedule</h2>
+            <p>Do you want to copy this month's availability schedule to next month?</p>
+            <div class="modal-info">
+                <p><strong>This will:</strong></p>
+                <ul>
+                    <li>Copy all available dates and time slots</li>
+                    <li>Apply them to the same days next month</li>
+                    <li>You can still modify individual days after</li>
+                </ul>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-primary-small" onclick="confirmAutoFill()">Yes, Copy Schedule</button>
+                <button class="btn-secondary" onclick="closeAutoFillModal()">No, Thanks</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Avatar Upload Modal -->
+    <div id="avatarModal" class="modal" style="display: flex !important;">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close" onclick="closeAvatarModal()" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #888;">&times;</span>
+            <h3 style="margin-bottom: 20px;">Update Profile Picture</h3>
+            
+            <!-- Drag and Drop Area -->
+            <div id="dropZone" class="drop-zone">
+                <div class="drop-zone-content">
+                    <div class="drop-icon">📁</div>
+                    <p class="drop-text">Drag & Drop your image here</p>
+                    <p class="drop-subtext">or</p>
+                    <button class="btn-browse" onclick="selectFromGallery(); event.stopPropagation();">Browse Files</button>
+                </div>
+            </div>
+            
+            <div class="divider-text">OR</div>
+            
+            <div class="avatar-options">
+                <button class="avatar-option-btn" onclick="selectFromGallery()">
+                    <span class="avatar-icon">🖼️</span>
+                    <span>Choose from System</span>
+                </button>
+                <button class="avatar-option-btn" onclick="takePhoto()">
+                    <span class="avatar-icon">📸</span>
+                    <span>Open Camera</span>
+                </button>
+                <button class="avatar-option-btn remove" onclick="removeAvatar()">
+                    <span class="avatar-icon">🗑️</span>
+                    <span>Remove Photo</span>
+                </button>
+            </div>
+            <input type="file" id="avatarFileInput" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+            <input type="file" id="avatarCameraInput" accept="image/*" capture="user" style="display: none;" onchange="handleAvatarUpload(event)">
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button class="btn-secondary" onclick="closeAvatarModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js?v=4.0"></script>
+    <script src="calendar.js?v=4.0"></script>
+</body>
+</html>

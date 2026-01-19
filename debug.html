@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        window.addEventListener('load', () => {
+            const styles = window.getComputedStyle(document.body);
+            console.log('Body background:', styles.background);
+            console.log('Body color:', styles.color);
+            document.getElementById('debug').innerHTML = `
+                <p>Background: ${styles.background}</p>
+                <p>Color: ${styles.color}</p>
+                <p>CSS loaded: ${styles.fontFamily.includes('Segoe') ? 'YES' : 'NO'}</p>
+            `;
+        });
+    </script>
+</head>
+<body>
+    <h1>CSS Load Test</h1>
+    <p>If this has custom styling, CSS is loading.</p>
+    <div id="debug"></div>
+    <hr>
+    <p><a href="index.html">Go to main page</a></p>
+</body>
+</html>

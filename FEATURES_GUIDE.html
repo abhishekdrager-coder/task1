@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard - Features Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .feature-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .feature-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .step-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .step-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #856404;
+        }
+        .important {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+            color: #721c24;
+        }
+        .success {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+            color: #155724;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        .screenshot-placeholder {
+            background: #e9ecef;
+            border: 2px dashed #adb5bd;
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            color: #6c757d;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Provider Dashboard - Complete Features Guide</h1>
+        <p class="subtitle">This guide shows you exactly where to find all features in the Provider Dashboard</p>
+
+        <div class="important">
+            <strong>⚠️ IMPORTANT:</strong> All features are already implemented and working! Follow this guide step-by-step to access them.
+        </div>
+
+        <!-- FEATURE 1: LOCATION SETTINGS -->
+        <div class="feature-section">
+            <div class="feature-title">
+                <span>📍</span>
+                <span>Feature 1: Service Area (Province & Cities Selection)</span>
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <div class="step-title">Open Provider Dashboard</div>
+                <div class="step-description">
+                    Navigate to <span class="highlight">provider-dashboard.html</span> in your browser
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <div class="step-title">Click on Profile Settings</div>
+                <div class="step-description">
+                    In the left sidebar, find and click on <span class="highlight">Profile Settings</span> (icon: ⚙️)
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <div class="step-title">Click the Location Tab</div>
+                <div class="step-description">
+                    You will see 4 tabs at the top:<br>
+                    • Basic Info<br>
+                    • Services<br>
+                    • <span class="highlight">Location</span> (with red "Required" badge) ← Click this one!<br>
+                    • Business Details
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <div class="step-title">Select Your Province</div>
+                <div class="step-description">
+                    You'll see a dropdown labeled <span class="highlight">"Service Province"</span>. Click it and select your province (e.g., Ontario, British Columbia, etc.)
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <div class="step-title">Select Cities</div>
+                <div class="step-description">
+                    After selecting a province, a list of cities will appear. Check the boxes next to all cities where you provide services. You can select multiple cities.
+                </div>
+            </div>
+
+            <div class="success">
+                ✅ <strong>Result:</strong> Your service area is now configured! This will be used in the Advanced Scheduling feature.
+            </div>
+        </div>
+
+        <!-- FEATURE 2: ADVANCED SCHEDULING -->
+        <div class="feature-section">
+            <div class="feature-title">
+                <span>🎯</span>
+                <span>Feature 2: Advanced Scheduling (City-by-Day Assignment)</span>
+            </div>
+
+            <div class="important">
+                <strong>⚠️ PREREQUISITE:</strong> You must complete Feature 1 (Location Settings) first! Advanced Scheduling uses the cities you selected.
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <div class="step-title">Navigate to Availability Section</div>
+                <div class="step-description">
+                    In the left sidebar, click on <span class="highlight">Availability</span> (icon: 🕐)
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <div class="step-title">Choose Scheduling Mode</div>
+                <div class="step-description">
+                    You'll see two mode options:<br><br>
+                    • <strong>Basic Mode:</strong> Same availability for all cities<br>
+                    • <strong>Advanced Mode:</strong> Different cities on different days<br><br>
+                    Select <span class="highlight">Advanced Mode</span> (the second option)
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <div class="step-title">Assign Cities to Days</div>
+                <div class="step-description">
+                    You'll see 7 cards (Monday through Sunday). Each card shows:<br>
+                    • Time slots (set your working hours)<br>
+                    • Checkboxes for each city you selected in Profile Settings<br><br>
+                    For each day, check the cities where you want to work that day.
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <div class="step-title">Example Setup</div>
+                <div class="step-description">
+                    <strong>Example:</strong> If you selected Vancouver, Surrey, and Burnaby as your cities:<br>
+                    • Monday: Check ✓ Burnaby<br>
+                    • Tuesday: Check ✓ Surrey<br>
+                    • Wednesday: Check ✓ Vancouver<br>
+                    • Thursday: Check ✓ Burnaby + Surrey<br>
+                    • Friday: Check ✓ Vancouver<br>
+                    • Saturday: Check ✓ All three cities<br>
+                    • Sunday: Leave all unchecked (day off)
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <div class="step-title">Save Your Schedule</div>
+                <div class="step-description">
+                    Click the <span class="highlight">"Save Advanced Schedule"</span> button at the bottom
+                </div>
+            </div>
+
+            <div class="success">
+                ✅ <strong>Result:</strong> Your advanced schedule is now saved! Customers will only see you available in specific cities on specific days.
+            </div>
+        </div>
+
+        <!-- FEATURE 3: ADDITIONAL PROFILE SETTINGS -->
+        <div class="feature-section">
+            <div class="feature-title">
+                <span>💼</span>
+                <span>Feature 3: Additional Profile Settings</span>
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <div class="step-title">Services Tab</div>
+                <div class="step-description">
+                    In Profile Settings → <span class="highlight">Services Tab</span>:<br>
+                    Select all service categories and specializations you offer (Cleaning, Plumbing, Electrical, Beauty, etc.)
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <div class="step-title">Business Details Tab</div>
+                <div class="step-description">
+                    In Profile Settings → <span class="highlight">Business Details Tab</span>:<br>
+                    • Set your years of experience<br>
+                    • Set your hourly rate<br>
+                    • Write a service description
+                </div>
+            </div>
+        </div>
+
+        <div class="important">
+            <strong>🔍 Troubleshooting:</strong><br><br>
+            <strong>Q: I don't see cities after selecting a province</strong><br>
+            A: Make sure JavaScript is enabled in your browser. Check the browser console (F12) for any errors.<br><br>
+            
+            <strong>Q: Advanced Mode shows "Please set your service cities first"</strong><br>
+            A: Go back to Profile Settings → Location tab and select your province and cities first.<br><br>
+            
+            <strong>Q: Changes aren't saving</strong><br>
+            A: Make sure you click the "Save" button at the bottom of each section. Data is saved to localStorage.
+        </div>
+
+        <a href="provider-dashboard.html" class="btn">Open Provider Dashboard Now →</a>
+    </div>
+</body>
+</html>

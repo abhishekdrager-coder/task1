@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Task Masters</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Modern Top Navigation -->
+    <nav class="modern-navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <div class="logo-wrapper">
+                        <span class="logo-icon">🎯</span>
+                        <span class="logo-text">Task Masters</span>
+                    </div>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <a href="services.html?service=all" class="nav-btn">
+                    <i class="fas fa-search"></i>
+                    <span>Browse Services</span>
+                </a>
+                <div class="nav-notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="nav-user-menu">
+                    <div class="user-avatar-small">👤</div>
+                    <span class="user-name-nav">John</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Icon-Based Dashboard -->
+    <div class="icon-dashboard-container">
+        <div class="icon-dashboard-header">
+            <h1>Welcome Back, John! 👋</h1>
+            <p>What would you like to do today?</p>
+        </div>
+
+        <div class="icon-menu-grid">
+            <a href="customer-overview.html" class="icon-menu-card">
+                <div class="icon">📊</div>
+                <h3>Overview</h3>
+                <p>Dashboard summary & stats</p>
+            </a>
+
+            <a href="customer-bookings.html" class="icon-menu-card">
+                <div class="icon">📅</div>
+                <h3>My Bookings</h3>
+                <p>View & manage bookings</p>
+            </a>
+
+            <a href="customer-favorites.html" class="icon-menu-card">
+                <div class="icon">⭐</div>
+                <h3>Favorites</h3>
+                <p>Saved providers</p>
+            </a>
+
+            <a href="customer-profile.html" class="icon-menu-card">
+                <div class="icon">👤</div>
+                <h3>Profile Settings</h3>
+                <p>Update your information</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Provider Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        body.dark-mode .modern-navbar {
+            background: #0d1117 !important;
+        }
+        body.dark-mode .icon-dashboard-container {
+            background: #1a1a1a;
+        }
+        body.dark-mode .icon-dashboard-header h1 {
+            color: #ffffff;
+        }
+        body.dark-mode .icon-dashboard-header p {
+            color: #b0b0b0;
+        }
+        body.dark-mode .profile-form-container {
+            background: #0d1117 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        body.dark-mode .profile-header h2 {
+            color: #ffffff;
+        }
+        body.dark-mode .form-section h3 {
+            color: #e0e0e0;
+        }
+        body.dark-mode .form-group label {
+            color: #b0b0b0;
+        }
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background: #161b22;
+            color: #e0e0e0;
+            border: 1px solid #30363d;
+        }
+        body.dark-mode .form-group input:focus,
+        body.dark-mode .form-group select:focus,
+        body.dark-mode .form-group textarea:focus {
+            border-color: #667eea;
+            background: #1a1f2e;
+        }
+        body.dark-mode .footer {
+            background: #0d1117;
+            border-top: 1px solid #30363d;
+        }
+        body.dark-mode .footer h3,
+        body.dark-mode .footer h4,
+        body.dark-mode .footer p,
+        body.dark-mode .footer a {
+            color: #e0e0e0;
+        }
+    </style>
+    <script>
+        // Check and apply dark mode on page load
+        (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {
+                console.error('Error loading dark mode:', e);
+            }
+        })();
+    </script>
+</head>
+<body>
+    <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0;">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="provider.html" style="text-decoration: none;">
+                    <div class="logo-wrapper" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <span class="logo-icon" style="font-size: 2.5em;">🎯</span>
+                        <span class="logo-text" style="font-size: 32px; font-weight: 700; color: #ffffff;">Task Masters</span>
+                    </div>
+                </a>
+            </div>
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 30px;">
+                <a href="provider.html" class="nav-btn" style="display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 25px; text-decoration: none; color: white; font-weight: 600; font-size: 15px; cursor: pointer;">← Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="icon-dashboard-container">
+        <div class="icon-dashboard-header">
+            <h1>👤 Profile</h1>
+            <p>Edit your profile</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+            <form id="profileForm" style="max-width: 500px; margin: 0 auto;" onsubmit="saveProfile(event)">
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Business Name</label>
+                    <input type="text" id="businessName" value="Professional Services Co." style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Service Category</label>
+                    <select id="serviceCategory" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                        <option>Home Cleaning</option>
+                        <option>Plumbing</option>
+                        <option>Electrical</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Hourly Rate</label>
+                    <input type="number" id="hourlyRate" value="50" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Bio</label>
+                    <textarea id="bio" rows="4" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; font-family: inherit;">Professional service provider with 10 years of experience...</textarea>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">📍 Service Area</label>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 12px;">Select the province and cities where you provide services</p>
+                    
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333; margin-top: 20px;">Province *</label>
+                    <select id="province" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;" onchange="loadCities()">
+                        <option value="">-- Select Province --</option>
+                        <option value="BC">British Columbia</option>
+                        <option value="AB">Alberta</option>
+                        <option value="SK">Saskatchewan</option>
+                        <option value="MB">Manitoba</option>
+                        <option value="ON">Ontario</option>
+                        <option value="QC">Quebec</option>
+                        <option value="NB">New Brunswick</option>
+                        <option value="NS">Nova Scotia</option>
+                        <option value="PE">Prince Edward Island</option>
+                        <option value="NL">Newfoundland and Labrador</option>
+                        <option value="YT">Yukon</option>
+                        <option value="NT">Northwest Territories</option>
+                        <option value="NU">Nunavut</option>
+                    </select>
+                    
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333; margin-top: 20px;">Cities *</label>
+                    <p style="color: #666; font-size: 0.85em; margin-bottom: 8px;">Select all cities where you provide services</p>
+                    <div id="citiesContainer" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 15px; max-height: 300px; overflow-y: auto; background: #f9fafb;">
+                        <p style="color: #999; text-align: center; padding: 20px;">Please select a province first</p>
+                    </div>
+                    <div id="selectedCitiesDisplay" style="margin-top: 10px; padding: 10px; background: #f0f4ff; border-radius: 8px; min-height: 40px;">
+                        <strong style="color: #667eea;">Selected:</strong> <span id="selectedCitiesList" style="color: #666;">None</span>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">🎓 Certifications</label>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 12px;">Add your professional certifications (press Enter after typing each one)</p>
+                    
+                    <div style="position: relative;">
+                        <input type="text" id="certificationInput" placeholder="Type certification name and press Enter" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;" onkeypress="handleCertificationKeyPress(event)">
+                        <button type="button" onclick="addCertification()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #667eea; color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: 600;">Add</button>
+                    </div>
+                    
+                    <div id="certificationsContainer" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; min-height: 40px; padding: 10px; background: #f9fafb; border-radius: 8px; border: 2px dashed #e0e0e0;">
+                        <span style="color: #999; font-size: 0.9em; width: 100%; text-align: center;">No certifications added yet</span>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">⏰ Minimum Hours Required</label>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 12px;">Do you require a minimum number of hours per booking?</p>
+                    
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px; background: #f9fafb; border-radius: 10px; border: 2px solid #e0e0e0; transition: all 0.2s;" onmouseover="this.style.background='#f0f4ff'; this.style.borderColor='#667eea'" onmouseout="this.style.background='#f9fafb'; this.style.borderColor='#e0e0e0'">
+                        <input type="checkbox" id="minimumHoursCheckbox" onchange="toggleMinimumHours()" style="width: 20px; height: 20px; cursor: pointer;">
+                        <span style="font-weight: 500; color: #333;">Yes, I require minimum hours per booking</span>
+                    </label>
+                    
+                    <div id="minimumHoursDropdown" style="display: none; margin-top: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">How many minimum hours? *</label>
+                        <select id="minimumHoursSelect" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                            <option value="1">1 Hour</option>
+                            <option value="2">2 Hours</option>
+                            <option value="3">3 Hours</option>
+                            <option value="4">4 Hours</option>
+                            <option value="5">5 Hours</option>
+                            <option value="6">6 Hours</option>
+                            <option value="7">7 Hours</option>
+                            <option value="8">8 Hours</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; margin-top: 10px;">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Save profile function
+        function saveProfile(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            // Gather all form data
+            const profileData = {
+                businessName: document.getElementById('businessName').value,
+                serviceCategory: document.getElementById('serviceCategory').value,
+                hourlyRate: document.getElementById('hourlyRate').value,
+                bio: document.getElementById('bio').value,
+                province: document.getElementById('province').value,
+                cities: selectedCities,
+                certifications: certifications,
+                minimumHoursRequired: document.getElementById('minimumHoursCheckbox').checked,
+                minimumHours: document.getElementById('minimumHoursCheckbox').checked ? document.getElementById('minimumHoursSelect').value : null
+            };
+            
+            console.log('Saving profile data:', profileData);
+            
+            // Save to localStorage
+            localStorage.setItem('providerProfile', JSON.stringify(profileData));
+            
+            // Verify save
+            const saved = localStorage.getItem('providerProfile');
+            console.log('Verified saved data:', saved);
+            
+            // Show success message
+            const form = document.getElementById('profileForm');
+            const successMsg = document.createElement('div');
+            successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #00c853 0%, #00e676 100%); color: white; padding: 20px 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,200,83,0.4); z-index: 9999; font-weight: 600; font-size: 1.1em; animation: slideIn 0.3s ease-out;';
+            successMsg.innerHTML = '✓ Profile saved successfully! Redirecting...';
+            document.body.appendChild(successMsg);
+            
+            // Add animation
+            const style = document.createElement('style');
+            style.textContent = '@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }';
+            document.head.appendChild(style);
+            
+            // Redirect after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = 'provider.html';
+            }, 1500);
+        }
+
+        const cityData = {
+            'BC': ['Vancouver', 'Surrey', 'Burnaby', 'Richmond', 'Coquitlam', 'Langley', 'Delta', 'North Vancouver', 'West Vancouver', 'New Westminster', 'Port Coquitlam', 'Port Moody', 'Maple Ridge', 'White Rock', 'Pitt Meadows', 'Abbotsford', 'Chilliwack', 'Kelowna', 'Kamloops', 'Victoria', 'Nanaimo', 'Prince George', 'Vernon', 'Penticton', 'Campbell River'],
+            'AB': ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'St. Albert', 'Medicine Hat', 'Grande Prairie', 'Airdrie', 'Spruce Grove', 'Okotoks', 'Fort McMurray', 'Cochrane', 'Chestermere', 'Beaumont', 'Leduc', 'Lloydminster', 'Camrose', 'Brooks', 'Cold Lake', 'Wetaskiwin', 'Sylvan Lake', 'Canmore', 'Lacombe', 'High River', 'Stony Plain'],
+            'SK': ['Saskatoon', 'Regina', 'Prince Albert', 'Moose Jaw', 'Swift Current', 'Yorkton', 'North Battleford', 'Estevan', 'Weyburn', 'Lloydminster', 'Martensville', 'Warman', 'Corman Park', 'Meadow Lake', 'Melfort', 'Humboldt', 'Kindersley', 'Melville', 'Battlefords', 'La Ronge', 'Tisdale', 'Rosetown', 'Nipawin', 'Carlyle', 'Moosomin'],
+            'MB': ['Winnipeg', 'Brandon', 'Steinbach', 'Thompson', 'Portage la Prairie', 'Winkler', 'Selkirk', 'Morden', 'Dauphin', 'The Pas', 'Flin Flon', 'Neepawa', 'Gimli', 'Stonewall', 'Beausejour', 'Carman', 'Virden', 'Swan River', 'Minnedosa', 'Boissevain', 'Killarney', 'Hamiota', 'Deloraine', 'Russell', 'Souris'],
+            'ON': ['Toronto', 'Ottawa', 'Mississauga', 'Brampton', 'Hamilton', 'London', 'Markham', 'Vaughan', 'Kitchener', 'Windsor', 'Richmond Hill', 'Oakville', 'Burlington', 'Oshawa', 'Barrie', 'St. Catharines', 'Cambridge', 'Waterloo', 'Guelph', 'Sudbury', 'Kingston', 'Whitby', 'Ajax', 'Thunder Bay', 'Newmarket'],
+            'QC': ['Montreal', 'Quebec City', 'Laval', 'Gatineau', 'Longueuil', 'Sherbrooke', 'Saguenay', 'Lévis', 'Trois-Rivières', 'Terrebonne', 'Saint-Jean-sur-Richelieu', 'Repentigny', 'Brossard', 'Drummondville', 'Saint-Jérôme', 'Granby', 'Blainville', 'Saint-Hyacinthe', 'Shawinigan', 'Dollard-des-Ormeaux', 'Rimouski', 'Victoriaville', 'Mirabel', 'Joliette', 'Sorel-Tracy'],
+            'NB': ['Moncton', 'Saint John', 'Fredericton', 'Dieppe', 'Miramichi', 'Bathurst', 'Edmundston', 'Campbellton', 'Quispamsis', 'Rothesay', 'Riverview', 'Oromocto', 'Grand Falls', 'Woodstock', 'Shediac', 'Tracadie', 'Sussex', 'Caraquet', 'Sackville', 'Dalhousie', 'Shippagan', 'Bouctouche', 'Neguac', 'Saint-Quentin', 'Perth-Andover'],
+            'NS': ['Halifax', 'Dartmouth', 'Sydney', 'Truro', 'New Glasgow', 'Glace Bay', 'Amherst', 'Bridgewater', 'Yarmouth', 'Kentville', 'Antigonish', 'New Waterford', 'Cole Harbour', 'Lower Sackville', 'Sydney Mines', 'Westville', 'Stellarton', 'Pictou', 'Berwick', 'Wolfville', 'Shelburne', 'Windsor', 'Springhill', 'Annapolis Royal', 'Digby'],
+            'PE': ['Charlottetown', 'Summerside', 'Stratford', 'Cornwall', 'Montague', 'Kensington', 'Souris', 'Alberton', 'Tignish', 'Georgetown', 'O\'Leary', 'Wellington', 'Borden-Carleton', 'Cavendish', 'North Rustico', 'Hunter River', 'Victoria', 'Crapaud', 'Murray Harbour', 'Murray River', 'Belfast', 'Morell', 'Cardigan', 'St. Peters', 'Tyne Valley'],
+            'NL': ['St. John\'s', 'Mount Pearl', 'Corner Brook', 'Conception Bay South', 'Paradise', 'Grand Falls-Windsor', 'Gander', 'Portugal Cove-St. Philip\'s', 'Torbay', 'Labrador City', 'Happy Valley-Goose Bay', 'Stephenville', 'Bay Roberts', 'Marystown', 'Clarenville', 'Carbonear', 'Channel-Port aux Basques', 'Deer Lake', 'Lewisporte', 'Bonavista', 'Placentia', 'Burin', 'Harbour Grace', 'Grand Bank', 'Twillingate'],
+            'YT': ['Whitehorse', 'Dawson City', 'Watson Lake', 'Haines Junction', 'Carmacks', 'Mayo', 'Faro', 'Ross River', 'Pelly Crossing', 'Teslin', 'Beaver Creek', 'Burwash Landing', 'Carcross', 'Old Crow', 'Tagish', 'Mount Lorne', 'Ibex Valley', 'Marsh Lake', 'Destruction Bay', 'Stewart Crossing', 'Keno City', 'Silver City', 'Champagne', 'Upper Liard', 'Lower Post'],
+            'NT': ['Yellowknife', 'Hay River', 'Inuvik', 'Fort Smith', 'Behchokǫ̀', 'Fort Simpson', 'Norman Wells', 'Tuktoyaktuk', 'Fort Providence', 'Fort Resolution', 'Aklavik', 'Fort Liard', 'Sachs Harbour', 'Paulatuk', 'Tsiigehtchic', 'Wekweètì', 'Whatì', 'Gamètì', 'Dettah', 'N\'Dilo', 'Ulukhaktok', 'Fort McPherson', 'Colville Lake', 'Tulita', 'Délı̨nę'],
+            'NU': ['Iqaluit', 'Rankin Inlet', 'Arviat', 'Baker Lake', 'Cambridge Bay', 'Pond Inlet', 'Igloolik', 'Kugluktuk', 'Pangnirtung', 'Cape Dorset', 'Gjoa Haven', 'Clyde River', 'Coral Harbour', 'Naujaat', 'Taloyoak', 'Qikiqtarjuaq', 'Arctic Bay', 'Chesterfield Inlet', 'Kimmirut', 'Sanikiluaq', 'Whale Cove', 'Resolute', 'Grise Fiord', 'Hall Beach', 'Kugaaruk']
+        };
+
+        let selectedCities = [];
+        let certifications = [];
+
+        // Load existing profile data into form
+        function loadExistingProfile() {
+            const profileData = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            console.log('Loading existing profile into form:', profileData);
+            
+            if (profileData.businessName) {
+                document.getElementById('businessName').value = profileData.businessName;
+            }
+            if (profileData.serviceCategory) {
+                document.getElementById('serviceCategory').value = profileData.serviceCategory;
+            }
+            if (profileData.hourlyRate) {
+                document.getElementById('hourlyRate').value = profileData.hourlyRate;
+            }
+            if (profileData.bio) {
+                document.getElementById('bio').value = profileData.bio;
+            }
+            if (profileData.province) {
+                document.getElementById('province').value = profileData.province;
+                loadCities(); // Load cities for selected province
+                
+                // After cities load, select the saved ones
+                if (profileData.cities && profileData.cities.length > 0) {
+                    setTimeout(() => {
+                        selectedCities = profileData.cities;
+                        const checkboxes = document.querySelectorAll('#citiesContainer input[type="checkbox"]');
+                        checkboxes.forEach(cb => {
+                            if (selectedCities.includes(cb.value)) {
+                                cb.checked = true;
+                            }
+                        });
+                        updateSelectedDisplay();
+                    }, 100);
+                }
+            }
+            if (profileData.certifications && profileData.certifications.length > 0) {
+                certifications = profileData.certifications;
+                renderCertifications();
+            }
+            if (profileData.minimumHoursRequired) {
+                document.getElementById('minimumHoursCheckbox').checked = true;
+                toggleMinimumHours();
+                if (profileData.minimumHours) {
+                    document.getElementById('minimumHoursSelect').value = profileData.minimumHours;
+                }
+            }
+        }
+
+        // Minimum hours toggle
+        function toggleMinimumHours() {
+            const checkbox = document.getElementById('minimumHoursCheckbox');
+            const dropdown = document.getElementById('minimumHoursDropdown');
+            dropdown.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        function loadCities() {
+            const province = document.getElementById('province').value;
+            const container = document.getElementById('citiesContainer');
+            
+            if (!province) {
+                container.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">Please select a province first</p>';
+                selectedCities = [];
+                updateSelectedDisplay();
+                return;
+            }
+
+            const cities = cityData[province] || [];
+            container.innerHTML = '';
+
+            cities.forEach(city => {
+                const label = document.createElement('label');
+                label.style.cssText = 'display: block; padding: 10px; cursor: pointer; border-radius: 6px; margin-bottom: 5px; transition: background 0.2s;';
+                label.onmouseover = function() { this.style.background = '#e0e7ff'; };
+                label.onmouseout = function() { this.style.background = 'transparent'; };
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = city;
+                checkbox.style.cssText = 'margin-right: 10px; cursor: pointer;';
+                checkbox.onchange = function() { updateSelectedCities(); };
+                
+                const span = document.createElement('span');
+                span.textContent = city;
+                span.style.cssText = 'font-size: 0.95em; color: #333;';
+                
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                container.appendChild(label);
+            });
+        }
+
+        function updateSelectedCities() {
+            const checkboxes = document.querySelectorAll('#citiesContainer input[type="checkbox"]:checked');
+            selectedCities = Array.from(checkboxes).map(cb => cb.value);
+            console.log('Selected cities updated:', selectedCities);
+            updateSelectedDisplay();
+        }
+
+        function updateSelectedDisplay() {
+            const display = document.getElementById('selectedCitiesList');
+            console.log('Updating display with cities:', selectedCities);
+            if (selectedCities.length === 0) {
+                display.textContent = 'None';
+                display.style.color = '#999';
+            } else {
+                display.textContent = selectedCities.join(', ');
+                display.style.color = '#333';
+            }
+        }
+
+        // Certification functions
+        function handleCertificationKeyPress(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addCertification();
+            }
+        }
+
+        function addCertification() {
+            const input = document.getElementById('certificationInput');
+            const cert = input.value.trim();
+            
+            if (cert && !certifications.includes(cert)) {
+                certifications.push(cert);
+                input.value = '';
+                renderCertifications();
+            }
+        }
+
+        function removeCertification(cert) {
+            certifications = certifications.filter(c => c !== cert);
+            renderCertifications();
+        }
+
+        function renderCertifications() {
+            const container = document.getElementById('certificationsContainer');
+            
+            if (certifications.length === 0) {
+                container.innerHTML = '<span style="color: #999; font-size: 0.9em; width: 100%; text-align: center;">No certifications added yet</span>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            certifications.forEach(cert => {
+                const tag = document.createElement('div');
+                tag.style.cssText = 'display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px 12px; border-radius: 20px; font-size: 0.9em; font-weight: 500;';
+                
+                const text = document.createElement('span');
+                text.textContent = cert;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.innerHTML = '×';
+                removeBtn.type = 'button';
+                removeBtn.style.cssText = 'background: rgba(255,255,255,0.3); border: none; color: white; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 1.2em; line-height: 1; display: flex; align-items: center; justify-content: center; transition: background 0.2s;';
+                removeBtn.onmouseover = function() { this.style.background = 'rgba(255,255,255,0.5)'; };
+                removeBtn.onmouseout = function() { this.style.background = 'rgba(255,255,255,0.3)'; };
+                removeBtn.onclick = function() { removeCertification(cert); };
+                
+                tag.appendChild(text);
+                tag.appendChild(removeBtn);
+                container.appendChild(tag);
+            });
+        }
+
+        // Load existing profile data when page loads
+        window.onload = function() {
+            loadExistingProfile();
+        };
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="careers.html">Careers</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="safety.html">Safety</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Providers</h4>
+                <a href="service-provider-login.html">Provider Login</a>
+                <a href="service-provider-login.html">Become a Provider</a>
+                <a href="provider-resources.html">Provider Resources</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

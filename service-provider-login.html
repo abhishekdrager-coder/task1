@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Provider Login - Task Masters</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body.dark-mode { background: #1a1a1a; color: #e0e0e0; }
+        body.dark-mode .modern-navbar { background: #0d1117 !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p { color: #b0b0b0; }
+        body.dark-mode .login-container, body.dark-mode form { background: #0d1117; border: 1px solid #30363d; }
+        body.dark-mode input { background: #161b22; color: #e0e0e0; border: 1px solid #30363d; }
+        body.dark-mode .footer { background: #0d1117; border-top: 1px solid #30363d; }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e0e0; }
+    </style>
+    <script>
+        (function() {
+            try {
+                const custSettings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                const provSettings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (custSettings.darkMode === true || provSettings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><h2>🎯 Task Masters</h2></a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="index.html#services">Services</a>
+                <a href="index.html#about">About</a>
+                <a href="customer-dashboard.html" class="btn-provider" id="customerBtn" style="background: #28a745;">Customer Dashboard</a>
+                <button class="btn-login" id="loginBtn" onclick="window.location.href='index.html'">Customer Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Provider Login Section -->
+    <section class="provider-login-section">
+        <div class="login-container">
+            <div class="login-box">
+                <h1>Service Provider Portal</h1>
+                <p class="subtitle">Login or register to start earning</p>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="showTab('login')">Login</button>
+                    <button class="tab-btn" onclick="showTab('register')">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginTab" class="tab-content active">
+                    <form class="provider-form" onsubmit="handleProviderLogin(event)">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="providerEmail" required placeholder="your@email.com" />
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="providerPassword" required placeholder="Enter your password" />
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="providerRememberMe" /> Remember me
+                            </label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn-submit-full">Login to Dashboard</button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerTab" class="tab-content">
+                    <form class="provider-form" onsubmit="handleProviderRegister(event)">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" required placeholder="John Doe" />
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" required placeholder="your@email.com" />
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" required placeholder="+1 (555) 123-4567" />
+                        </div>
+                        <div class="form-group">
+                            <label>Password *</label>
+                            <input type="password" required placeholder="Create a strong password" />
+                        </div>
+                        <div class="form-group">
+                            <label>Service Category *</label>
+                            <select required>
+                                <option value="">Select your expertise</option>
+                                <option value="cleaning">Home Cleaning</option>
+                                <option value="plumbing">Plumbing</option>
+                                <option value="electrical">Electrical Work</option>
+                                <option value="carpentry">Carpentry</option>
+                                <option value="painting">Painting</option>
+                                <option value="beauty">Beauty & Salon</option>
+                                <option value="tutoring">Tutoring</option>
+                                <option value="pest">Pest Control</option>
+                                <option value="ac">AC Repair</option>
+                                <option value="babysitting">Babysitting</option>
+                                <option value="moving">Moving & Packing</option>
+                                <option value="fitness">Personal Training</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Years of Experience *</label>
+                            <input type="number" required placeholder="e.g., 5" min="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>City *</label>
+                            <input type="text" required placeholder="Your city" />
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" required />
+                                I agree to the <a href="#">Terms & Conditions</a>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-submit-full">Create Account</button>
+                        <p class="info-text">✓ 0% Commission • ✓ Flexible schedule • ✓ Weekly payments</p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="benefits-box">
+                <h2>Why Join Task Masters?</h2>
+                <div class="zero-commission-highlight">
+                    <h3>🎉 0% Commission Platform</h3>
+                    <p>You keep 100% of every payment. No hidden fees, no commission cuts!</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">💰</div>
+                    <div>
+                        <h3>Earn More</h3>
+                        <p>Set your own rates and earn up to $5,000/month</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📅</div>
+                    <div>
+                        <h3>Flexible Hours</h3>
+                        <p>Work when you want, where you want</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <div>
+                        <h3>Steady Work</h3>
+                        <p>Access to thousands of customers daily</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🛡️</div>
+                    <div>
+                        <h3>Insurance Coverage</h3>
+                        <p>Protected while you work</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📱</div>
+                    <div>
+                        <h3>Easy App</h3>
+                        <p>Manage bookings from your phone</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <h2 class="section-title">What Providers Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"Task Masters has helped me grow my business and reach more customers than ever before!"</p>
+                <div class="testimonial-author">
+                    <strong>Service Provider</strong>
+                    <span>Plumber • Toronto</span>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p>"The flexible schedule lets me balance work and personal commitments perfectly."</p>
+                <div class="testimonial-author">
+                    <strong>Service Provider</strong>
+                    <span>Tutor • Vancouver</span>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p>"Great platform with reliable customers and prompt payments. Highly recommend!"</p>
+                <div class="testimonial-author">
+                    <strong>Service Provider</strong>
+                    <span>Electrician • Montreal</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="index.html#about">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Safety</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <a href="#">Email Us</a>
+                <a href="#">Call: 1800-TASK-HELP</a>
+                <a href="#">Live Chat</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Update navigation based on login status
+        window.addEventListener('DOMContentLoaded', () => {
+            const customerAuth = Auth.isLoggedIn('customer');
+            const providerAuth = Auth.isLoggedIn('provider');
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const customerBtn = document.getElementById('customerBtn');
+            
+            if (loginBtn && customerBtn) {
+                if (providerAuth) {
+                    // If provider is logged in, show their dashboard link
+                    loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
+                    customerBtn.style.display = 'none';
+                } else if (customerAuth) {
+                    // If customer is logged in, they can still become provider
+                    loginBtn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" style="text-decoration: none; display: inline-block; background: #28a745;">Customer Dashboard</a>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
