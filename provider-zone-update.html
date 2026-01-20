@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Service Zone - Task Masters</title>
+    <link rel="stylesheet" href="styles.css?v=15.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .zone-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .zone-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .zone-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            color: white;
+        }
+
+        .zone-header h1 {
+            font-size: 28px;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .zone-header p {
+            font-size: 16px;
+            color: #718096;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .current-zone {
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .current-zone-label {
+            font-size: 13px;
+            color: #718096;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .current-zone-value {
+            font-size: 18px;
+            color: #2d3748;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .current-zone-value i {
+            color: #667eea;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 6px;
+            display: flex;
+            align-items: start;
+            gap: 6px;
+        }
+
+        .help-text i {
+            margin-top: 2px;
+            color: #a0aec0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+        }
+
+        .suggestions {
+            margin-top: 20px;
+        }
+
+        .suggestions-label {
+            font-size: 13px;
+            color: #718096;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .suggestions-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-chip {
+            padding: 8px 16px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .suggestion-chip:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .success-message {
+            display: none;
+            background: #48bb78;
+            color: white;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message i {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .zone-container {
+                padding: 30px 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="zone-container">
+        <div class="zone-header">
+            <div class="zone-icon">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <h1>Update Service Zone</h1>
+            <p>Manage the areas where you provide your services</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            Service zone updated successfully!
+        </div>
+
+        <div class="current-zone" id="currentZoneDisplay">
+            <div class="current-zone-label">Current Service Zone</div>
+            <div class="current-zone-value">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="currentZoneText">Not set</span>
+            </div>
+        </div>
+
+        <form id="zoneUpdateForm">
+            <div class="form-group">
+                <label class="form-label" for="province">
+                    <i class="fas fa-location-dot"></i> Province *
+                </label>
+                <select 
+                    id="province" 
+                    name="province"
+                    class="form-input" 
+                    required
+                    onchange="loadCities()"
+                >
+                    <option value="">-- Select Province --</option>
+                    <option value="BC">British Columbia</option>
+                    <option value="AB">Alberta</option>
+                    <option value="SK">Saskatchewan</option>
+                    <option value="MB">Manitoba</option>
+                    <option value="ON">Ontario</option>
+                    <option value="QC">Quebec</option>
+                    <option value="NB">New Brunswick</option>
+                    <option value="NS">Nova Scotia</option>
+                    <option value="PE">Prince Edward Island</option>
+                    <option value="NL">Newfoundland and Labrador</option>
+                    <option value="YT">Yukon</option>
+                    <option value="NT">Northwest Territories</option>
+                    <option value="NU">Nunavut</option>
+                </select>
+                <div class="help-text">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Select the province where you provide services</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="cities">
+                    <i class="fas fa-city"></i> Cities *
+                </label>
+                <div id="cityCheckboxContainer" style="max-height: 300px; overflow-y: auto; border: 2px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                    <p style="color: #a0aec0; text-align: center; padding: 20px;">Please select a province first</p>
+                </div>
+                <div class="help-text">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Select all cities where you offer your services</span>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i>
+                    Update Zone
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Canadian city data by province
+        const cityData = {
+            'BC': ['Vancouver', 'Surrey', 'Burnaby', 'Richmond', 'Coquitlam', 'Langley', 'Delta', 'North Vancouver', 'West Vancouver', 'New Westminster', 'Port Coquitlam', 'Port Moody', 'Maple Ridge', 'White Rock', 'Pitt Meadows', 'Abbotsford', 'Chilliwack', 'Kelowna', 'Kamloops', 'Victoria', 'Nanaimo', 'Prince George', 'Vernon', 'Penticton', 'Campbell River'],
+            'AB': ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'St. Albert', 'Medicine Hat', 'Grande Prairie', 'Airdrie', 'Spruce Grove', 'Okotoks', 'Fort McMurray', 'Cochrane', 'Chestermere', 'Beaumont', 'Leduc', 'Lloydminster', 'Camrose', 'Brooks', 'Cold Lake', 'Wetaskiwin', 'Sylvan Lake', 'Canmore', 'Lacombe', 'High River', 'Stony Plain'],
+            'SK': ['Saskatoon', 'Regina', 'Prince Albert', 'Moose Jaw', 'Swift Current', 'Yorkton', 'North Battleford', 'Estevan', 'Weyburn', 'Lloydminster', 'Martensville', 'Warman', 'Corman Park', 'Meadow Lake', 'Melfort', 'Humboldt', 'Kindersley', 'Melville', 'Battlefords', 'La Ronge', 'Tisdale', 'Rosetown', 'Nipawin', 'Carlyle', 'Moosomin'],
+            'MB': ['Winnipeg', 'Brandon', 'Steinbach', 'Thompson', 'Portage la Prairie', 'Winkler', 'Selkirk', 'Morden', 'Dauphin', 'The Pas', 'Flin Flon', 'Neepawa', 'Gimli', 'Stonewall', 'Beausejour', 'Carman', 'Virden', 'Swan River', 'Minnedosa', 'Boissevain', 'Killarney', 'Hamiota', 'Deloraine', 'Russell', 'Souris'],
+            'ON': ['Toronto', 'Ottawa', 'Mississauga', 'Brampton', 'Hamilton', 'London', 'Markham', 'Vaughan', 'Kitchener', 'Windsor', 'Richmond Hill', 'Oakville', 'Burlington', 'Oshawa', 'Barrie', 'St. Catharines', 'Cambridge', 'Waterloo', 'Guelph', 'Sudbury', 'Kingston', 'Whitby', 'Ajax', 'Thunder Bay', 'Newmarket'],
+            'QC': ['Montreal', 'Quebec City', 'Laval', 'Gatineau', 'Longueuil', 'Sherbrooke', 'Saguenay', 'Lévis', 'Trois-Rivières', 'Terrebonne', 'Saint-Jean-sur-Richelieu', 'Repentigny', 'Brossard', 'Drummondville', 'Saint-Jérôme', 'Granby', 'Blainville', 'Saint-Hyacinthe', 'Shawinigan', 'Dollard-des-Ormeaux', 'Rimouski', 'Victoriaville', 'Mirabel', 'Joliette', 'Sorel-Tracy'],
+            'NB': ['Moncton', 'Saint John', 'Fredericton', 'Dieppe', 'Miramichi', 'Bathurst', 'Edmundston', 'Campbellton', 'Quispamsis', 'Rothesay', 'Riverview', 'Oromocto', 'Grand Falls', 'Woodstock', 'Shediac', 'Tracadie', 'Sussex', 'Caraquet', 'Sackville', 'Dalhousie', 'Shippagan', 'Bouctouche', 'Neguac', 'Saint-Quentin', 'Perth-Andover'],
+            'NS': ['Halifax', 'Dartmouth', 'Sydney', 'Truro', 'New Glasgow', 'Glace Bay', 'Amherst', 'Bridgewater', 'Yarmouth', 'Kentville', 'Antigonish', 'New Waterford', 'Cole Harbour', 'Lower Sackville', 'Sydney Mines', 'Westville', 'Stellarton', 'Pictou', 'Berwick', 'Wolfville', 'Shelburne', 'Windsor', 'Springhill', 'Annapolis Royal', 'Digby'],
+            'PE': ['Charlottetown', 'Summerside', 'Stratford', 'Cornwall', 'Montague', 'Kensington', 'Souris', 'Alberton', 'Tignish', 'Georgetown', 'O\'Leary', 'Wellington', 'Borden-Carleton', 'Cavendish', 'North Rustico', 'Hunter River', 'Victoria', 'Crapaud', 'Murray Harbour', 'Murray River', 'Belfast', 'Morell', 'Cardigan', 'St. Peters', 'Tyne Valley'],
+            'NL': ['St. John\'s', 'Mount Pearl', 'Corner Brook', 'Conception Bay South', 'Paradise', 'Grand Falls-Windsor', 'Gander', 'Portugal Cove-St. Philip\'s', 'Torbay', 'Labrador City', 'Happy Valley-Goose Bay', 'Stephenville', 'Bay Roberts', 'Marystown', 'Clarenville', 'Carbonear', 'Channel-Port aux Basques', 'Deer Lake', 'Lewisporte', 'Bonavista', 'Placentia', 'Burin', 'Harbour Grace', 'Grand Bank', 'Twillingate'],
+            'YT': ['Whitehorse', 'Dawson City', 'Watson Lake', 'Haines Junction', 'Carmacks', 'Mayo', 'Faro', 'Ross River', 'Pelly Crossing', 'Teslin', 'Beaver Creek', 'Burwash Landing', 'Carcross', 'Old Crow', 'Tagish', 'Mount Lorne', 'Ibex Valley', 'Marsh Lake', 'Destruction Bay', 'Stewart Crossing', 'Keno City', 'Silver City', 'Champagne', 'Upper Liard', 'Lower Post'],
+            'NT': ['Yellowknife', 'Hay River', 'Inuvik', 'Fort Smith', 'Behchokǫ̀', 'Fort Simpson', 'Norman Wells', 'Tuktoyaktuk', 'Fort Providence', 'Fort Resolution', 'Aklavik', 'Fort Liard', 'Sachs Harbour', 'Paulatuk', 'Tsiigehtchic', 'Wekweètì', 'Whatì', 'Gamètì', 'Dettah', 'N\'Dilo', 'Ulukhaktok', 'Fort McPherson', 'Colville Lake', 'Tulita', 'Délı̨nę'],
+            'NU': ['Iqaluit', 'Rankin Inlet', 'Arviat', 'Baker Lake', 'Cambridge Bay', 'Pond Inlet', 'Igloolik', 'Kugluktuk', 'Pangnirtung', 'Cape Dorset', 'Gjoa Haven', 'Clyde River', 'Coral Harbour', 'Naujaat', 'Taloyoak', 'Qikiqtarjuaq', 'Arctic Bay', 'Chesterfield Inlet', 'Kimmirut', 'Sanikiluaq', 'Whale Cove', 'Resolute', 'Grise Fiord', 'Hall Beach', 'Kugaaruk']
+        };
+
+        // Load current zone on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadCurrentZone();
+        });
+
+        function loadCurrentZone() {
+            const profileData = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            
+            // Display current province and cities
+            if (profileData.province && profileData.cities && profileData.cities.length > 0) {
+                const provinceNames = {
+                    'BC': 'British Columbia', 'AB': 'Alberta', 'SK': 'Saskatchewan', 'MB': 'Manitoba',
+                    'ON': 'Ontario', 'QC': 'Quebec', 'NB': 'New Brunswick', 'NS': 'Nova Scotia',
+                    'PE': 'Prince Edward Island', 'NL': 'Newfoundland and Labrador',
+                    'YT': 'Yukon', 'NT': 'Northwest Territories', 'NU': 'Nunavut'
+                };
+                
+                const currentZone = provinceNames[profileData.province] + ' - ' + profileData.cities.join(', ');
+                document.getElementById('currentZoneText').textContent = currentZone;
+                
+                // Pre-select province
+                document.getElementById('province').value = profileData.province;
+                
+                // Load and pre-select cities
+                loadCities();
+            } else {
+                document.getElementById('currentZoneText').textContent = 'Not set';
+            }
+        }
+
+        function loadCities() {
+            const province = document.getElementById('province').value;
+            const container = document.getElementById('cityCheckboxContainer');
+            
+            if (!province) {
+                container.innerHTML = '<p style="color: #a0aec0; text-align: center; padding: 20px;">Please select a province first</p>';
+                return;
+            }
+            
+            const cities = cityData[province] || [];
+            const profileData = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            const selectedCities = profileData.cities || [];
+            
+            container.innerHTML = '';
+            
+            // Add "Select All" checkbox
+            const selectAllDiv = document.createElement('div');
+            selectAllDiv.style.cssText = 'display: flex; align-items: center; gap: 10px; padding: 12px; background: #f7fafc; border-radius: 8px; margin-bottom: 12px; border: 2px solid #e2e8f0;';
+            selectAllDiv.innerHTML = `
+                <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" style="width: 18px; height: 18px; cursor: pointer;">
+                <label for="selectAll" style="cursor: pointer; font-weight: 600; color: #2d3748;">Select All Cities</label>
+            `;
+            container.appendChild(selectAllDiv);
+            
+            cities.forEach(city => {
+                const div = document.createElement('div');
+                div.style.cssText = 'display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #e2e8f0;';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'city';
+                checkbox.value = city;
+                checkbox.id = 'city-' + city.replace(/\s+/g, '-');
+                checkbox.style.cssText = 'width: 18px; height: 18px; cursor: pointer;';
+                checkbox.onchange = updateSelectAll;
+                
+                // Check if this city was previously selected
+                if (selectedCities.includes(city)) {
+                    checkbox.checked = true;
+                }
+                
+                const label = document.createElement('label');
+                label.htmlFor = checkbox.id;
+                label.textContent = city;
+                label.style.cssText = 'cursor: pointer; flex: 1; color: #2d3748;';
+                
+                div.appendChild(checkbox);
+                div.appendChild(label);
+                container.appendChild(div);
+            });
+            
+            updateSelectAll();
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('input[name="city"]');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        }
+
+        function updateSelectAll() {
+            const checkboxes = document.querySelectorAll('input[name="city"]');
+            const selectAll = document.getElementById('selectAll');
+            if (selectAll) {
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                selectAll.checked = allChecked;
+            }
+        }
+
+        function goBack() {
+            window.location.href = 'provider.html';
+        }
+
+        // Handle form submission
+        document.getElementById('zoneUpdateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const province = document.getElementById('province').value;
+            const selectedCities = Array.from(document.querySelectorAll('input[name="city"]:checked')).map(cb => cb.value);
+            
+            if (!province) {
+                alert('Please select a province');
+                return;
+            }
+            
+            if (selectedCities.length === 0) {
+                alert('Please select at least one city');
+                return;
+            }
+            
+            // Get existing profile data
+            const profileData = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            
+            // Update the service zone
+            profileData.province = province;
+            profileData.cities = selectedCities;
+            
+            // Also update location field for compatibility
+            const provinceNames = {
+                'BC': 'British Columbia', 'AB': 'Alberta', 'SK': 'Saskatchewan', 'MB': 'Manitoba',
+                'ON': 'Ontario', 'QC': 'Quebec', 'NB': 'New Brunswick', 'NS': 'Nova Scotia',
+                'PE': 'Prince Edward Island', 'NL': 'Newfoundland and Labrador',
+                'YT': 'Yukon', 'NT': 'Northwest Territories', 'NU': 'Nunavut'
+            };
+            profileData.location = provinceNames[province] + ', Canada';
+            profileData.serviceZone = provinceNames[province] + ' - ' + selectedCities.join(', ');
+            
+            // Save back to localStorage
+            localStorage.setItem('providerProfile', JSON.stringify(profileData));
+            
+            // Show success message
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+            
+            // Update current zone display
+            document.getElementById('currentZoneText').textContent = profileData.serviceZone;
+            
+            // Redirect after 1.5 seconds
+            setTimeout(function() {
+                window.location.href = 'provider.html';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

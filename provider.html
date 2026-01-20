@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Provider Dashboard - Task Masters</title>
-    <link rel="stylesheet" href="styles.css?v=2.0">
+    <link rel="stylesheet" href="styles.css?v=19.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <style>
         /* Dark Mode Styles */
         body.dark-mode {
@@ -171,8 +171,11 @@
                         📷
                     </button>
                 </div>
-                <h2 id="displayName" style="margin: 0 0 10px 0; font-size: 2em; color: #2c3e50;">Welcome <span id="providerNameDisplay">Professional</span></h2>
-                <p id="displayProfession" style="margin: 0 0 20px 0; font-size: 1.2em; color: #7f8c8d; font-weight: 500;">Service Provider</p>
+                <h2 id="displayName" style="margin: 0 0 10px 0; font-size: 2em; color: #2c3e50;">Welcome <span id="providerNameDisplay"></span></h2>
+                <p id="displayProfession" style="margin: 0 0 20px 0; font-size: 1.2em; color: #7f8c8d; font-weight: 500;">
+                    Service Zone 
+                    <i class="fas fa-edit" onclick="showServiceZoneModal()" style="cursor: pointer; color: #667eea; font-size: 0.8em; margin-left: 8px;" title="Edit Service Zone"></i>
+                </p>
                 <div style="display: inline-block; background: #f0f4ff; padding: 12px 24px; border-radius: 12px;">
                     <p style="margin: 0; color: #667eea; font-weight: 600;"><i class="fas fa-map-marker-alt"></i> <span id="displayProvince">Not set</span></p>
                     <p id="displayCities" style="margin: 8px 0 0 0; color: #666; font-size: 0.9em;">No cities selected</p>
@@ -316,18 +319,19 @@
         <div style="flex: 0 0 30%; display: flex; flex-direction: column; gap: 20px;">
             <h3 style="margin: 0 0 10px 0; color: #2c3e50; font-size: 1.3em;">Quick Access</h3>
             
-            <a href="provider-overview.html" class="icon-menu-card" style="margin: 0;">
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=200&h=200&fit=crop" alt="Overview" class="icon-image">
-                <div class="icon">📊</div>
-                <h3>Overview</h3>
-                <p>Dashboard & analytics</p>
-            </a>
-
-            <a href="provider-bookings.html" class="icon-menu-card" style="margin: 0;">
+            <a href="provider-bookings.html" class="icon-menu-card" style="margin: 0; position: relative;">
                 <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=200&h=200&fit=crop" alt="Bookings" class="icon-image">
                 <div class="icon">📅</div>
+                <span id="bookingNotification" style="position: absolute; top: 10px; right: 10px; background: #f44336; color: white; border-radius: 50%; width: 28px; height: 28px; display: none; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85em; box-shadow: 0 2px 8px rgba(244,67,54,0.4);">0</span>
                 <h3>Bookings</h3>
                 <p>Manage appointments</p>
+            </a>
+
+            <a href="provider-analytics.html" class="icon-menu-card" style="margin: 0;">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=200&h=200&fit=crop" alt="Analytics" class="icon-image">
+                <div class="icon">📊</div>
+                <h3>Analytics</h3>
+                <p>Business insights</p>
             </a>
 
             <a href="provider-earnings.html" class="icon-menu-card" style="margin: 0;">
@@ -337,13 +341,6 @@
                 <p>View income & payouts</p>
             </a>
 
-            <a href="provider-profile.html" class="icon-menu-card" style="margin: 0;">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Profile" class="icon-image">
-                <div class="icon">👤</div>
-                <h3>Profile</h3>
-                <p>Edit your profile</p>
-            </a>
-
             <a href="provider-availability.html" class="icon-menu-card" style="margin: 0;">
                 <img src="https://images.unsplash.com/photo-1495364141860-b0d03eccd065?w=200&h=200&fit=crop" alt="Availability" class="icon-image">
                 <div class="icon">🕐</div>
@@ -351,26 +348,101 @@
                 <p>Set your schedule</p>
             </a>
 
+            <a href="provider-profile.html" class="icon-menu-card" style="margin: 0;">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Profile" class="icon-image">
+                <div class="icon">👤</div>
+                <h3>Profile</h3>
+                <p>Edit your details</p>
+            </a>
+
             <a href="provider-services.html" class="icon-menu-card" style="margin: 0;">
-                <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=200&h=200&fit=crop" alt="Services" class="icon-image">
+                <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=200&h=200&fit=crop" alt="Service Type" class="icon-image">
                 <div class="icon">🔧</div>
-                <h3>Services</h3>
+                <h3>Service Type</h3>
                 <p>Manage offerings</p>
             </a>
         </div>
     </div>
 
+    <!-- Service Zone Edit Modal -->
+    <div id="serviceZoneModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 40px; border-radius: 20px; max-width: 500px; width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            <button onclick="closeServiceZoneModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; color: #999; z-index: 10001; padding: 5px 10px;">×</button>
+            <h2 style="margin: 0 0 20px 0; color: #2c3e50;">✏️ Edit Service Zone</h2>
+            <p style="color: #666; margin-bottom: 30px;">Do you want to change or edit your service zone?</p>
+            <div style="display: flex; gap: 15px;">
+                <button onclick="handleServiceZoneChoice('yes')" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; border: 2px solid #667eea; border-radius: 10px; cursor: pointer; flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600; font-size: 1em; transition: all 0.3s;">
+                    ✅ Yes, Edit Zone
+                </button>
+                <button onclick="handleServiceZoneChoice('no')" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; flex: 1; background: #f8f9fa; color: #333; font-weight: 600; font-size: 1em; transition: all 0.3s;">
+                    ❌ No, Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showServiceZoneModal() {
+            const modal = document.getElementById('serviceZoneModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeServiceZoneModal() {
+            const modal = document.getElementById('serviceZoneModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function handleServiceZoneChoice(choice) {
+            if (choice === 'yes') {
+                window.location.href = 'provider-zone-update.html';
+            } else {
+                closeServiceZoneModal();
+            }
+        }
+    </script>
+
+        function closeServiceZoneModal() {
+            // No longer needed but keeping for compatibility
+        }
+
+        function handleServiceZoneChoice() {
+            // No longer needed but keeping for compatibility
+        }
+    </script>
+
+    <script>
+        // Check for bookings and show notification badge
+        (function() {
+            const bookings = JSON.parse(localStorage.getItem('providerBookings') || '[]');
+            const activeBookings = bookings.filter(b => b.status === 'pending' || b.status === 'confirmed');
+            const badge = document.getElementById('bookingNotification');
+            if (badge && activeBookings.length > 0) {
+                badge.textContent = activeBookings.length;
+                badge.style.display = 'flex';
+            }
+        })();
+    </script>
+
     <script>
         // IMMEDIATE EXECUTION - Load data right away
         (function() {
             const data = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            console.log('Provider data loaded:', data);
             
             setTimeout(function() {
-                // Update provider name
-                if (data.name) {
+                // Update provider name - prioritize business name
+                const displayName = data.businessName || data.name;
+                console.log('Display name:', displayName);
+                if (displayName) {
                     const nameEl = document.getElementById('providerNameDisplay');
+                    console.log('Name element:', nameEl);
                     if (nameEl) {
-                        nameEl.textContent = data.name;
+                        nameEl.textContent = displayName;
+                        console.log('Name set to:', displayName);
                     }
                 }
                 
@@ -514,16 +586,13 @@
             try {
                 const data = JSON.parse(localStorage.getItem('providerProfile') || '{}');
                 
-                // Direct updates with innerHTML
-                const providerNameDisplay = document.getElementById('providerNameDisplay');
-                if (providerNameDisplay && data.businessName) {
-                    providerNameDisplay.textContent = data.businessName;
-                } else if (providerNameDisplay && data.name) {
-                    providerNameDisplay.textContent = data.name;
-                }
+                // Get the display name (business name or regular name)
+                const displayName = data.businessName || data.name;
                 
-                if (data.businessName) {
-                    document.getElementById('displayName').innerHTML = data.businessName;
+                // Update the provider name display (only the span inside)
+                const providerNameDisplay = document.getElementById('providerNameDisplay');
+                if (providerNameDisplay && displayName) {
+                    providerNameDisplay.textContent = displayName;
                 }
                 
                 if (data.serviceCategory) {

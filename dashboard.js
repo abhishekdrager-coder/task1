@@ -245,14 +245,29 @@ function saveProfile(event) {
     // Save to localStorage
     localStorage.setItem('providerProfile', JSON.stringify(profileData));
     
-    // Update sidebar profile display immediately
+    // Update all name displays immediately (name or business name)
+    const displayName = profileData.businessName || profileData.name;
+    
+    // Update sidebar profile display
     const sidebarName = document.getElementById('providerName');
     const sidebarPhone = document.getElementById('providerPhone');
-    if (sidebarName && profileData.name) {
-        sidebarName.textContent = profileData.name;
+    if (sidebarName && displayName) {
+        sidebarName.textContent = displayName;
     }
     if (sidebarPhone && profileData.phone) {
         sidebarPhone.textContent = profileData.phone;
+    }
+    
+    // Update welcome name in header
+    const welcomeName = document.getElementById('welcomeName');
+    if (welcomeName && displayName) {
+        welcomeName.textContent = displayName;
+    }
+    
+    // Update navigation bar name
+    const navName = document.getElementById('navProviderName');
+    if (navName && displayName) {
+        navName.textContent = displayName;
     }
     
     // Create success message
@@ -494,22 +509,40 @@ function updateParentCheckboxes() {
 // Load profile data from localStorage
 function loadProfileData() {
     const savedProfile = localStorage.getItem('providerProfile');
-    if (!savedProfile) return;
+    console.log('Loading profile data...', savedProfile);
+    if (!savedProfile) {
+        console.log('No saved profile found');
+        return;
+    }
     
     try {
         const profileData = JSON.parse(savedProfile);
+        console.log('Profile data:', profileData);
+        
+        // Determine display name (business name takes priority over personal name)
+        const displayName = profileData.businessName || profileData.name;
+        console.log('Display name:', displayName);
         
         // Update welcome name in header
         const welcomeName = document.getElementById('welcomeName');
-        if (welcomeName && profileData.name) {
-            welcomeName.textContent = profileData.name;
+        if (welcomeName && displayName) {
+            welcomeName.textContent = displayName;
+            console.log('Updated welcome name to:', displayName);
+        }
+        
+        // Update navigation bar name
+        const navName = document.getElementById('navProviderName');
+        if (navName && displayName) {
+            navName.textContent = displayName;
+            console.log('Updated nav name to:', displayName);
         }
         
         // Update sidebar profile display
         const sidebarName = document.getElementById('providerName');
         const sidebarPhone = document.getElementById('providerPhone');
-        if (sidebarName && profileData.name) {
-            sidebarName.textContent = profileData.name;
+        if (sidebarName && displayName) {
+            sidebarName.textContent = displayName;
+            console.log('Updated sidebar name to:', displayName);
         }
         if (sidebarPhone && profileData.phone) {
             sidebarPhone.textContent = profileData.phone;

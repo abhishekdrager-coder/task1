@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Task Masters</title>
+    <link rel="stylesheet" href="styles.css?v=15.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+        }
+
+        .analytics-container {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .date-range-selector {
+            display: flex;
+            gap: 8px;
+            background: white;
+            padding: 4px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .date-range-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: #4a5568;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .date-range-btn:hover {
+            background: #f7fafc;
+        }
+
+        .date-range-btn.active {
+            background: #3182ce;
+            color: white;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: #2c5aa0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .kpi-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #3182ce, #2c5aa0);
+        }
+
+        .kpi-card.green::before {
+            background: linear-gradient(180deg, #48bb78, #38a169);
+        }
+
+        .kpi-card.purple::before {
+            background: linear-gradient(180deg, #9f7aea, #805ad5);
+        }
+
+        .kpi-card.orange::before {
+            background: linear-gradient(180deg, #ed8936, #dd6b20);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .kpi-title {
+            font-size: 14px;
+            color: #718096;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .kpi-card.blue .kpi-icon {
+            background: rgba(49, 130, 206, 0.1);
+            color: #3182ce;
+        }
+
+        .kpi-card.green .kpi-icon {
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
+        }
+
+        .kpi-card.purple .kpi-icon {
+            background: rgba(159, 122, 234, 0.1);
+            color: #9f7aea;
+        }
+
+        .kpi-card.orange .kpi-icon {
+            background: rgba(237, 137, 54, 0.1);
+            color: #ed8936;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .kpi-trend.up {
+            color: #48bb78;
+        }
+
+        .kpi-trend.down {
+            color: #f56565;
+        }
+
+        .kpi-trend.neutral {
+            color: #718096;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .chart-subtitle {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 4px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .chart-card.large .chart-wrapper {
+            height: 400px;
+        }
+
+        /* Performance Indicators */
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .performance-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .performance-title {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .performance-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .performance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3182ce, #2c5aa0);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .performance-value {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        /* Table Styles */
+        .table-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: #f7fafc;
+        }
+
+        .data-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #2d3748;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0aec0;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state small {
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .analytics-container {
+                padding: 16px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .date-range-selector {
+                width: 100%;
+                overflow-x: auto;
+            }
+    </style>
+</head>
+<body>
+    <div class="analytics-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>📊 Business Analytics</h1>
+            </div>
+            <div class="header-actions">
+                <div class="date-range-selector">
+                    <button class="date-range-btn" onclick="setDateRange('7d')">7 Days</button>
+                    <button class="date-range-btn active" onclick="setDateRange('30d')">30 Days</button>
+                    <button class="date-range-btn" onclick="setDateRange('90d')">90 Days</button>
+                    <button class="date-range-btn" onclick="setDateRange('1y')">1 Year</button>
+                </div>
+                <a href="provider.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card blue">
+                <div class="kpi-header">
+                    <div>
+                        <div class="kpi-title">Total Bookings</div>
+                    </div>
+                    <div class="kpi-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="kpi-value" id="totalBookings">0</div>
+                <div class="kpi-trend neutral">
+                    <i class="fas fa-minus"></i>
+                    <span>No change from last period</span>
+                </div>
+            </div>
+
+            <div class="kpi-card green">
+                <div class="kpi-header">
+                    <div>
+                        <div class="kpi-title">Total Revenue</div>
+                    </div>
+                    <div class="kpi-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="kpi-value" id="totalRevenue">$0</div>
+                <div class="kpi-trend neutral">
+                    <i class="fas fa-minus"></i>
+                    <span>No change from last period</span>
+                </div>
+            </div>
+
+            <div class="kpi-card purple">
+                <div class="kpi-header">
+                    <div>
+                        <div class="kpi-title">Avg. Job Value</div>
+                    </div>
+                    <div class="kpi-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="kpi-value" id="avgJobValue">$0</div>
+                <div class="kpi-trend neutral">
+                    <i class="fas fa-minus"></i>
+                    <span>No change from last period</span>
+                </div>
+            </div>
+
+            <div class="kpi-card orange">
+                <div class="kpi-header">
+                    <div>
+                        <div class="kpi-title">Completion Rate</div>
+                    </div>
+                    <div class="kpi-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="kpi-value" id="completionRate">0%</div>
+                <div class="kpi-trend neutral">
+                    <i class="fas fa-minus"></i>
+                    <span>No data available</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Revenue Chart -->
+        <div class="chart-card large">
+            <div class="chart-header">
+                <div>
+                    <div class="chart-title">Revenue Overview</div>
+                    <div class="chart-subtitle">Daily revenue trend for the selected period</div>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Bookings Trend</div>
+                        <div class="chart-subtitle">Number of bookings over time</div>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="bookingsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Service Distribution</div>
+                        <div class="chart-subtitle">Bookings by service type</div>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="serviceDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Indicators -->
+        <div class="performance-grid">
+            <div class="performance-card">
+                <div class="performance-title">Customer Satisfaction</div>
+                <div class="performance-bar">
+                    <div class="performance-fill" style="width: 0%"></div>
+                </div>
+                <div class="performance-value">
+                    <span>Average Rating</span>
+                    <strong>0.0 / 5.0</strong>
+                </div>
+            </div>
+
+            <div class="performance-card">
+                <div class="performance-title">Response Time</div>
+                <div class="performance-bar">
+                    <div class="performance-fill" style="width: 0%; background: linear-gradient(90deg, #48bb78, #38a169);"></div>
+                </div>
+                <div class="performance-value">
+                    <span>Average Response</span>
+                    <strong>-- min</strong>
+                </div>
+            </div>
+
+            <div class="performance-card">
+                <div class="performance-title">Rebooking Rate</div>
+                <div class="performance-bar">
+                    <div class="performance-fill" style="width: 0%; background: linear-gradient(90deg, #9f7aea, #805ad5);"></div>
+                </div>
+                <div class="performance-value">
+                    <span>Returning Customers</span>
+                    <strong>0%</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Services Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <div class="table-title">Top Performing Services</div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Service Name</th>
+                        <th>Bookings</th>
+                        <th>Revenue</th>
+                        <th>Avg. Rating</th>
+                        <th>Trend</th>
+                    </tr>
+                </thead>
+                <tbody id="topServicesTable">
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="fas fa-chart-bar"></i>
+                                <p>No service data available yet</p>
+                                <small>Data will appear here once you start receiving bookings</small>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Customers Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <div class="table-title">Recent Customers</div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Last Booking</th>
+                        <th>Total Bookings</th>
+                        <th>Total Spent</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentCustomersTable">
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="fas fa-users"></i>
+                                <p>No customer data available yet</p>
+                                <small>Customer information will appear here after your first booking</small>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Chart.js default configuration
+        Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
+        Chart.defaults.color = '#718096';
+
+        // Date range selection
+        function setDateRange(range) {
+            const buttons = document.querySelectorAll('.date-range-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            console.log('Date range changed to:', range);
+        }
+
+        // Generate sample data structure
+        function generateAnalyticsData() {
+            return {
+                totalBookings: 0,
+                totalRevenue: 0,
+                avgJobValue: 0,
+                completionRate: 0,
+                revenueData: Array(30).fill(0),
+                bookingsData: Array(30).fill(0),
+                serviceDistribution: {
+                    labels: [],
+                    data: []
+                }
+            };
+        }
+
+        const analyticsData = generateAnalyticsData();
+
+        // Update KPI cards
+        document.getElementById('totalBookings').textContent = analyticsData.totalBookings;
+        document.getElementById('totalRevenue').textContent = '$' + analyticsData.totalRevenue.toLocaleString();
+        document.getElementById('avgJobValue').textContent = '$' + analyticsData.avgJobValue.toLocaleString();
+        document.getElementById('completionRate').textContent = analyticsData.completionRate + '%';
+
+        // Generate date labels for last 30 days
+        function getLast30Days() {
+            const labels = [];
+            const today = new Date();
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+            }
+            return labels;
+        }
+
+        // Revenue Chart
+        const revenueChart = new Chart(document.getElementById('revenueChart'), {
+            type: 'line',
+            data: {
+                labels: getLast30Days(),
+                datasets: [{
+                    label: 'Revenue',
+                    data: analyticsData.revenueData,
+                    borderColor: '#3182ce',
+                    backgroundColor: 'rgba(49, 130, 206, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#3182ce',
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a202c',
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: {
+                            size: 14,
+                            weight: 600
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return 'Revenue: $' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#e2e8f0'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Bookings Chart
+        const bookingsChart = new Chart(document.getElementById('bookingsChart'), {
+            type: 'line',
+            data: {
+                labels: getLast30Days(),
+                datasets: [{
+                    label: 'Bookings',
+                    data: analyticsData.bookingsData,
+                    borderColor: '#48bb78',
+                    backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#48bb78',
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a202c',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return 'Bookings: ' + context.parsed.y;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#e2e8f0'
+                        },
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Service Distribution Chart
+        const serviceDistributionChart = new Chart(document.getElementById('serviceDistributionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: analyticsData.serviceDistribution.labels.length ? analyticsData.serviceDistribution.labels : ['No Data'],
+                datasets: [{
+                    data: analyticsData.serviceDistribution.data.length ? analyticsData.serviceDistribution.data : [1],
+                    backgroundColor: [
+                        '#3182ce',
+                        '#48bb78',
+                        '#9f7aea',
+                        '#ed8936',
+                        '#f56565',
+                        '#38b2ac'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 16,
+                            usePointStyle: true,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a202c',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                if (context.label === 'No Data') return 'No bookings yet';
+                                return context.label + ': ' + context.parsed + ' bookings';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+                <div style="font-size: 2.5em; font-weight: bold; margin: 10px 0;" id="monthJobs">0</div>
+                <div style="font-size: 0.85em; opacity: 0.8;">Jobs completed</div>
+            </div>
+        </div>
+
+        <!-- All Charts in Single View -->
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
+            <h3 style="margin: 0 0 25px 0; color: #2c3e50;">📊 Sales by Day of Week</h3>
+            <canvas id="salesByDayChart" height="60"></canvas>
+        </div>
+
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
+            <h3 style="margin: 0 0 25px 0; color: #2c3e50;">📈 Monthly Performance</h3>
+            <canvas id="monthlyTrendChart" height="60"></canvas>
+        </div>
+
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
+            <h3 style="margin: 0 0 25px 0; color: #2c3e50;">🕐 Average Job Duration by Service</h3>
+            <canvas id="avgJobLengthChart" height="60"></canvas>
+        </div>
+
+        <!-- Top Customers Table -->
+        <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+            <h3 style="margin: 0 0 25px 0; color: #2c3e50;">🌟 Top Customers by Business</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f5f5f5; text-align: left;">
+                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Rank</th>
+                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Customer Name</th>
+                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Total Jobs</th>
+                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Total Spent</th>
+                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Avg Rating</th>
+                    </tr>
+                </thead>
+                <tbody id="topCustomersTable">
+                    <tr>
+                        <td colspan="5" style="padding: 20px; text-align: center; color: #999;">No customer data yet. Complete jobs to see your top customers!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Generate sample data for demonstration
+        const data = generateSampleData();
+
+        // Update summary cards
+        document.getElementById('totalJobs').textContent = data.totalJobs;
+        document.getElementById('totalEarnings').textContent = '$' + data.totalEarnings.toLocaleString();
+        document.getElementById('avgDuration').textContent = data.avgDuration + 'h';
+        document.getElementById('monthJobs').textContent = data.monthJobs;
+
+        // Sales by Day Chart (Line)
+        new Chart(document.getElementById('salesByDayChart'), {
+            type: 'line',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                datasets: [{
+                    label: 'Jobs Completed',
+                    data: data.salesByDay,
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Monthly Trend Chart
+        new Chart(document.getElementById('monthlyTrendChart'), {
+            type: 'line',
+            data: {
+                labels: data.months,
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: data.monthlyRevenue,
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Average Job Length Chart (Line)
+        new Chart(document.getElementById('avgJobLengthChart'), {
+            type: 'line',
+            data: {
+                labels: data.serviceTypes.map(s => s.name),
+                datasets: [{
+                    label: 'Hours',
+                    data: data.avgJobLengths,
+                    borderColor: 'rgba(76, 175, 80, 1)',
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Top Customers Table
+        if (data.topCustomers.length > 0) {
+            const tbody = document.getElementById('topCustomersTable');
+            tbody.innerHTML = data.topCustomers.map((customer, index) => `
+                <tr style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 15px; font-weight: bold; color: ${index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : index === 2 ? '#CD7F32' : '#666'};">
+                        ${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
+                    </td>
+                    <td style="padding: 15px;">${customer.name}</td>
+                    <td style="padding: 15px;">${customer.jobs}</td>
+                    <td style="padding: 15px; font-weight: 600;">$${customer.spent.toLocaleString()}</td>
+                    <td style="padding: 15px;">⭐ ${customer.rating.toFixed(1)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function generateSampleData() {
+            // Return empty data - will be populated with real data from bookings
+            return {
+                totalJobs: 0,
+                totalEarnings: 0,
+                avgDuration: 0,
+                monthJobs: 0,
+                salesByDay: [0, 0, 0, 0, 0, 0, 0],
+                serviceTypes: [
+                    { name: 'Cleaning', value: 0 },
+                    { name: 'Plumbing', value: 0 },
+                    { name: 'Electrical', value: 0 },
+                    { name: 'Carpentry', value: 0 },
+                    { name: 'Other', value: 0 }
+                ],
+                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                monthlyRevenue: [0, 0, 0, 0, 0, 0],
+                avgJobLengths: [0, 0, 0, 0, 0],
+                topCustomers: []
+            };
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
