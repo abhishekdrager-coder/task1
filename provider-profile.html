@@ -220,6 +220,9 @@
             // Save to localStorage
             localStorage.setItem('providerProfile', JSON.stringify(profileData));
             
+            // Sync profile service to services page
+            syncProfileToServices(profileData);
+            
             // Verify save
             const saved = localStorage.getItem('providerProfile');
             console.log('Verified saved data:', saved);
@@ -240,6 +243,37 @@
             setTimeout(() => {
                 window.location.href = 'provider.html';
             }, 1500);
+        }
+
+        function syncProfileToServices(profileData) {
+            // Get existing services
+            const services = JSON.parse(localStorage.getItem('providerServices') || '[]');
+            
+            // Check if service category and hourly rate are set
+            if (profileData.serviceCategory && profileData.hourlyRate) {
+                // Find if profile service already exists
+                const profileServiceIndex = services.findIndex(s => s.fromProfile === true);
+                
+                const serviceData = {
+                    id: profileServiceIndex >= 0 ? services[profileServiceIndex].id : 'profile-' + Date.now().toString(),
+                    name: profileData.serviceCategory,
+                    description: profileData.bio || 'Professional ' + profileData.serviceCategory.toLowerCase() + ' services',
+                    price: parseFloat(profileData.hourlyRate).toFixed(2),
+                    category: profileData.serviceCategory,
+                    fromProfile: true
+                };
+                
+                if (profileServiceIndex >= 0) {
+                    // Update existing profile service
+                    services[profileServiceIndex] = serviceData;
+                } else {
+                    // Add new profile service
+                    services.push(serviceData);
+                }
+                
+                localStorage.setItem('providerServices', JSON.stringify(services));
+                console.log('Synced profile service to services page');
+            }
         }
 
         const cityData = {

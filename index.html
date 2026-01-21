@@ -38,7 +38,8 @@
                 <h2>🎯 Task Masters</h2>
             </div>
             <div class="nav-links" id="navLinks">
-                <a href="#services">Services</a>
+                <a href="index.html">Home</a>
+                <a href="services-browse.html">Services</a>
                 <a href="#how-it-works">How it Works</a>
                 <a href="#about">About</a>
                 <a href="service-provider-login.html" class="btn-provider" id="providerBtn">Become a Provider</a>
@@ -53,10 +54,10 @@
             <h1 class="hero-title">Get Things Done by Skilled Professionals</h1>
             <p class="hero-subtitle">Book trusted service providers for home repairs, cleaning, beauty, wellness, and more</p>
             
-            <div class="commission-badge">
+            <a href="#how-it-works" class="commission-badge" style="display: block; text-decoration: none; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <span class="badge-icon">🎉</span>
-                <span class="badge-text">0% Commission • Providers Keep 100% of Your Payment</span>
-            </div>
+                <span class="badge-text">Find Your Local Professionals at 0% Commission</span>
+            </a>
             
             <div class="search-bar" style="position: relative;">
                 <input type="text" id="serviceSearch" placeholder="What service do you need? (e.g., plumber, cleaner, tutor)" autocomplete="off" />
@@ -147,33 +148,130 @@
                 <h3>Personal Training</h3>
                 <p>Fitness, yoga, nutrition coaching</p>
             </div>
+            <div class="service-card" onclick="selectService('Dog Sitting')">
+                <div class="service-icon">🐕</div>
+                <h3>Dog Sitting</h3>
+                <p>Dog walking, sitting, training</p>
+            </div>
+            <div class="service-card" onclick="selectService('Cat Sitting')">
+                <div class="service-icon">🐈</div>
+                <h3>Cat Sitting</h3>
+                <p>Cat care, feeding, playtime</p>
+            </div>
+            <div class="service-card" onclick="selectService('Pet Grooming')">
+                <div class="service-icon">🐾</div>
+                <h3>Pet Grooming</h3>
+                <p>Bathing, trimming, nail care</p>
+            </div>
+            <div class="service-card" onclick="selectService('Makeup Artist')">
+                <div class="service-icon">💄</div>
+                <h3>Makeup Artist</h3>
+                <p>Bridal, party, professional makeup</p>
+            </div>
+            <div class="service-card" onclick="selectService('Hairstylist')">
+                <div class="service-icon">✂️</div>
+                <h3>Hairstylist at Home</h3>
+                <p>Haircut, styling, coloring (all genders)</p>
+            </div>
+            <div class="service-card" onclick="selectService('Massage')">
+                <div class="service-icon">💆</div>
+                <h3>Massage Therapy</h3>
+                <p>Relaxation, deep tissue, sports</p>
+            </div>
+            <div class="service-card" onclick="selectService('Yoga Instructor')">
+                <div class="service-icon">🧘</div>
+                <h3>Yoga Instructor</h3>
+                <p>Private sessions, all levels</p>
+            </div>
+            <div class="service-card" onclick="selectService('Concierge')">
+                <div class="service-icon">🎩</div>
+                <h3>Concierge Service</h3>
+                <p>Personal assistant, errands, planning</p>
+            </div>
+            <div class="service-card" onclick="selectService('Personal Chef')">
+                <div class="service-icon">👨‍🍳</div>
+                <h3>Personal Chef</h3>
+                <p>Meal prep, cooking, catering</p>
+            </div>
+            <div class="service-card" onclick="selectService('Maid Service')">
+                <div class="service-icon">🧹</div>
+                <h3>Maid Service</h3>
+                <p>Housekeeping, live-in, part-time</p>
+            </div>
+            <div class="service-card" onclick="selectService('Manicure Pedicure')">
+                <div class="service-icon">💅</div>
+                <h3>Nail Technician</h3>
+                <p>Manicure, pedicure, nail art</p>
+            </div>
+            <div class="service-card" onclick="selectService('Dietitian')">
+                <div class="service-icon">🥗</div>
+                <h3>Dietitian & Nutrition</h3>
+                <p>Meal planning, diet consultation</p>
+            </div>
+            <div class="service-card" onclick="selectService('Physiotherapy')">
+                <div class="service-icon">🏥</div>
+                <h3>Physiotherapy</h3>
+                <p>Rehabilitation, pain management</p>
+            </div>
         </div>
     </section>
 
     <!-- How It Works -->
     <section id="how-it-works" class="how-it-works">
         <h2 class="section-title">How It Works</h2>
-        <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-number">1</div>
-                <h3>Choose a Service</h3>
-                <p>Browse and select the service you need</p>
+        
+        <!-- Zero Commission Banner -->
+        <div style="background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%); padding: 30px; border-radius: 15px; margin: 30px auto; max-width: 800px; text-align: center; box-shadow: 0 4px 15px rgba(74,144,226,0.3);">
+            <h3 style="color: white; font-size: 2rem; margin-bottom: 15px;">💯 We Don't Take Commission</h3>
+            <p style="color: white; font-size: 1.1rem; line-height: 1.6; margin: 0;">
+                Unlike other platforms that charge 15-30% commission, <strong>Task Masters charges 0% commission</strong>. 
+                The price you see is the price you pay directly to the service provider. We believe in supporting local small businesses, 
+                not taking a cut from their hard-earned income.
+            </p>
+        </div>
+
+        <!-- How The Platform Works -->
+        <div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+            <h3 style="font-size: 1.8rem; text-align: center; margin-bottom: 30px; color: #2c3e50;">The Complete Process</h3>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Search & Browse</h3>
+                    <p>Enter your service need (plumber, cleaner, tutor, etc.) and browse local professionals in your area. Filter by ratings, price, and availability.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Review Profiles</h3>
+                    <p>Check detailed profiles with verified credentials, customer reviews, past work photos, and transparent pricing. No hidden fees.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Book Your Service</h3>
+                    <p>Select a time slot that works for you and the provider. Confirm the booking with a detailed service description and agreed price.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Secure Payment</h3>
+                    <p>Pay securely through our platform. Your payment goes directly to the provider with 0% commission deducted by Task Masters.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3>Service Delivery</h3>
+                    <p>The professional arrives at your scheduled time and completes the service. Track your booking status in real-time through your dashboard.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h3>Rate & Review</h3>
+                    <p>Share your experience by rating the provider. If you're not satisfied, our quality guarantee and support team are here to help.</p>
+                </div>
             </div>
-            <div class="step-card">
-                <div class="step-number">2</div>
-                <h3>Pick a Provider</h3>
-                <p>View profiles, ratings, and prices</p>
-            </div>
-            <div class="step-card">
-                <div class="step-number">3</div>
-                <h3>Book & Pay</h3>
-                <p>Schedule a time and make secure payment</p>
-            </div>
-            <div class="step-card">
-                <div class="step-number">4</div>
-                <h3>Get It Done</h3>
-                <p>Professional service at your doorstep</p>
-            </div>
+        </div>
+
+        <!-- Future Videos Section -->
+        <div style="text-align: center; margin-top: 50px; padding: 30px; background: #f8f9fa; border-radius: 15px;">
+            <h3 style="color: #2c3e50; margin-bottom: 15px;">📹 Video Guides Coming Soon</h3>
+            <p style="color: #6c757d; font-size: 1.1rem;">We're creating step-by-step video tutorials to help you get the most out of Task Masters</p>
         </div>
     </section>
 
@@ -182,40 +280,8 @@
         <div class="cta-content">
             <h2>Want to Earn as a Service Provider?</h2>
             <p>Join thousands of professionals earning on their own schedule</p>
-            <div class="cta-highlight">✨ Keep 100% of what you earn • Zero commission fees ✨</div>
+            <div class="cta-highlight">✨ Zero commission from Task Masters • We don't take a cut ✨</div>
             <a href="service-provider-login.html" class="btn-cta">Register as Provider</a>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about-section">
-        <h2 class="section-title">Why Choose Task Masters?</h2>
-        <div class="features-grid">
-            <div class="feature-box">
-                <div class="feature-icon">💰</div>
-                <h3>0% Commission</h3>
-                <p>100% of your payment goes directly to the service provider</p>
-            </div>
-            <div class="feature-box">
-                <div class="feature-icon">✅</div>
-                <h3>Verified Professionals</h3>
-                <p>All providers are background-checked and verified</p>
-            </div>
-            <div class="feature-box">
-                <div class="feature-icon">💯</div>
-                <h3>Quality Guaranteed</h3>
-                <p>Money-back guarantee if you're not satisfied</p>
-            </div>
-            <div class="feature-box">
-                <div class="feature-icon">💳</div>
-                <h3>Secure Payments</h3>
-                <p>Safe and encrypted payment processing</p>
-            </div>
-            <div class="feature-box">
-                <div class="feature-icon">🕐</div>
-                <h3>24/7 Support</h3>
-                <p>Customer support available anytime</p>
-            </div>
         </div>
     </section>
 

@@ -58,25 +58,419 @@
         <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                 <h2>My Services</h2>
-                <button style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-weight: 600;">+ Add Service</button>
+                <button onclick="openAddServiceModal()" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-weight: 600;">+ Add Service</button>
             </div>
-            <div style="display: grid; gap: 20px;">
-                <div style="background: #f8f9fa; padding: 25px; border-radius: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div>
-                            <h3 style="margin-bottom: 10px;">Home Cleaning</h3>
-                            <p style="color: #666; margin: 5px 0;">Deep cleaning, regular maintenance</p>
-                            <p style="color: #667eea; font-weight: 600; margin: 10px 0;">$50/hour</p>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            <button style="background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Edit</button>
-                            <button style="background: #ff4444; border: none; color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Delete</button>
-                        </div>
-                    </div>
-                </div>
+            <div id="servicesContainer" style="display: grid; gap: 20px;">
+                <!-- Services will be loaded here dynamically -->
+            </div>
+            <div id="emptyState" style="text-align: center; padding: 60px 20px;">
+                <div style="font-size: 64px; margin-bottom: 20px;">🔧</div>
+                <h3 style="color: #6c757d; margin-bottom: 10px;">No services added yet</h3>
+                <p style="color: #9ca3af; margin-bottom: 25px;">Start by adding the services you provide</p>
+                <button onclick="openAddServiceModal()" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-weight: 600;">+ Add Your First Service</button>
             </div>
         </div>
     </div>
+
+    <!-- Add/Edit Service Modal -->
+    <div id="serviceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 40px; border-radius: 20px; max-width: 600px; width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeServiceModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; color: #999;">×</button>
+            <h2 id="modalTitle" style="margin: 0 0 20px 0; color: #2c3e50;">Add Service</h2>
+            
+            <form id="serviceForm" onsubmit="saveService(event)">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Service Name *</label>
+                    <input type="text" id="serviceName" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;" placeholder="e.g., Home Cleaning">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Description *</label>
+                    <textarea id="serviceDescription" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; min-height: 100px;" placeholder="Describe your service"></textarea>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Price per Hour *</label>
+                    <div style="position: relative;">
+                        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #666; font-weight: 600;">$</span>
+                        <input type="number" id="servicePrice" required min="0" step="0.01" style="width: 100%; padding: 12px 12px 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;" placeholder="50.00">
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="requireMinimumHours" onchange="toggleMinimumHours()" style="width: 18px; height: 18px; cursor: pointer;">
+                        <span style="font-weight: 600; color: #2c3e50;">Require Minimum Hours</span>
+                    </label>
+                    <div id="minimumHoursSection" style="display: none; padding: 15px; background: #f9fafb; border: 2px solid #e0e0e0; border-radius: 8px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Minimum Hours Required</label>
+                        <select id="minimumHours" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; background: white;">
+                            <option value="1">1 hour</option>
+                            <option value="2" selected>2 hours</option>
+                            <option value="3">3 hours</option>
+                            <option value="4">4 hours</option>
+                            <option value="5">5 hours</option>
+                            <option value="6">6 hours</option>
+                            <option value="8">8 hours (Full Day)</option>
+                        </select>
+                        <p style="font-size: 13px; color: #666; margin-top: 8px;">💡 Customers must book at least this many hours</p>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Category *</label>
+                    <select id="serviceCategory" required onchange="loadSubtypes()" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px;">
+                        <option value="">Select a category</option>
+                        <option value="Cleaning">🧹 Home Cleaning</option>
+                        <option value="Plumbing">🔧 Plumbing</option>
+                        <option value="Electrical">⚡ Electrical Work</option>
+                        <option value="Carpentry">🪚 Carpentry</option>
+                        <option value="Painting">🎨 Painting</option>
+                        <option value="Beauty">💇 Beauty & Salon</option>
+                        <option value="Tutoring">📚 Tutoring</option>
+                        <option value="Pest Control">🐛 Pest Control</option>
+                        <option value="AC Repair">❄️ AC Repair</option>
+                        <option value="Babysitting">👶 Babysitting</option>
+                        <option value="Moving">📦 Moving & Packing</option>
+                        <option value="Fitness">💪 Personal Training</option>
+                        <option value="Pet Care">🐕 Pet Care</option>
+                        <option value="Massage">💆 Massage & Spa</option>
+                        <option value="Catering">🍽️ Catering & Chef</option>
+                        <option value="Landscaping">🌿 Landscaping</option>
+                        <option value="Photography">📸 Photography</option>
+                        <option value="Event Planning">🎉 Event Planning</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div id="subtypesSection" style="margin-bottom: 20px; display: none;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Service Subtypes</label>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Select all subtypes you offer for this service</p>
+                    
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; background: #e3e8ff; border-radius: 8px;">
+                            <input type="checkbox" id="selectAllSubtypes" onchange="toggleAllSubtypes()" style="cursor: pointer; width: 18px; height: 18px;">
+                            <span style="font-weight: 600; color: #667eea;">Select All</span>
+                        </label>
+                    </div>
+                    
+                    <div id="subtypesContainer" style="max-height: 250px; overflow-y: auto; border: 2px solid #e0e0e0; border-radius: 8px; padding: 12px; background: #f9fafb;">
+                        <!-- Subtypes will be loaded here -->
+                    </div>
+                    
+                    <div id="selectedSubtypesDisplay" style="margin-top: 10px; padding: 10px; background: #f0f4ff; border-radius: 8px; min-height: 40px;">
+                        <strong style="color: #667eea;">Selected:</strong> <span id="selectedSubtypesList" style="color: #666;">None</span>
+                    </div>
+                </div>
+                
+                <input type="hidden" id="serviceId" value="">
+                
+                <div style="display: flex; gap: 12px; margin-top: 30px;">
+                    <button type="submit" style="flex: 1; background: #667eea; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px;">Save Service</button>
+                    <button type="button" onclick="closeServiceModal()" style="flex: 1; background: #e0e0e0; color: #333; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 40px; border-radius: 20px; max-width: 450px; width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            <h2 style="margin: 0 0 15px 0; color: #2c3e50;">Delete Service</h2>
+            <p style="color: #666; margin-bottom: 30px;">Are you sure you want to delete this service? This action cannot be undone.</p>
+            <div style="display: flex; gap: 12px;">
+                <button onclick="confirmDelete()" style="flex: 1; background: #ff4444; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600;">Delete</button>
+                <button onclick="closeDeleteModal()" style="flex: 1; background: #e0e0e0; color: #333; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentServiceId = null;
+        let deleteServiceId = null;
+
+        // Define subtypes for each category
+        const serviceSubtypes = {
+            'Cleaning': ['Deep Cleaning', 'Regular Maintenance', 'Move-in/Move-out Cleaning', 'Office Cleaning', 'Carpet Cleaning', 'Window Cleaning', 'Post-Construction Cleaning', 'Maid Service', 'Housekeeping'],
+            'Plumbing': ['Leak Repairs', 'Pipe Installation', 'Drain Cleaning', 'Water Heater Repair', 'Fixture Installation', 'Bathroom Plumbing', 'Kitchen Plumbing', 'Emergency Plumbing'],
+            'Electrical': ['Wiring & Rewiring', 'Fixture Installation', 'Circuit Breaker Repair', 'Outlet Installation', 'Lighting Installation', 'Electrical Inspection', 'Panel Upgrades', 'Emergency Electrical'],
+            'Carpentry': ['Furniture Assembly', 'Custom Furniture', 'Cabinet Installation', 'Door Installation', 'Window Installation', 'Deck Building', 'Shelving', 'Repairs & Restoration'],
+            'Painting': ['Interior Painting', 'Exterior Painting', 'Wall Texturing', 'Cabinet Painting', 'Touch-ups', 'Wallpaper Installation', 'Drywall Repair', 'Commercial Painting'],
+            'Beauty': ['Haircut & Styling', 'Hair Coloring', 'Makeup Services', 'Manicure & Pedicure', 'Facial Treatment', 'Waxing', 'Massage', 'Spa Services', 'Bridal Services'],
+            'Tutoring': ['Math Tutoring', 'Science Tutoring', 'English Tutoring', 'Language Learning', 'Test Preparation', 'Music Lessons', 'Art Classes', 'Computer Skills', 'Homework Help'],
+            'Pest Control': ['Inspection', 'General Pest Control', 'Termite Treatment', 'Rodent Control', 'Bed Bug Treatment', 'Mosquito Control', 'Ant Control', 'Prevention Services'],
+            'AC Repair': ['AC Installation', 'AC Maintenance', 'AC Repair', 'Duct Cleaning', 'Thermostat Installation', 'Refrigerant Recharge', 'Emergency AC Service', 'Heating Services'],
+            'Babysitting': ['Part-time Babysitting', 'Full-time Nanny', 'Night Care', 'Weekend Care', 'Newborn Care', 'After-school Care', 'Special Needs Care', 'Backup Care'],
+            'Moving': ['Local Moving', 'Long Distance Moving', 'Packing Services', 'Unpacking Services', 'Furniture Moving', 'Office Moving', 'Storage Services', 'Loading & Unloading'],
+            'Fitness': ['Personal Training', 'Yoga Classes', 'Pilates', 'Weight Training', 'Cardio Training', 'Nutrition Coaching', 'Group Classes', 'Online Training', 'Meditation'],
+            'Pet Care': ['Dog Walking', 'Dog Sitting', 'Cat Sitting', 'Pet Grooming', 'Pet Training', 'Veterinary Care', 'Pet Boarding', 'Pet Taxi'],
+            'Massage': ['Swedish Massage', 'Deep Tissue Massage', 'Sports Massage', 'Hot Stone Massage', 'Aromatherapy', 'Thai Massage', 'Reflexology', 'Spa Packages'],
+            'Catering': ['Event Catering', 'Personal Chef', 'Meal Prep', 'Party Catering', 'Corporate Catering', 'Wedding Catering', 'Buffet Services', 'Custom Menus'],
+            'Landscaping': ['Lawn Mowing', 'Garden Design', 'Tree Trimming', 'Hedge Trimming', 'Mulching', 'Irrigation', 'Landscaping Installation', 'Snow Removal'],
+            'Photography': ['Wedding Photography', 'Portrait Photography', 'Event Photography', 'Product Photography', 'Real Estate Photography', 'Family Photography', 'Headshots', 'Video Services'],
+            'Event Planning': ['Wedding Planning', 'Birthday Parties', 'Corporate Events', 'Baby Showers', 'Anniversary Parties', 'Venue Selection', 'Decoration', 'Coordination'],
+            'Other': []
+        };
+
+        // Load services on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            syncProfileToServices();
+            loadServices();
+        });
+
+        function syncProfileToServices() {
+            // Get profile data
+            const profileData = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            const services = JSON.parse(localStorage.getItem('providerServices') || '[]');
+            
+            // If profile has service category and hourly rate, ensure it exists in services
+            if (profileData.serviceCategory && profileData.hourlyRate) {
+                const categoryExists = services.some(s => s.category === profileData.serviceCategory);
+                
+                if (!categoryExists) {
+                    // Auto-create service from profile
+                    const newService = {
+                        id: 'profile-' + Date.now().toString(),
+                        name: profileData.serviceCategory,
+                        description: profileData.bio || 'Professional ' + profileData.serviceCategory.toLowerCase() + ' services',
+                        price: parseFloat(profileData.hourlyRate).toFixed(2),
+                        category: profileData.serviceCategory,
+                        fromProfile: true
+                    };
+                    services.push(newService);
+                    localStorage.setItem('providerServices', JSON.stringify(services));
+                }
+            }
+        }
+
+        function loadServices() {
+            const services = JSON.parse(localStorage.getItem('providerServices') || '[]');
+            const container = document.getElementById('servicesContainer');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (services.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                container.style.display = 'grid';
+                emptyState.style.display = 'none';
+                
+                container.innerHTML = services.map(service => `
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                    <h3 style="margin: 0;">${service.name}</h3>
+                                    ${service.fromProfile ? '<span style="background: #4caf50; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">FROM PROFILE</span>' : ''}
+                                </div>
+                                <p style="color: #666; margin: 5px 0;">${service.description}</p>
+                                <div style="display: flex; align-items: center; gap: 15px; margin: 10px 0;">
+                                    <p style="color: #667eea; font-weight: 600; margin: 0;">$${service.price}/hour</p>
+                                    ${service.minimumHours ? `<span style="background: #fff3cd; color: #856404; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">⏱️ Min: ${service.minimumHours}h</span>` : ''}
+                                </div>
+                                <span style="display: inline-block; background: #e3e8ff; color: #667eea; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600;">${service.category}</span>
+                                ${service.subtypes && service.subtypes.length > 0 ? `
+                                    <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 8px; border: 1px solid #e0e0e0;">
+                                        <strong style="font-size: 12px; color: #666;">Subtypes:</strong>
+                                        <div style="margin-top: 5px; display: flex; flex-wrap: wrap; gap: 5px;">
+                                            ${service.subtypes.map(st => `<span style="background: #f0f4ff; color: #667eea; padding: 3px 8px; border-radius: 10px; font-size: 11px;">${st}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="editService('${service.id}')" style="background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Edit</button>
+                                <button onclick="openDeleteModal('${service.id}')" style="background: #ff4444; border: none; color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function openAddServiceModal() {
+            document.getElementById('modalTitle').textContent = 'Add Service';
+            document.getElementById('serviceForm').reset();
+            document.getElementById('serviceId').value = '';
+            document.getElementById('subtypesSection').style.display = 'none';
+            document.getElementById('minimumHoursSection').style.display = 'none';
+            document.getElementById('requireMinimumHours').checked = false;
+            currentServiceId = null;
+            document.getElementById('serviceModal').style.display = 'flex';
+        }
+
+        function closeServiceModal() {
+            document.getElementById('serviceModal').style.display = 'none';
+        }
+
+        function toggleMinimumHours() {
+            const checkbox = document.getElementById('requireMinimumHours');
+            const section = document.getElementById('minimumHoursSection');
+            section.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        function loadSubtypes() {
+            const category = document.getElementById('serviceCategory').value;
+            const subtypesSection = document.getElementById('subtypesSection');
+            const subtypesContainer = document.getElementById('subtypesContainer');
+            const selectAllCheckbox = document.getElementById('selectAllSubtypes');
+            
+            if (category && serviceSubtypes[category]) {
+                const subtypes = serviceSubtypes[category];
+                
+                if (subtypes.length > 0) {
+                    subtypesSection.style.display = 'block';
+                    selectAllCheckbox.checked = false;
+                    
+                    subtypesContainer.innerHTML = subtypes.map((subtype, index) => `
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; cursor: pointer; border-radius: 6px; transition: background 0.2s;" 
+                               onmouseover="this.style.background='#e3e8ff'" 
+                               onmouseout="this.style.background='transparent'">
+                            <input type="checkbox" class="subtype-checkbox" value="${subtype}" onchange="updateSelectedSubtypes()" style="cursor: pointer; width: 16px; height: 16px;">
+                            <span style="color: #333;">${subtype}</span>
+                        </label>
+                    `).join('');
+                    
+                    updateSelectedSubtypes();
+                } else {
+                    subtypesSection.style.display = 'none';
+                }
+            } else {
+                subtypesSection.style.display = 'none';
+            }
+        }
+
+        function toggleAllSubtypes() {
+            const selectAll = document.getElementById('selectAllSubtypes').checked;
+            const checkboxes = document.querySelectorAll('.subtype-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll;
+            });
+            updateSelectedSubtypes();
+        }
+
+        function updateSelectedSubtypes() {
+            const checkboxes = document.querySelectorAll('.subtype-checkbox:checked');
+            const selectedList = document.getElementById('selectedSubtypesList');
+            const selectAllCheckbox = document.getElementById('selectAllSubtypes');
+            const allCheckboxes = document.querySelectorAll('.subtype-checkbox');
+            
+            if (checkboxes.length === 0) {
+                selectedList.textContent = 'None';
+                selectedList.style.color = '#666';
+            } else {
+                const selected = Array.from(checkboxes).map(cb => cb.value);
+                selectedList.textContent = selected.join(', ');
+                selectedList.style.color = '#667eea';
+            }
+            
+            // Update "Select All" checkbox state
+            selectAllCheckbox.checked = (checkboxes.length === allCheckboxes.length && allCheckboxes.length > 0);
+        }
+
+        function editService(id) {
+            const services = JSON.parse(localStorage.getItem('providerServices') || '[]');
+            const service = services.find(s => s.id === id);
+            
+            if (service) {
+                document.getElementById('modalTitle').textContent = 'Edit Service';
+                document.getElementById('serviceName').value = service.name;
+                document.getElementById('serviceDescription').value = service.description;
+                document.getElementById('servicePrice').value = service.price;
+                document.getElementById('serviceCategory').value = service.category;
+                document.getElementById('serviceId').value = service.id;
+                currentServiceId = id;
+                
+                // Handle minimum hours
+                if (service.minimumHours) {
+                    document.getElementById('requireMinimumHours').checked = true;
+                    document.getElementById('minimumHoursSection').style.display = 'block';
+                    document.getElementById('minimumHours').value = service.minimumHours;
+                } else {
+                    document.getElementById('requireMinimumHours').checked = false;
+                    document.getElementById('minimumHoursSection').style.display = 'none';
+                }
+                
+                // Load subtypes for this category
+                loadSubtypes();
+                
+                // Pre-select subtypes if they exist
+                if (service.subtypes && service.subtypes.length > 0) {
+                    setTimeout(() => {
+                        service.subtypes.forEach(subtype => {
+                            const checkbox = Array.from(document.querySelectorAll('.subtype-checkbox'))
+                                .find(cb => cb.value === subtype);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                        updateSelectedSubtypes();
+                    }, 100);
+                }
+                
+                document.getElementById('serviceModal').style.display = 'flex';
+            }
+        }
+
+        function saveService(event) {
+            event.preventDefault();
+            
+            const services = JSON.parse(localStorage.getItem('providerServices') || '[]');
+            const selectedSubtypes = Array.from(document.querySelectorAll('.subtype-checkbox:checked'))
+                .map(cb => cb.value);
+            
+            const serviceData = {
+                id: currentServiceId || Date.now().toString(),
+                name: document.getElementById('serviceName').value,
+                description: document.getElementById('serviceDescription').value,
+                price: parseFloat(document.getElementById('servicePrice').value).toFixed(2),
+                category: document.getElementById('serviceCategory').value,
+                subtypes: selectedSubtypes
+            };
+            
+            // Add minimum hours if checked
+            if (document.getElementById('requireMinimumHours').checked) {
+                serviceData.minimumHours = parseInt(document.getElementById('minimumHours').value);
+            }
+            
+            if (currentServiceId) {
+                // Update existing service
+                const index = services.findIndex(s => s.id === currentServiceId);
+                if (index !== -1) {
+                    // Preserve fromProfile flag if it exists
+                    if (services[index].fromProfile) {
+                        serviceData.fromProfile = true;
+                    }
+                    services[index] = serviceData;
+                }
+            } else {
+                // Add new service
+                services.push(serviceData);
+            }
+            
+            localStorage.setItem('providerServices', JSON.stringify(services));
+            closeServiceModal();
+            loadServices();
+        }
+
+        function openDeleteModal(id) {
+            deleteServiceId = id;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            deleteServiceId = null;
+        }
+
+        function confirmDelete() {
+            if (deleteServiceId) {
+                const services = JSON.parse(localStorage.getItem('providerServices') || '[]');
+                const filtered = services.filter(s => s.id !== deleteServiceId);
+                localStorage.setItem('providerServices', JSON.stringify(filtered));
+                closeDeleteModal();
+                loadServices();
+            }
+        }
+    </script>
 
     <!-- Footer -->
     <footer class="footer">

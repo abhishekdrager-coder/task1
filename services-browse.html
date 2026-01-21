@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Services - Task Masters</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body.dark-mode { background: #1a1a1a; color: #e0e0e0; }
+        body.dark-mode .modern-navbar { background: #0d1117 !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p { color: #b0b0b0; }
+        body.dark-mode .service-category, body.dark-mode .subcategory-item { background: #0d1117; border: 1px solid #30363d; }
+        body.dark-mode .footer { background: #0d1117; border-top: 1px solid #30363d; }
+        body.dark-mode .search-suggestions { background: #0d1117; border: 1px solid #30363d; }
+        body.dark-mode .suggestion-item:hover { background: #161b22; }
+
+        .services-browse-header {
+            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+            padding: 80px 20px 60px;
+            text-align: center;
+            color: white;
+        }
+
+        .services-browse-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .services-browse-header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            gap: 10px;
+            background: white;
+            padding: 5px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .search-input-wrapper input {
+            flex: 1;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            color: #333;
+        }
+
+        .search-input-wrapper button {
+            padding: 15px 35px;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-input-wrapper button:hover {
+            background: #357ABD;
+            transform: translateY(-2px);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 10px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .search-suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #333;
+        }
+
+        .suggestion-item:hover {
+            background: #f8f9fa;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-icon {
+            font-size: 1.5rem;
+        }
+
+        .suggestion-text {
+            flex: 1;
+        }
+
+        .suggestion-text strong {
+            display: block;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .suggestion-text span {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .services-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .category-group {
+            margin-bottom: 50px;
+        }
+
+        .category-group-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        body.dark-mode .category-group-title {
+            color: #ffffff;
+        }
+
+        .category-group-icon {
+            font-size: 2rem;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .service-category {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .service-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #4A90E2;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+        }
+
+        .category-info h3 {
+            font-size: 1.3rem;
+            margin: 0;
+            color: #333;
+        }
+
+        body.dark-mode .category-info h3 {
+            color: #ffffff;
+        }
+
+        .category-info p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 5px 0 0;
+        }
+
+        body.dark-mode .category-info p {
+            color: #b0b0b0;
+        }
+
+        .subcategories {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            margin-top: 15px;
+            padding-top: 0;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .subcategories {
+            border-top-color: #30363d;
+        }
+
+        .subcategories.expanded {
+            max-height: 1000px;
+            padding-top: 15px;
+        }
+
+        .subcategory-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .subcategory-item {
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+        }
+
+        .subcategory-item:hover {
+            background: #4A90E2;
+            color: white;
+            border-color: #4A90E2;
+        }
+
+        .expand-icon {
+            font-size: 1.2rem;
+            margin-left: auto;
+            transition: transform 0.3s;
+        }
+
+        .service-category.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .category-count {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        body.dark-mode .category-count {
+            background: #1a2332;
+            color: #64b5f6;
+        }
+    </style>
+    <script>
+        (function() {
+            try {
+                const custSettings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                const provSettings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (custSettings.darkMode === true || provSettings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><h2>🎯 Task Masters</h2></a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="services-browse.html" class="active">Services</a>
+                <a href="index.html#how-it-works">How it Works</a>
+                <a href="index.html#about">About</a>
+                <a href="service-provider-login.html" class="btn-provider">Become a Provider</a>
+                <button class="btn-login" id="loginBtn" onclick="showCustomerLogin()">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header with Search -->
+    <section class="services-browse-header">
+        <h1>Explore All Services</h1>
+        <p>Find the perfect professional for any task - browse categories or search directly</p>
+        
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <input 
+                    type="text" 
+                    id="serviceSearchInput" 
+                    placeholder="Search for services (e.g., plumber, yoga, dog sitting)..." 
+                    autocomplete="off"
+                    oninput="handleSearchInput()"
+                    onfocus="handleSearchInput()"
+                />
+                <button onclick="performSearch()">🔍 Search</button>
+            </div>
+            <div id="searchSuggestions" class="search-suggestions"></div>
+        </div>
+    </section>
+
+    <!-- Services Categories -->
+    <section class="services-container">
+        <!-- Home & Maintenance -->
+        <div class="category-group">
+            <h2 class="category-group-title">
+                <span class="category-group-icon">🏠</span>
+                Home & Maintenance
+            </h2>
+            <div class="categories-grid">
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🧹</span>
+                        <div class="category-info">
+                            <h3>Home Cleaning</h3>
+                            <p>Professional cleaning services</p>
+                        </div>
+                        <span class="category-count">4</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Deep Cleaning', event)">Deep Cleaning</span>
+                            <span class="subcategory-item" onclick="selectService('Regular Maintenance', event)">Regular Maintenance</span>
+                            <span class="subcategory-item" onclick="selectService('Move In/Out', event)">Move In/Out Cleaning</span>
+                            <span class="subcategory-item" onclick="selectService('Window Cleaning', event)">Window Cleaning</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🔧</span>
+                        <div class="category-info">
+                            <h3>Plumbing</h3>
+                            <p>Repair and installation</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Leak Repair', event)">Leak Repair</span>
+                            <span class="subcategory-item" onclick="selectService('Pipe Installation', event)">Pipe Installation</span>
+                            <span class="subcategory-item" onclick="selectService('Drain Cleaning', event)">Drain Cleaning</span>
+                            <span class="subcategory-item" onclick="selectService('Water Heater', event)">Water Heater Service</span>
+                            <span class="subcategory-item" onclick="selectService('Bathroom Fixtures', event)">Bathroom Fixtures</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">⚡</span>
+                        <div class="category-info">
+                            <h3>Electrical Work</h3>
+                            <p>Wiring and fixtures</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Wiring', event)">Wiring & Rewiring</span>
+                            <span class="subcategory-item" onclick="selectService('Light Fixtures', event)">Light Fixtures</span>
+                            <span class="subcategory-item" onclick="selectService('Fan Installation', event)">Fan Installation</span>
+                            <span class="subcategory-item" onclick="selectService('Circuit Breaker', event)">Circuit Breaker</span>
+                            <span class="subcategory-item" onclick="selectService('Electrical Troubleshooting', event)">Troubleshooting</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🪚</span>
+                        <div class="category-info">
+                            <h3>Carpentry</h3>
+                            <p>Furniture and woodwork</p>
+                        </div>
+                        <span class="category-count">4</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Furniture Assembly', event)">Furniture Assembly</span>
+                            <span class="subcategory-item" onclick="selectService('Cabinet Making', event)">Cabinet Making</span>
+                            <span class="subcategory-item" onclick="selectService('Door Repair', event)">Door Repair</span>
+                            <span class="subcategory-item" onclick="selectService('Custom Woodwork', event)">Custom Woodwork</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🎨</span>
+                        <div class="category-info">
+                            <h3>Painting</h3>
+                            <p>Interior and exterior</p>
+                        </div>
+                        <span class="category-count">4</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Interior Painting', event)">Interior Painting</span>
+                            <span class="subcategory-item" onclick="selectService('Exterior Painting', event)">Exterior Painting</span>
+                            <span class="subcategory-item" onclick="selectService('Touch Ups', event)">Touch Ups</span>
+                            <span class="subcategory-item" onclick="selectService('Wallpaper', event)">Wallpaper Installation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">❄️</span>
+                        <div class="category-info">
+                            <h3>AC & HVAC</h3>
+                            <p>Climate control</p>
+                        </div>
+                        <span class="category-count">4</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('AC Installation', event)">AC Installation</span>
+                            <span class="subcategory-item" onclick="selectService('AC Repair', event)">AC Repair</span>
+                            <span class="subcategory-item" onclick="selectService('AC Servicing', event)">AC Servicing</span>
+                            <span class="subcategory-item" onclick="selectService('Heating Systems', event)">Heating Systems</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🐛</span>
+                        <div class="category-info">
+                            <h3>Pest Control</h3>
+                            <p>Inspection and treatment</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Termite Treatment', event)">Termite Treatment</span>
+                            <span class="subcategory-item" onclick="selectService('Rodent Control', event)">Rodent Control</span>
+                            <span class="subcategory-item" onclick="selectService('Mosquito Control', event)">Mosquito Control</span>
+                            <span class="subcategory-item" onclick="selectService('Bed Bug Treatment', event)">Bed Bug Treatment</span>
+                            <span class="subcategory-item" onclick="selectService('General Pest Control', event)">General Pest Control</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">📦</span>
+                        <div class="category-info">
+                            <h3>Moving & Packing</h3>
+                            <p>Relocation services</p>
+                        </div>
+                        <span class="category-count">4</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Home Moving', event)">Home Moving</span>
+                            <span class="subcategory-item" onclick="selectService('Office Moving', event)">Office Moving</span>
+                            <span class="subcategory-item" onclick="selectService('Packing Services', event)">Packing Services</span>
+                            <span class="subcategory-item" onclick="selectService('Unpacking', event)">Unpacking Services</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beauty & Wellness -->
+        <div class="category-group">
+            <h2 class="category-group-title">
+                <span class="category-group-icon">💆</span>
+                Beauty & Wellness
+            </h2>
+            <div class="categories-grid">
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">💄</span>
+                        <div class="category-info">
+                            <h3>Makeup Artist</h3>
+                            <p>Professional makeup</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Bridal Makeup', event)">Bridal Makeup</span>
+                            <span class="subcategory-item" onclick="selectService('Party Makeup', event)">Party Makeup</span>
+                            <span class="subcategory-item" onclick="selectService('Professional Makeup', event)">Professional Makeup</span>
+                            <span class="subcategory-item" onclick="selectService('Special Effects', event)">Special Effects</span>
+                            <span class="subcategory-item" onclick="selectService('Makeup Lessons', event)">Makeup Lessons</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">✂️</span>
+                        <div class="category-info">
+                            <h3>Hairstylist</h3>
+                            <p>All genders welcome</p>
+                        </div>
+                        <span class="category-count">6</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Haircut', event)">Haircut (All Genders)</span>
+                            <span class="subcategory-item" onclick="selectService('Hair Styling', event)">Hair Styling</span>
+                            <span class="subcategory-item" onclick="selectService('Hair Coloring', event)">Hair Coloring</span>
+                            <span class="subcategory-item" onclick="selectService('Bridal Hair', event)">Bridal Hair</span>
+                            <span class="subcategory-item" onclick="selectService('Hair Treatment', event)">Hair Treatment</span>
+                            <span class="subcategory-item" onclick="selectService('Barber Services', event)">Barber Services</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">💅</span>
+                        <div class="category-info">
+                            <h3>Nail Technician</h3>
+                            <p>Manicure & pedicure</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Manicure', event)">Manicure</span>
+                            <span class="subcategory-item" onclick="selectService('Pedicure', event)">Pedicure</span>
+                            <span class="subcategory-item" onclick="selectService('Nail Art', event)">Nail Art</span>
+                            <span class="subcategory-item" onclick="selectService('Gel Nails', event)">Gel Nails</span>
+                            <span class="subcategory-item" onclick="selectService('Acrylic Nails', event)">Acrylic Nails</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">💆</span>
+                        <div class="category-info">
+                            <h3>Massage Therapy</h3>
+                            <p>Relaxation & wellness</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Relaxation Massage', event)">Relaxation Massage</span>
+                            <span class="subcategory-item" onclick="selectService('Deep Tissue', event)">Deep Tissue</span>
+                            <span class="subcategory-item" onclick="selectService('Sports Massage', event)">Sports Massage</span>
+                            <span class="subcategory-item" onclick="selectService('Thai Massage', event)">Thai Massage</span>
+                            <span class="subcategory-item" onclick="selectService('Aromatherapy', event)">Aromatherapy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">💇</span>
+                        <div class="category-info">
+                            <h3>Salon at Home</h3>
+                            <p>Complete beauty services</p>
+                        </div>
+                        <span class="category-count">6</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Facial', event)">Facial</span>
+                            <span class="subcategory-item" onclick="selectService('Waxing', event)">Waxing</span>
+                            <span class="subcategory-item" onclick="selectService('Threading', event)">Threading</span>
+                            <span class="subcategory-item" onclick="selectService('Bleach', event)">Bleach</span>
+                            <span class="subcategory-item" onclick="selectService('Hair Spa', event)">Hair Spa</span>
+                            <span class="subcategory-item" onclick="selectService('Bridal Package', event)">Bridal Package</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Fitness & Health -->
+        <div class="category-group">
+            <h2 class="category-group-title">
+                <span class="category-group-icon">💪</span>
+                Fitness & Health
+            </h2>
+            <div class="categories-grid">
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🏋️</span>
+                        <div class="category-info">
+                            <h3>Personal Trainer</h3>
+                            <p>One-on-one fitness coaching</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Weight Training', event)">Weight Training</span>
+                            <span class="subcategory-item" onclick="selectService('Cardio Training', event)">Cardio Training</span>
+                            <span class="subcategory-item" onclick="selectService('Strength Training', event)">Strength Training</span>
+                            <span class="subcategory-item" onclick="selectService('HIIT Training', event)">HIIT Training</span>
+                            <span class="subcategory-item" onclick="selectService('Fitness Assessment', event)">Fitness Assessment</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🧘</span>
+                        <div class="category-info">
+                            <h3>Yoga Instructor</h3>
+                            <p>Mindful practice</p>
+                        </div>
+                        <span class="category-count">6</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Hatha Yoga', event)">Hatha Yoga</span>
+                            <span class="subcategory-item" onclick="selectService('Vinyasa Yoga', event)">Vinyasa Yoga</span>
+                            <span class="subcategory-item" onclick="selectService('Power Yoga', event)">Power Yoga</span>
+                            <span class="subcategory-item" onclick="selectService('Prenatal Yoga', event)">Prenatal Yoga</span>
+                            <span class="subcategory-item" onclick="selectService('Meditation', event)">Meditation</span>
+                            <span class="subcategory-item" onclick="selectService('Breathing Exercises', event)">Breathing Exercises</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🥗</span>
+                        <div class="category-info">
+                            <h3>Dietitian & Nutrition</h3>
+                            <p>Meal planning & consulting</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Diet Consultation', event)">Diet Consultation</span>
+                            <span class="subcategory-item" onclick="selectService('Meal Planning', event)">Meal Planning</span>
+                            <span class="subcategory-item" onclick="selectService('Weight Loss', event)">Weight Loss Program</span>
+                            <span class="subcategory-item" onclick="selectService('Sports Nutrition', event)">Sports Nutrition</span>
+                            <span class="subcategory-item" onclick="selectService('Therapeutic Diet', event)">Therapeutic Diet</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🏥</span>
+                        <div class="category-info">
+                            <h3>Physiotherapy</h3>
+                            <p>Rehabilitation & recovery</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Pain Management', event)">Pain Management</span>
+                            <span class="subcategory-item" onclick="selectService('Sports Injury', event)">Sports Injury</span>
+                            <span class="subcategory-item" onclick="selectService('Post Surgery', event)">Post Surgery Care</span>
+                            <span class="subcategory-item" onclick="selectService('Mobility Training', event)">Mobility Training</span>
+                            <span class="subcategory-item" onclick="selectService('Posture Correction', event)">Posture Correction</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pet Care -->
+        <div class="category-group">
+            <h2 class="category-group-title">
+                <span class="category-group-icon">🐾</span>
+                Pet Care
+            </h2>
+            <div class="categories-grid">
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🐕</span>
+                        <div class="category-info">
+                            <h3>Dog Sitting</h3>
+                            <p>Care for your canine</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Dog Walking', event)">Dog Walking</span>
+                            <span class="subcategory-item" onclick="selectService('Dog Sitting', event)">Dog Sitting</span>
+                            <span class="subcategory-item" onclick="selectService('Dog Training', event)">Dog Training</span>
+                            <span class="subcategory-item" onclick="selectService('Dog Boarding', event)">Dog Boarding</span>
+                            <span class="subcategory-item" onclick="selectService('Puppy Care', event)">Puppy Care</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🐈</span>
+                        <div class="category-info">
+                            <h3>Cat Sitting</h3>
+                            <p>Feline care services</p>
+                        </div>
+                        <span class="category-count">4</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Cat Sitting', event)">Cat Sitting</span>
+                            <span class="subcategory-item" onclick="selectService('Cat Feeding', event)">Cat Feeding</span>
+                            <span class="subcategory-item" onclick="selectService('Litter Box Care', event)">Litter Box Care</span>
+                            <span class="subcategory-item" onclick="selectService('Cat Playtime', event)">Cat Playtime</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🐾</span>
+                        <div class="category-info">
+                            <h3>Pet Grooming</h3>
+                            <p>Professional grooming</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Pet Bathing', event)">Pet Bathing</span>
+                            <span class="subcategory-item" onclick="selectService('Hair Trimming', event)">Hair Trimming</span>
+                            <span class="subcategory-item" onclick="selectService('Nail Clipping', event)">Nail Clipping</span>
+                            <span class="subcategory-item" onclick="selectService('Ear Cleaning', event)">Ear Cleaning</span>
+                            <span class="subcategory-item" onclick="selectService('Full Grooming', event)">Full Grooming Package</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Child Care & Household Help -->
+        <div class="category-group">
+            <h2 class="category-group-title">
+                <span class="category-group-icon">👨‍👩‍👧‍👦</span>
+                Child Care & Household Help
+            </h2>
+            <div class="categories-grid">
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">👶</span>
+                        <div class="category-info">
+                            <h3>Babysitting & Nanny</h3>
+                            <p>Childcare services</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Babysitting', event)">Babysitting</span>
+                            <span class="subcategory-item" onclick="selectService('Full-time Nanny', event)">Full-time Nanny</span>
+                            <span class="subcategory-item" onclick="selectService('Part-time Nanny', event)">Part-time Nanny</span>
+                            <span class="subcategory-item" onclick="selectService('Night Nanny', event)">Night Nanny</span>
+                            <span class="subcategory-item" onclick="selectService('Special Needs Care', event)">Special Needs Care</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🧹</span>
+                        <div class="category-info">
+                            <h3>Maid Service</h3>
+                            <p>Professional housekeeping</p>
+                        </div>
+                        <span class="category-count">6</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Live-in Maid', event)">Live-in Maid</span>
+                            <span class="subcategory-item" onclick="selectService('Part-time Maid', event)">Part-time Maid</span>
+                            <span class="subcategory-item" onclick="selectService('Daily Housekeeping', event)">Daily Housekeeping</span>
+                            <span class="subcategory-item" onclick="selectService('Cooking Maid', event)">Cooking Maid</span>
+                            <span class="subcategory-item" onclick="selectService('Cleaning Maid', event)">Cleaning Maid</span>
+                            <span class="subcategory-item" onclick="selectService('Full-time Housekeeping', event)">Full-time Housekeeping</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education & Lifestyle -->
+        <div class="category-group">
+            <h2 class="category-group-title">
+                <span class="category-group-icon">📚</span>
+                Education & Lifestyle
+            </h2>
+            <div class="categories-grid">
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">📚</span>
+                        <div class="category-info">
+                            <h3>Tutoring</h3>
+                            <p>Academic & skills training</p>
+                        </div>
+                        <span class="category-count">6</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Math Tutoring', event)">Math Tutoring</span>
+                            <span class="subcategory-item" onclick="selectService('Science Tutoring', event)">Science Tutoring</span>
+                            <span class="subcategory-item" onclick="selectService('English Tutoring', event)">English Tutoring</span>
+                            <span class="subcategory-item" onclick="selectService('Test Prep', event)">Test Prep</span>
+                            <span class="subcategory-item" onclick="selectService('Language Lessons', event)">Language Lessons</span>
+                            <span class="subcategory-item" onclick="selectService('Music Lessons', event)">Music Lessons</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">🎩</span>
+                        <div class="category-info">
+                            <h3>Concierge Service</h3>
+                            <p>Personal assistance</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Errand Running', event)">Errand Running</span>
+                            <span class="subcategory-item" onclick="selectService('Event Planning', event)">Event Planning</span>
+                            <span class="subcategory-item" onclick="selectService('Shopping Assistance', event)">Shopping Assistance</span>
+                            <span class="subcategory-item" onclick="selectService('Travel Planning', event)">Travel Planning</span>
+                            <span class="subcategory-item" onclick="selectService('Personal Assistance', event)">Personal Assistance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-category" onclick="toggleCategory(this)">
+                    <div class="category-header">
+                        <span class="category-icon">👨‍🍳</span>
+                        <div class="category-info">
+                            <h3>Personal Chef</h3>
+                            <p>Meal prep & catering</p>
+                        </div>
+                        <span class="category-count">5</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="subcategories">
+                        <div class="subcategory-list">
+                            <span class="subcategory-item" onclick="selectService('Meal Prep', event)">Meal Prep</span>
+                            <span class="subcategory-item" onclick="selectService('Private Dining', event)">Private Dining</span>
+                            <span class="subcategory-item" onclick="selectService('Catering', event)">Catering</span>
+                            <span class="subcategory-item" onclick="selectService('Cooking Lessons', event)">Cooking Lessons</span>
+                            <span class="subcategory-item" onclick="selectService('Special Diet Meals', event)">Special Diet Meals</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted marketplace for professional services</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="services-browse.html">All Services</a>
+                <a href="index.html#about">About Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Providers</h4>
+                <a href="service-provider-login.html">Register</a>
+                <a href="provider-dashboard.html">Provider Dashboard</a>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+            © 2026 Task Masters. All rights reserved.
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Service categories and subcategories database
+        const allServices = {
+            'Home Cleaning': ['Deep Cleaning', 'Regular Maintenance', 'Move In/Out Cleaning', 'Window Cleaning'],
+            'Plumbing': ['Leak Repair', 'Pipe Installation', 'Drain Cleaning', 'Water Heater Service', 'Bathroom Fixtures'],
+            'Electrical Work': ['Wiring & Rewiring', 'Light Fixtures', 'Fan Installation', 'Circuit Breaker', 'Troubleshooting'],
+            'Carpentry': ['Furniture Assembly', 'Cabinet Making', 'Door Repair', 'Custom Woodwork'],
+            'Painting': ['Interior Painting', 'Exterior Painting', 'Touch Ups', 'Wallpaper Installation'],
+            'AC & HVAC': ['AC Installation', 'AC Repair', 'AC Servicing', 'Heating Systems'],
+            'Pest Control': ['Termite Treatment', 'Rodent Control', 'Mosquito Control', 'Bed Bug Treatment', 'General Pest Control'],
+            'Moving & Packing': ['Home Moving', 'Office Moving', 'Packing Services', 'Unpacking Services'],
+            'Makeup Artist': ['Bridal Makeup', 'Party Makeup', 'Professional Makeup', 'Special Effects', 'Makeup Lessons'],
+            'Hairstylist': ['Haircut (All Genders)', 'Hair Styling', 'Hair Coloring', 'Bridal Hair', 'Hair Treatment', 'Barber Services'],
+            'Nail Technician': ['Manicure', 'Pedicure', 'Nail Art', 'Gel Nails', 'Acrylic Nails'],
+            'Massage Therapy': ['Relaxation Massage', 'Deep Tissue', 'Sports Massage', 'Thai Massage', 'Aromatherapy'],
+            'Salon at Home': ['Facial', 'Waxing', 'Threading', 'Bleach', 'Hair Spa', 'Bridal Package'],
+            'Personal Trainer': ['Weight Training', 'Cardio Training', 'Strength Training', 'HIIT Training', 'Fitness Assessment'],
+            'Yoga Instructor': ['Hatha Yoga', 'Vinyasa Yoga', 'Power Yoga', 'Prenatal Yoga', 'Meditation', 'Breathing Exercises'],
+            'Dietitian & Nutrition': ['Diet Consultation', 'Meal Planning', 'Weight Loss Program', 'Sports Nutrition', 'Therapeutic Diet'],
+            'Physiotherapy': ['Pain Management', 'Sports Injury', 'Post Surgery Care', 'Mobility Training', 'Posture Correction'],
+            'Dog Sitting': ['Dog Walking', 'Dog Sitting', 'Dog Training', 'Dog Boarding', 'Puppy Care'],
+            'Cat Sitting': ['Cat Sitting', 'Cat Feeding', 'Litter Box Care', 'Cat Playtime'],
+            'Pet Grooming': ['Pet Bathing', 'Hair Trimming', 'Nail Clipping', 'Ear Cleaning', 'Full Grooming Package'],
+            'Babysitting & Nanny': ['Babysitting', 'Full-time Nanny', 'Part-time Nanny', 'Night Nanny', 'Special Needs Care'],
+            'Maid Service': ['Live-in Maid', 'Part-time Maid', 'Daily Housekeeping', 'Cooking Maid', 'Cleaning Maid', 'Full-time Housekeeping'],
+            'Tutoring': ['Math Tutoring', 'Science Tutoring', 'English Tutoring', 'Test Prep', 'Language Lessons', 'Music Lessons'],
+            'Concierge Service': ['Errand Running', 'Event Planning', 'Shopping Assistance', 'Travel Planning', 'Personal Assistance'],
+            'Personal Chef': ['Meal Prep', 'Private Dining', 'Catering', 'Cooking Lessons', 'Special Diet Meals']
+        };
+
+        // Search functionality with auto-suggest
+        function handleSearchInput() {
+            const input = document.getElementById('serviceSearchInput');
+            const suggestions = document.getElementById('searchSuggestions');
+            const query = input.value.toLowerCase().trim();
+
+            if (query.length === 0) {
+                suggestions.classList.remove('active');
+                return;
+            }
+
+            const matches = [];
+            
+            // Search in categories
+            Object.keys(allServices).forEach(category => {
+                if (category.toLowerCase().includes(query)) {
+                    matches.push({
+                        type: 'category',
+                        name: category,
+                        subcategories: allServices[category]
+                    });
+                }
+                
+                // Search in subcategories
+                allServices[category].forEach(subcategory => {
+                    if (subcategory.toLowerCase().includes(query)) {
+                        matches.push({
+                            type: 'subcategory',
+                            name: subcategory,
+                            category: category
+                        });
+                    }
+                });
+            });
+
+            if (matches.length > 0) {
+                suggestions.innerHTML = matches.slice(0, 8).map(match => {
+                    if (match.type === 'category') {
+                        return `
+                            <div class="suggestion-item" onclick="selectSuggestion('${match.name}', 'category')">
+                                <span class="suggestion-icon">📁</span>
+                                <div class="suggestion-text">
+                                    <strong>${match.name}</strong>
+                                    <span>${match.subcategories.length} services available</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        return `
+                            <div class="suggestion-item" onclick="selectSuggestion('${match.name}', 'subcategory')">
+                                <span class="suggestion-icon">🔍</span>
+                                <div class="suggestion-text">
+                                    <strong>${match.name}</strong>
+                                    <span>in ${match.category}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }).join('');
+                suggestions.classList.add('active');
+            } else {
+                suggestions.innerHTML = `
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">❌</span>
+                        <div class="suggestion-text">
+                            <strong>No services found</strong>
+                            <span>Try different keywords</span>
+                        </div>
+                    </div>
+                `;
+                suggestions.classList.add('active');
+            }
+        }
+
+        function selectSuggestion(name, type) {
+            document.getElementById('serviceSearchInput').value = name;
+            document.getElementById('searchSuggestions').classList.remove('active');
+            
+            if (type === 'category') {
+                // Scroll to category
+                const categories = document.querySelectorAll('.service-category');
+                categories.forEach(cat => {
+                    const title = cat.querySelector('h3').textContent;
+                    if (title === name) {
+                        cat.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        cat.style.border = '2px solid #4A90E2';
+                        setTimeout(() => {
+                            cat.style.border = '2px solid transparent';
+                        }, 2000);
+                    }
+                });
+            } else {
+                // Redirect to services page with subcategory
+                window.location.href = `services.html?service=${encodeURIComponent(name)}`;
+            }
+        }
+
+        function performSearch() {
+            const query = document.getElementById('serviceSearchInput').value.trim();
+            if (query) {
+                window.location.href = `services.html?service=${encodeURIComponent(query)}`;
+            }
+        }
+
+        // Toggle category expansion
+        function toggleCategory(element) {
+            const subcategories = element.querySelector('.subcategories');
+            const isExpanded = element.classList.contains('expanded');
+            
+            // Close all other categories
+            document.querySelectorAll('.service-category.expanded').forEach(cat => {
+                if (cat !== element) {
+                    cat.classList.remove('expanded');
+                    cat.querySelector('.subcategories').classList.remove('expanded');
+                }
+            });
+            
+            // Toggle current category
+            if (isExpanded) {
+                element.classList.remove('expanded');
+                subcategories.classList.remove('expanded');
+            } else {
+                element.classList.add('expanded');
+                subcategories.classList.add('expanded');
+            }
+        }
+
+        // Select service
+        function selectService(serviceName, event) {
+            if (event) event.stopPropagation();
+            window.location.href = `services.html?service=${encodeURIComponent(serviceName)}`;
+        }
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            const searchContainer = document.querySelector('.search-container');
+            const suggestions = document.getElementById('searchSuggestions');
+            if (!searchContainer.contains(event.target)) {
+                suggestions.classList.remove('active');
+            }
+        });
+
+        // Handle Enter key in search
+        document.getElementById('serviceSearchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+</body>
+</html>
