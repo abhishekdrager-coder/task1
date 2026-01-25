@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📍 Location Feature Demo - Task Masters</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="location.js"></script>
+    <style>
+        .demo-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .demo-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .demo-hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .feature-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .test-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .test-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .test-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-btn:hover {
+            background: #5568d3;
+        }
+        
+        .result-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .postal-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .postal-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+        }
+        
+        .postal-code {
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-hero h1 {
+                font-size: 1.8em;
+            }
+            
+            .postal-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-hero">
+            <h1>📍 Location Feature Active!</h1>
+            <p style="font-size: 1.2em; margin-top: 15px;">
+                Your site now automatically detects location and filters providers by proximity
+            </p>
+        </div>
+
+        <div class="feature-box">
+            <h3>🌍 How It Works</h3>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 15px;">
+                The location system uses a multi-tier approach to respect user privacy while providing 
+                accurate local results:
+            </p>
+            <ol style="color: #666; line-height: 1.8; padding-left: 25px;">
+                <li><strong>Browser Geolocation:</strong> Requests approximate location (not precise GPS)</li>
+                <li><strong>Postal Code Lookup:</strong> Falls back to postal/ZIP code entry if denied</li>
+                <li><strong>City Detection:</strong> Automatically maps postal codes to cities</li>
+                <li><strong>Distance Filtering:</strong> Shows providers within 50km radius</li>
+                <li><strong>Privacy Compliant:</strong> Follows government regulations (Canada, USA, etc.)</li>
+            </ol>
+        </div>
+
+        <div class="feature-box">
+            <h3>🔍 Current Location Status</h3>
+            <div id="locationStatus" style="padding: 20px; background: #f8f9fa; border-radius: 10px; margin-top: 15px;">
+                <p style="color: #666;">Checking location...</p>
+            </div>
+            <button onclick="showLocationModal()" class="test-btn">Change Location</button>
+        </div>
+
+        <div class="feature-box">
+            <h3>🧪 Test Location Features</h3>
+            <div class="test-grid">
+                <div class="test-card">
+                    <h4>📱 Request Location</h4>
+                    <p style="color: #666; font-size: 14px;">Test browser geolocation</p>
+                    <button onclick="testPreciseLocation()" class="test-btn">Test GPS</button>
+                    <div id="gpsResult"></div>
+                </div>
+                
+                <div class="test-card">
+                    <h4>🏘️ Test Postal Code</h4>
+                    <input type="text" id="testPostalInput" placeholder="M5H 2N2 or 10001" 
+                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-top: 10px; font-size: 16px;">
+                    <button onclick="testPostalCode()" class="test-btn">Lookup City</button>
+                    <div id="postalResult"></div>
+                </div>
+                
+                <div class="test-card">
+                    <h4>📏 Distance Calculator</h4>
+                    <p style="color: #666; font-size: 14px;">Calculate distance between cities</p>
+                    <button onclick="testDistance()" class="test-btn">Test Distance</button>
+                    <div id="distanceResult"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-box">
+            <h3>🗺️ Supported Postal Codes</h3>
+            <p style="color: #666; margin-bottom: 15px;">
+                Try any of these postal codes to see automatic city detection:
+            </p>
+            
+            <h4 style="color: #333; margin: 20px 0 10px 0;">🇨🇦 Canada</h4>
+            <div class="postal-list">
+                <div class="postal-item"><span class="postal-code">M5H 2N2</span> → Toronto, ON</div>
+                <div class="postal-item"><span class="postal-code">V6B 1A1</span> → Vancouver, BC</div>
+                <div class="postal-item"><span class="postal-code">H2X 1Y2</span> → Montreal, QC</div>
+                <div class="postal-item"><span class="postal-code">T2P 1A5</span> → Calgary, AB</div>
+                <div class="postal-item"><span class="postal-code">K1A 0A6</span> → Ottawa, ON</div>
+                <div class="postal-item"><span class="postal-code">G1R 4P5</span> → Quebec City, QC</div>
+            </div>
+            
+            <h4 style="color: #333; margin: 20px 0 10px 0;">🇺🇸 USA</h4>
+            <div class="postal-list">
+                <div class="postal-item"><span class="postal-code">10001</span> → New York, NY</div>
+                <div class="postal-item"><span class="postal-code">90001</span> → Los Angeles, CA</div>
+                <div class="postal-item"><span class="postal-code">60601</span> → Chicago, IL</div>
+                <div class="postal-item"><span class="postal-code">94102</span> → San Francisco, CA</div>
+                <div class="postal-item"><span class="postal-code">02108</span> → Boston, MA</div>
+            </div>
+        </div>
+
+        <div class="feature-box">
+            <h3>✅ Privacy & Compliance</h3>
+            <div style="background: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 10px; color: #155724;">
+                <p style="margin-bottom: 10px; font-weight: 600;">🔒 Privacy Protected</p>
+                <ul style="line-height: 1.8; padding-left: 20px;">
+                    <li>Only approximate location requested (not precise GPS)</li>
+                    <li>Follows Canadian Privacy Act & GDPR guidelines</li>
+                    <li>Location stored locally (not on servers)</li>
+                    <li>User can deny and use postal code instead</li>
+                    <li>Location can be changed anytime</li>
+                    <li>No tracking or location history kept</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-box">
+            <h3>🚀 Try It Live</h3>
+            <div class="test-grid">
+                <a href="index.html" style="text-decoration: none;">
+                    <div style="background: #667eea; color: white; padding: 30px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 3em; margin-bottom: 10px;">🏠</div>
+                        <h4 style="margin-bottom: 10px;">Homepage</h4>
+                        <p style="font-size: 14px; opacity: 0.9;">See location modal on load</p>
+                    </div>
+                </a>
+                
+                <a href="services.html?service=cleaning" style="text-decoration: none;">
+                    <div style="background: #764ba2; color: white; padding: 30px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 3em; margin-bottom: 10px;">🔍</div>
+                        <h4 style="margin-bottom: 10px;">Search Results</h4>
+                        <p style="font-size: 14px; opacity: 0.9;">See location-filtered providers</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateLocationStatus() {
+            const statusDiv = document.getElementById('locationStatus');
+            const location = LocationService.getLocation();
+            
+            if (location) {
+                statusDiv.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                        <span style="font-size: 32px;">✅</span>
+                        <div style="flex: 1;">
+                            <p style="margin: 0; font-weight: 600; color: #28a745; font-size: 18px;">Location Set</p>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">
+                                <strong>Type:</strong> ${location.type === 'precise' ? 'GPS Location' : 'Postal Code'}<br>
+                                <strong>City:</strong> ${location.city}, ${location.region}<br>
+                                <strong>Country:</strong> ${location.country}<br>
+                                ${location.postalCode ? `<strong>Postal Code:</strong> ${location.postalCode}<br>` : ''}
+                                <strong>Coordinates:</strong> ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                statusDiv.innerHTML = `
+                    <div style="text-align: center;">
+                        <span style="font-size: 48px;">📍</span>
+                        <p style="margin: 10px 0; color: #999; font-weight: 600;">No Location Set</p>
+                        <p style="margin: 0; color: #666; font-size: 14px;">Click "Change Location" to set your location</p>
+                    </div>
+                `;
+            }
+        }
+
+        function showLocationModal() {
+            window.location.href = 'index.html';
+        }
+
+        async function testPreciseLocation() {
+            const resultDiv = document.getElementById('gpsResult');
+            try {
+                resultDiv.innerHTML = '<div class="result-box" style="background: #fff3cd; border-color: #ffc107;">⏳ Requesting permission...</div>';
+                const location = await LocationService.requestPreciseLocation();
+                resultDiv.innerHTML = `
+                    <div class="result-box" style="background: #d4edda; border-color: #28a745;">
+                        ✅ Success!<br>
+                        <strong>${location.city}, ${location.region}</strong><br>
+                        (${location.lat.toFixed(4)}, ${location.lng.toFixed(4)})
+                    </div>
+                `;
+                updateLocationStatus();
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result-box" style="background: #f8d7da; border-color: #dc3545;">❌ ${error.message}</div>`;
+            }
+        }
+
+        function testPostalCode() {
+            const input = document.getElementById('testPostalInput').value.trim();
+            const resultDiv = document.getElementById('postalResult');
+            
+            if (!input) {
+                resultDiv.innerHTML = '<div class="result-box" style="background: #f8d7da; border-color: #dc3545;">Please enter a postal code</div>';
+                return;
+            }
+            
+            const result = LocationService.setLocationByPostalCode(input);
+            
+            if (result.success) {
+                const loc = result.location;
+                resultDiv.innerHTML = `
+                    <div class="result-box" style="background: #d4edda; border-color: #28a745;">
+                        ✅ Found!<br>
+                        <strong>${loc.city}, ${loc.region}</strong><br>
+                        ${loc.country}
+                    </div>
+                `;
+                updateLocationStatus();
+            } else {
+                resultDiv.innerHTML = `<div class="result-box" style="background: #f8d7da; border-color: #dc3545;">❌ ${result.error}</div>`;
+            }
+        }
+
+        function testDistance() {
+            const resultDiv = document.getElementById('distanceResult');
+            
+            // Calculate distance between Toronto and Vancouver
+            const torontoLat = 43.6532, torontoLng = -79.3832;
+            const vancouverLat = 49.2827, vancouverLng = -123.1207;
+            
+            const distance = LocationService.calculateDistance(torontoLat, torontoLng, vancouverLat, vancouverLng);
+            
+            resultDiv.innerHTML = `
+                <div class="result-box" style="background: #d1ecf1; border-color: #17a2b8;">
+                    📏 Toronto ↔ Vancouver<br>
+                    <strong>${Math.round(distance)} km</strong><br>
+                    (${Math.round(distance * 0.621371)} miles)
+                </div>
+            `;
+        }
+
+        // Update status on load
+        window.addEventListener('DOMContentLoaded', updateLocationStatus);
+    </script>
+</body>
+</html>

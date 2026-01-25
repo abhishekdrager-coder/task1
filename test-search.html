@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Search Autosuggestion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .search-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        #serviceSearch {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        #searchSuggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        .suggestion-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+        .suggestion-item:hover {
+            background: #f8f9fa;
+        }
+        #debugOutput {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test Search Autosuggestion</h1>
+    <p>Type "phot" or any service name to test:</p>
+    
+    <div class="search-container">
+        <input type="text" id="serviceSearch" placeholder="Type 'phot' to test..." autocomplete="off">
+        <div id="searchSuggestions" style="display: none;"></div>
+    </div>
+    
+    <div id="debugOutput">Debug output will appear here...</div>
+
+    <script src="script.js"></script>
+    <script>
+        // Override console.log to show in page
+        const debugDiv = document.getElementById('debugOutput');
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            debugDiv.textContent += args.join(' ') + '\n';
+        };
+
+        // Test the servicesList
+        console.log('📋 Total services in list:', servicesList.length);
+        console.log('\n🔍 Searching for services with "phot" keyword:');
+        
+        const photServices = servicesList.filter(service => 
+            service.keywords.some(keyword => keyword.includes('phot'))
+        );
+        console.log('Found:', photServices.length, 'services');
+        photServices.forEach(s => {
+            console.log('  -', s.name, '| Keywords:', s.keywords.join(', '));
+        });
+        
+        // Add search listener
+        const input = document.getElementById('serviceSearch');
+        input.addEventListener('input', (e) => {
+            debugDiv.textContent = 'Current input: "' + e.target.value + '"\n\n';
+            showSearchSuggestions(e.target.value);
+        });
+    </script>
+</body>
+</html>

@@ -7,6 +7,7 @@
     <meta name="theme-color" content="#4A90E2">
     <title>Task Masters - Your Trusted Service Marketplace</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="location.js"></script>
     <style>
         body.dark-mode { background: #1a1a1a !important; color: #e0e0e0; }
         body.dark-mode .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important; }
@@ -37,6 +38,14 @@
             <div class="nav-logo">
                 <h2>🎯 Task Masters</h2>
             </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
                 <a href="services-browse.html">Services</a>
@@ -60,7 +69,7 @@
             </a>
             
             <div class="search-bar" style="position: relative;">
-                <input type="text" id="serviceSearch" placeholder="What service do you need? (e.g., plumber, cleaner, tutor)" autocomplete="off" />
+                <input type="text" id="serviceSearch" placeholder="What service do you need? (e.g., plumber, cleaner, tutor)" autocomplete="off" oninput="showSearchSuggestions(this.value)" onfocus="showSearchSuggestions(this.value)" />
                 <button class="btn-search" onclick="searchService()">🔍 Search</button>
                 <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 15px 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 400px; overflow-y: auto; z-index: 1000; margin-top: -1px;"></div>
             </div>
@@ -213,6 +222,106 @@
                 <h3>Physiotherapy</h3>
                 <p>Rehabilitation, pain management</p>
             </div>
+            <div class="service-card" onclick="selectService('Photographer')">
+                <div class="service-icon">📸</div>
+                <h3>Professional Photography</h3>
+                <p>Events, portraits, product shoots</p>
+            </div>
+            <div class="service-card" onclick="selectService('Wedding Planner')">
+                <div class="service-icon">💍</div>
+                <h3>Wedding Planner</h3>
+                <p>Complete wedding planning & coordination</p>
+            </div>
+            <div class="service-card" onclick="selectService('Event Planner')">
+                <div class="service-icon">🎉</div>
+                <h3>Event Planner</h3>
+                <p>Birthday, corporate, social events</p>
+            </div>
+            <div class="service-card" onclick="selectService('Wedding Decorator')">
+                <div class="service-icon">💐</div>
+                <h3>Wedding Decorator</h3>
+                <p>Venue decoration, floral arrangements</p>
+            </div>
+            <div class="service-card" onclick="selectService('Event Decorator')">
+                <div class="service-icon">🎈</div>
+                <h3>Event Decorator</h3>
+                <p>Party decoration, balloon art, themes</p>
+            </div>
+            <div class="service-card" onclick="selectService('Mehendi Artist')">
+                <div class="service-icon">🎨</div>
+                <h3>Mehendi Artist</h3>
+                <p>Bridal, Arabic, traditional designs</p>
+            </div>
+            <div class="service-card" onclick="selectService('Tailor')">
+                <div class="service-icon">🧵</div>
+                <h3>Tailor & Alterations</h3>
+                <p>Clothing alterations, custom stitching</p>
+            </div>
+            <div class="service-card" onclick="selectService('Catering')">
+                <div class="service-icon">🍽️</div>
+                <h3>Catering Service</h3>
+                <p>Party catering, meal delivery</p>
+            </div>
+            <div class="service-card" onclick="selectService('DJ')">
+                <div class="service-icon">🎵</div>
+                <h3>DJ & Music</h3>
+                <p>Party DJ, wedding entertainment</p>
+            </div>
+            <div class="service-card" onclick="selectService('Videographer')">
+                <div class="service-icon">🎥</div>
+                <h3>Videography</h3>
+                <p>Wedding videos, event coverage</p>
+            </div>
+            <div class="service-card" onclick="selectService('Dance Teacher')">
+                <div class="service-icon">💃</div>
+                <h3>Dance Instructor</h3>
+                <p>Bollywood, classical, contemporary</p>
+            </div>
+            <div class="service-card" onclick="selectService('Music Teacher')">
+                <div class="service-icon">🎸</div>
+                <h3>Music Teacher</h3>
+                <p>Guitar, piano, vocals, instruments</p>
+            </div>
+            <div class="service-card" onclick="selectService('Astrologer')">
+                <div class="service-icon">🔮</div>
+                <h3>Astrologer</h3>
+                <p>Astrology consultation, horoscope</p>
+            </div>
+            <div class="service-card" onclick="selectService('Interior Designer')">
+                <div class="service-icon">🛋️</div>
+                <h3>Interior Designer</h3>
+                <p>Home design, space planning</p>
+            </div>
+            <div class="service-card" onclick="selectService('Gardener')">
+                <div class="service-icon">🌱</div>
+                <h3>Gardening & Landscaping</h3>
+                <p>Garden maintenance, landscaping</p>
+            </div>
+            <div class="service-card" onclick="selectService('Car Wash')">
+                <div class="service-icon">🚗</div>
+                <h3>Car Wash at Home</h3>
+                <p>Car cleaning, detailing, waxing</p>
+            </div>
+            <div class="service-card" onclick="selectService('Home Appliance Repair')">
+                <div class="service-icon">🔌</div>
+                <h3>Appliance Repair</h3>
+                <p>Refrigerator, washing machine, etc.</p>
+            </div>
+            <div class="service-card" onclick="selectService('Pandit')">
+                <div class="service-icon">🕉️</div>
+                <h3>Pandit for Puja</h3>
+                <p>Religious ceremonies, home puja</p>
+            </div>
+            <div class="service-card" onclick="selectService('Barber')">
+                <div class="service-icon">💈</div>
+                <h3>Barber at Home</h3>
+                <p>Haircut, beard grooming, shave</p>
+            </div>
+            <div class="service-card" onclick="selectService('Tattoo Artist')">
+                <div class="service-icon">🖊️</div>
+                <h3>Tattoo Artist</h3>
+                <p>Permanent, temporary, henna tattoos</p>
+            </div>
         </div>
     </section>
 
@@ -336,8 +445,251 @@
         </div>
     </div>
 
+    <!-- Location Modal -->
+    <div id="locationModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2 style="color: #667eea; margin-bottom: 15px; font-size: 1.8em;">📍 Set Your Location</h2>
+            <p style="color: #666; margin-bottom: 25px; line-height: 1.6;">
+                To show you the best service providers in your area, we need your location. 
+                We respect your privacy and follow all government regulations.
+            </p>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <button onclick="requestPreciseLocation()" class="btn-location-primary" 
+                    style="padding: 15px 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="font-size: 24px;">📍</span>
+                    <span>Use My Current Location</span>
+                </button>
+                
+                <div style="text-align: center; color: #999; font-size: 14px; margin: 10px 0;">OR</div>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 10px;">Enter Postal Code / ZIP Code</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="postalCodeInput" placeholder="e.g., M5H 2N2 or 10001" 
+                            style="flex: 1; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;"
+                            oninput="this.value = this.value.toUpperCase()" />
+                        <button onclick="submitPostalCode()" 
+                            style="padding: 12px 25px; background: #4A90E2; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                            Submit
+                        </button>
+                    </div>
+                    <div id="postalCodeResult" style="margin-top: 10px; font-size: 14px;"></div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-left: 4px solid #2196F3; border-radius: 5px;">
+                <p style="margin: 0; font-size: 14px; color: #0c5460;">
+                    <strong>🔒 Privacy Protected:</strong> We only access location data allowed by your government's privacy laws. 
+                    Your precise coordinates are never shared with service providers.
+                </p>
+            </div>
+            
+            <button onclick="skipLocationForNow()" 
+                style="margin-top: 15px; width: 100%; padding: 12px; background: #f8f9fa; color: #666; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                Skip for now (show all providers)
+            </button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
     <script>
+        // INLINE SEARCH AUTOSUGGESTION - Ensures it always works
+        (function() {
+            // Complete services list for autosuggestion
+            const allSearchServices = [
+                { name: 'Photographer', keywords: ['phot', 'photo', 'photographer', 'photography', 'camera', 'pictures'], category: 'Photography', emoji: '📸' },
+                { name: 'Videographer', keywords: ['video', 'videographer', 'videography', 'cinematography'], category: 'Videography', emoji: '🎥' },
+                { name: 'Wedding Planner', keywords: ['wedding', 'wedding planner', 'marriage', 'shaadi'], category: 'Event Planning', emoji: '💍' },
+                { name: 'Event Planner', keywords: ['event', 'party planner', 'event planner', 'birthday', 'celebration'], category: 'Event Planning', emoji: '🎉' },
+                { name: 'Wedding Decorator', keywords: ['wedding decorator', 'marriage decoration', 'mandap'], category: 'Decoration', emoji: '💐' },
+                { name: 'Event Decorator', keywords: ['event decorator', 'party decorator', 'balloon', 'decoration'], category: 'Decoration', emoji: '🎈' },
+                { name: 'Mehendi Artist', keywords: ['mehendi', 'mehndi', 'henna', 'bridal mehendi'], category: 'Beauty & Art', emoji: '🎨' },
+                { name: 'Catering', keywords: ['catering', 'food', 'party food', 'event food'], category: 'Food Services', emoji: '🍽️' },
+                { name: 'Personal Chef', keywords: ['chef', 'cook', 'personal chef', 'home chef'], category: 'Food Services', emoji: '👨‍🍳' },
+                { name: 'DJ', keywords: ['dj', 'disc jockey', 'music', 'party dj'], category: 'Entertainment', emoji: '🎧' },
+                { name: 'Dance Teacher', keywords: ['dance', 'dance teacher', 'choreographer', 'dance class'], category: 'Education & Arts', emoji: '💃' },
+                { name: 'Music Teacher', keywords: ['music teacher', 'music class', 'singing', 'instrument'], category: 'Education & Arts', emoji: '🎵' },
+                { name: 'Home Cleaning', keywords: ['cleaning', 'home cleaning', 'house cleaning', 'deep clean'], category: 'Home Services', emoji: '🧹' },
+                { name: 'Maid Service', keywords: ['maid', 'housekeeping', 'domestic help'], category: 'Home Services', emoji: '🏠' },
+                { name: 'Plumbing', keywords: ['plumber', 'plumbing', 'pipe', 'leak', 'tap', 'water'], category: 'Home Repair', emoji: '🔧' },
+                { name: 'Electrical Work', keywords: ['electrician', 'electrical', 'wiring', 'power', 'switch'], category: 'Home Repair', emoji: '⚡' },
+                { name: 'Carpentry', keywords: ['carpenter', 'carpentry', 'wood', 'furniture'], category: 'Home Repair', emoji: '🪚' },
+                { name: 'Painting', keywords: ['painter', 'painting', 'wall paint', 'house paint'], category: 'Home Improvement', emoji: '🎨' },
+                { name: 'Makeup Artist', keywords: ['makeup', 'mua', 'bridal makeup', 'party makeup'], category: 'Beauty Services', emoji: '💄' },
+                { name: 'Hairstylist', keywords: ['hair', 'hairstylist', 'haircut', 'salon'], category: 'Beauty Services', emoji: '💇' },
+                { name: 'Barber', keywords: ['barber', 'mens haircut', 'shave', 'beard'], category: 'Beauty Services', emoji: '💈' },
+                { name: 'Manicure Pedicure', keywords: ['manicure', 'pedicure', 'nails', 'nail art'], category: 'Beauty Services', emoji: '💅' },
+                { name: 'Massage', keywords: ['massage', 'spa', 'body massage', 'relaxation'], category: 'Wellness', emoji: '💆' },
+                { name: 'Yoga Instructor', keywords: ['yoga', 'meditation', 'yoga class', 'fitness'], category: 'Fitness & Wellness', emoji: '🧘' },
+                { name: 'Personal Training', keywords: ['trainer', 'gym', 'fitness', 'workout'], category: 'Fitness & Wellness', emoji: '💪' },
+                { name: 'Physiotherapy', keywords: ['physio', 'physiotherapy', 'therapy', 'rehabilitation'], category: 'Healthcare', emoji: '🏥' },
+                { name: 'Dietitian', keywords: ['diet', 'dietitian', 'nutrition', 'weight loss'], category: 'Healthcare', emoji: '🥗' },
+                { name: 'Tutoring', keywords: ['tutor', 'tutoring', 'teaching', 'education', 'home tutor'], category: 'Education', emoji: '📚' },
+                { name: 'Babysitting', keywords: ['babysitter', 'babysitting', 'nanny', 'childcare'], category: 'Childcare', emoji: '👶' },
+                { name: 'Dog Sitting', keywords: ['dog', 'dog sitting', 'pet sitting', 'dog walker'], category: 'Pet Care', emoji: '🐕' },
+                { name: 'Cat Sitting', keywords: ['cat', 'cat sitting', 'pet care'], category: 'Pet Care', emoji: '🐈' },
+                { name: 'Pet Grooming', keywords: ['pet grooming', 'dog grooming', 'pet bath'], category: 'Pet Care', emoji: '✂️' },
+                { name: 'Pest Control', keywords: ['pest', 'pest control', 'termite', 'bugs', 'insects'], category: 'Home Services', emoji: '🐛' },
+                { name: 'AC Repair', keywords: ['ac', 'air conditioning', 'ac repair', 'cooling'], category: 'Home Repair', emoji: '❄️' },
+                { name: 'Moving & Packing', keywords: ['moving', 'packing', 'movers', 'relocation'], category: 'Moving Services', emoji: '📦' },
+                { name: 'Tailor', keywords: ['tailor', 'stitching', 'alteration', 'clothes'], category: 'Fashion Services', emoji: '🧵' },
+                { name: 'Interior Designer', keywords: ['interior', 'interior design', 'home design'], category: 'Design Services', emoji: '🏠' },
+                { name: 'Gardener', keywords: ['garden', 'gardener', 'lawn', 'landscaping', 'plants'], category: 'Outdoor Services', emoji: '🌿' },
+                { name: 'Car Wash', keywords: ['car wash', 'car cleaning', 'vehicle wash'], category: 'Vehicle Services', emoji: '🚗' },
+                { name: 'Home Appliance Repair', keywords: ['appliance', 'fridge repair', 'washing machine'], category: 'Repair Services', emoji: '🔧' },
+                { name: 'Astrologer', keywords: ['astrologer', 'horoscope', 'kundli', 'jyotish'], category: 'Spiritual Services', emoji: '⭐' },
+                { name: 'Pandit', keywords: ['pandit', 'priest', 'puja', 'pooja'], category: 'Spiritual Services', emoji: '🙏' },
+                { name: 'Tattoo Artist', keywords: ['tattoo', 'body art', 'ink'], category: 'Body Art', emoji: '🖊️' },
+                { name: 'Concierge', keywords: ['concierge', 'personal assistant', 'errand'], category: 'Lifestyle Services', emoji: '🎩' }
+            ];
+
+            function inlineShowSuggestions(query) {
+                const suggestionsDiv = document.getElementById('searchSuggestions');
+                if (!suggestionsDiv || !query || query.length < 1) {
+                    if (suggestionsDiv) suggestionsDiv.style.display = 'none';
+                    return;
+                }
+
+                const q = query.toLowerCase().trim();
+                
+                // First try exact matches
+                let matches = allSearchServices.filter(service =>
+                    service.keywords.some(kw => kw.includes(q)) || service.name.toLowerCase().includes(q)
+                ).slice(0, 8);
+
+                let correctionMessage = '';
+                let correctedQuery = q;
+
+                // If no matches found, try fuzzy matching (autocorrect) with substring/prefix boost
+                if (matches.length === 0 && q.length >= 3) {
+                    // Enhanced fuzzy matching with substring and prefix detection
+                    function calculateSimilarityPercent(userInput, targetString) {
+                        const distance = getEditDistance(userInput, targetString);
+                        const maxLen = Math.max(userInput.length, targetString.length);
+                        let similarityPercent = ((maxLen - distance) / maxLen) * 100;
+                        
+                        // BOOST: substring match (20% bonus)
+                        if (targetString.includes(userInput)) {
+                            similarityPercent = Math.min(100, similarityPercent + 20);
+                        }
+                        
+                        // BOOST: prefix match (30% bonus)
+                        if (targetString.startsWith(userInput)) {
+                            similarityPercent = Math.min(100, similarityPercent + 30);
+                        }
+                        
+                        return similarityPercent;
+                    }
+
+                    function getEditDistance(s1, s2) {
+                        s1 = s1.toLowerCase();
+                        s2 = s2.toLowerCase();
+                        const costs = [];
+                        for (let i = 0; i <= s1.length; i++) {
+                            let lastValue = i;
+                            for (let j = 0; j <= s2.length; j++) {
+                                if (i === 0) {
+                                    costs[j] = j;
+                                } else if (j > 0) {
+                                    let newValue = costs[j - 1];
+                                    if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
+                                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                                    }
+                                    costs[j - 1] = lastValue;
+                                    lastValue = newValue;
+                                }
+                            }
+                            if (i > 0) costs[s2.length] = lastValue;
+                        }
+                        return costs[s2.length];
+                    }
+
+                    // Find best match from all keywords and service names with 40% threshold
+                    let bestMatch = null;
+                    let bestScore = 0;
+
+                    allSearchServices.forEach(service => {
+                        // Check service name
+                        const nameScore = calculateSimilarityPercent(q, service.name.toLowerCase());
+                        if (nameScore > bestScore) {
+                            bestScore = nameScore;
+                            bestMatch = service.name.toLowerCase();
+                        }
+
+                        // Check keywords
+                        service.keywords.forEach(keyword => {
+                            const score = calculateSimilarityPercent(q, keyword);
+                            if (score > bestScore) {
+                                bestScore = score;
+                                bestMatch = keyword;
+                            }
+                        });
+                    });
+
+                    // If we found a match above 40% threshold, search with it
+                    if (bestMatch && bestScore >= 40) {
+                        correctedQuery = bestMatch;
+                        matches = allSearchServices.filter(service =>
+                            service.keywords.some(kw => kw.includes(bestMatch)) || service.name.toLowerCase().includes(bestMatch)
+                        ).slice(0, 8);
+
+                        // Don't show correction message in search dropdown
+                        // The correction will be shown on the results page instead
+                    }
+                }
+
+                if (matches.length === 0) {
+                    suggestionsDiv.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: #999;">
+                            <span style="font-size: 24px;">🔍</span>
+                            <div style="margin-top: 8px; font-size: 14px;">No services found for "${q}"</div>
+                            <div style="margin-top: 4px; font-size: 13px;">Try different keywords</div>
+                        </div>
+                    `;
+                    suggestionsDiv.style.display = 'block';
+                    return;
+                }
+
+                const resultsHTML = matches.map(service => `
+                    <div onclick="var input = document.getElementById('serviceSearch'); input.value='${service.name}'; document.getElementById('searchSuggestions').style.display='none'; window.location.href='services.html?service=${encodeURIComponent(service.name.toLowerCase())}';"
+                         style="padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px; transition: background 0.2s;"
+                         onmouseover="this.style.background='#f0f7ff'"
+                         onmouseout="this.style.background='white'">
+                        <span style="font-size: 24px;">${service.emoji}</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #2c3e50; font-size: 15px;">${service.name}</div>
+                            <div style="font-size: 13px; color: #6c757d; margin-top: 2px;">in ${service.category}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Show suggestions without correction message on search page
+                // Correction will be shown on the results page (services.html)
+                suggestionsDiv.innerHTML = resultsHTML;
+                suggestionsDiv.style.display = 'block';
+            }
+
+            // Override the global function
+            window.showSearchSuggestions = inlineShowSuggestions;
+
+            // Also attach directly to input
+            const searchInput = document.getElementById('serviceSearch');
+            if (searchInput) {
+                searchInput.oninput = function() { inlineShowSuggestions(this.value); };
+                searchInput.onfocus = function() { if(this.value) inlineShowSuggestions(this.value); };
+            }
+
+            // Hide on click outside
+            document.addEventListener('click', function(e) {
+                const search = document.getElementById('serviceSearch');
+                const sugg = document.getElementById('searchSuggestions');
+                if (sugg && search && !search.contains(e.target) && !sugg.contains(e.target)) {
+                    sugg.style.display = 'none';
+                }
+            });
+        })();
+
         // Update navigation based on login status
         window.addEventListener('DOMContentLoaded', () => {
             const customerAuth = Auth.isLoggedIn('customer');
@@ -355,6 +707,158 @@
                 loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
                 providerBtn.style.display = 'none';
             }
+            
+            // Check and show location modal if not set
+            checkAndShowLocationModal();
+        });
+
+        // Location Functions
+        function checkAndShowLocationModal() {
+            if (!LocationService.hasLocation()) {
+                console.log('📍 No location set, showing modal...');
+                setTimeout(() => {
+                    document.getElementById('locationModal').style.display = 'flex';
+                }, 1000); // Show after 1 second
+            } else {
+                console.log('✅ Location already set:', LocationService.formatLocation(LocationService.getLocation()));
+                updateLocationDisplay();
+            }
+        }
+
+        function updateLocationDisplay() {
+            const location = LocationService.getLocation();
+            if (location) {
+                // Update location input in header
+                const locationInput = document.getElementById('locationInput');
+                if (locationInput) {
+                    locationInput.value = LocationService.formatLocation(location);
+                }
+                
+                // Show location badge
+                showLocationBadge(location);
+            }
+        }
+
+        function showLocationBadge(location) {
+            const badge = document.createElement('div');
+            badge.style.cssText = 'position: fixed; top: 80px; right: 20px; background: white; padding: 12px 20px; border-radius: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease;';
+            badge.innerHTML = `
+                <span style="font-size: 20px;">📍</span>
+                <span style="font-weight: 600; color: #333;">${LocationService.formatLocation(location)}</span>
+                <button onclick="changeLocation()" style="background: #f0f0f0; border: none; padding: 5px 12px; border-radius: 15px; cursor: pointer; font-size: 12px; color: #667eea; font-weight: 600;">Change</button>
+            `;
+            badge.id = 'locationBadge';
+            document.body.appendChild(badge);
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                badge.style.opacity = '0';
+                badge.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => badge.remove(), 300);
+            }, 5000);
+        }
+
+        function changeLocation() {
+            document.getElementById('locationModal').style.display = 'flex';
+            const badge = document.getElementById('locationBadge');
+            if (badge) badge.remove();
+        }
+
+        async function requestPreciseLocation() {
+            const modal = document.getElementById('locationModal');
+            const resultDiv = document.getElementById('postalCodeResult');
+            
+            try {
+                resultDiv.innerHTML = '<div style="color: #2196F3;">🔄 Requesting location permission...</div>';
+                
+                const location = await LocationService.requestPreciseLocation();
+                
+                resultDiv.innerHTML = `<div style="color: #28a745; font-weight: 600;">✅ Location set: ${LocationService.formatLocation(location)}</div>`;
+                
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    updateLocationDisplay();
+                }, 1500);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div style="color: #dc3545;">❌ ${error.message}. Please enter your postal code instead.</div>`;
+            }
+        }
+
+        function submitPostalCode() {
+            const input = document.getElementById('postalCodeInput');
+            const postalCode = input.value.trim();
+            const resultDiv = document.getElementById('postalCodeResult');
+            
+            if (!postalCode) {
+                resultDiv.innerHTML = '<div style="color: #dc3545;">Please enter a postal code</div>';
+                return;
+            }
+            
+            const result = LocationService.setLocationByPostalCode(postalCode);
+            
+            if (result.success) {
+                const loc = result.location;
+                resultDiv.innerHTML = `<div style="color: #28a745; font-weight: 600;">✅ ${loc.city}, ${loc.region}</div>`;
+                
+                setTimeout(() => {
+                    document.getElementById('locationModal').style.display = 'none';
+                    updateLocationDisplay();
+                }, 1500);
+            } else {
+                resultDiv.innerHTML = `<div style="color: #dc3545;">❌ ${result.error}. Please try a different postal code.</div>`;
+            }
+        }
+
+        function skipLocationForNow() {
+            document.getElementById('locationModal').style.display = 'none';
+            console.log('⏭️ User skipped location setting');
+        }
+
+        // Allow Enter key to submit postal code
+        document.addEventListener('DOMContentLoaded', () => {
+            const postalInput = document.getElementById('postalCodeInput');
+            if (postalInput) {
+                postalInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        submitPostalCode();
+                    }
+                });
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            navLinks.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            const navbar = document.querySelector('.navbar');
+            
+            if (navLinks && menuToggle && navbar) {
+                if (!navbar.contains(event.target) && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                }
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a, .nav-links button').forEach(link => {
+            link.addEventListener('click', function() {
+                const navLinks = document.getElementById('navLinks');
+                const menuToggle = document.getElementById('mobileMenuToggle');
+                if (navLinks && menuToggle) {
+                    navLinks.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                }
+            });
         });
     </script>
 </body>

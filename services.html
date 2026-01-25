@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Services - Task Masters</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="location.js"></script>
     <style>
         body.dark-mode { background: #1a1a1a; color: #e0e0e0; }
         body.dark-mode .modern-navbar { background: #0d1117 !important; }
@@ -34,6 +35,14 @@
             <div class="nav-logo">
                 <a href="index.html"><h2>🎯 Task Masters</h2></a>
             </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
                 <a href="services-browse.html">Services</a>
@@ -163,11 +172,17 @@
         </div>
     </footer>
 
-    <script src="services.js"></script>
+    <script src="services.js?v=20260125-004"></script>
     <script src="script.js"></script>
     <script>
-        // Update navigation based on login status
+        // Force verification that autocorrect variables exist
         window.addEventListener('DOMContentLoaded', () => {
+            console.log('🔍 VERIFICATION - Autocorrect variables:');
+            console.log('   - finalSearchQuery:', typeof finalSearchQuery !== 'undefined' ? finalSearchQuery : 'NOT DEFINED');
+            console.log('   - userTypedQuery:', typeof userTypedQuery !== 'undefined' ? userTypedQuery : 'NOT DEFINED');
+            console.log('   - wasAutoCorrected:', typeof wasAutoCorrected !== 'undefined' ? wasAutoCorrected : 'NOT DEFINED');
+            
+            // Update navigation based on login status
             const customerAuth = Auth.isLoggedIn('customer');
             const providerAuth = Auth.isLoggedIn('provider');
             
@@ -183,6 +198,45 @@
                 }
             }
         });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            navLinks.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            const navbar = document.querySelector('.navbar');
+            
+            if (navLinks && menuToggle && navbar) {
+                if (!navbar.contains(event.target) && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                }
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a, .nav-links button').forEach(link => {
+            link.addEventListener('click', function() {
+                const navLinks = document.getElementById('navLinks');
+                const menuToggle = document.getElementById('mobileMenuToggle');
+                if (navLinks && menuToggle) {
+                    navLinks.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                }
+            });
+        });
+
+        // Location change function
+        function changeLocation() {
+            window.location.href = 'index.html#location';
+        }
     </script>
 </body>
 </html>

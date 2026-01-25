@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Autocorrect Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-input {
+            padding: 12px;
+            width: 300px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 12px 24px;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background: #357ABD;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #4A90E2;
+            border-radius: 4px;
+        }
+        .success {
+            color: #0f9d58;
+            font-weight: bold;
+        }
+        .error {
+            color: #d93025;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Direct Autocorrect Test</h1>
+    <p>Test the autocorrect functionality with various misspellings</p>
+    
+    <div class="test-box">
+        <h3>Test Search Query</h3>
+        <input type="text" id="testInput" class="test-input" placeholder="Type 'damce' or 'phot'..." value="damce">
+        <button onclick="testAutocorrect()">Test Autocorrect</button>
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>Quick Tests</h3>
+        <button onclick="quickTest('damce')">Test: damce</button>
+        <button onclick="quickTest('phot')">Test: phot</button>
+        <button onclick="quickTest('photy')">Test: photy</button>
+        <button onclick="quickTest('photogapher')">Test: photogapher</button>
+        <button onclick="quickTest('dans')">Test: dans</button>
+        <button onclick="quickTest('weddig')">Test: weddig</button>
+        <button onclick="quickTest('cleanning')">Test: cleanning</button>
+    </div>
+
+    <div class="test-box">
+        <h3>Console Log</h3>
+        <div id="console" style="font-family: monospace; font-size: 12px; white-space: pre-wrap; background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 4px; max-height: 400px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        // Copy the exact providerDatabase from services.js
+        const providerDatabase = {
+            'cleaning': [],
+            'plumbing': [],
+            'electrical': [],
+            'carpentry': [],
+            'painting': [],
+            'beauty': [],
+            'tutoring': [],
+            'pest control': [],
+            'ac repair': [],
+            'babysitting': [],
+            'moving': [],
+            'fitness': [],
+            'dance': [],
+            'dance teacher': [],
+            'dog sitting': [],
+            'cat sitting': [],
+            'pet grooming': [],
+            'pet care': [],
+            'makeup artist': [],
+            'hairstylist': [],
+            'hair salon': [],
+            'barber': [],
+            'massage': [],
+            'spa services': [],
+            'personal trainer': [],
+            'yoga instructor': [],
+            'yoga': [],
+            'pilates': [],
+            'meditation': [],
+            'concierge': [],
+            'personal chef': [],
+            'catering': [],
+            'maid service': [],
+            'live-in maid': [],
+            'part-time maid': [],
+            'housekeeping': [],
+            'nanny': [],
+            'manicure pedicure': [],
+            'nail technician': [],
+            'dietitian': [],
+            'nutritionist': [],
+            'physiotherapy': [],
+            'photographer': [],
+            'photography': [],
+            'videographer': [],
+            'wedding planner': [],
+            'event planner': [],
+            'wedding decorator': [],
+            'event decorator': [],
+            'mehendi': [],
+            'tailor': [],
+            'dj': [],
+            'music teacher': [],
+            'astrologer': [],
+            'pandit': [],
+            'interior designer': [],
+            'gardener': [],
+            'car wash': [],
+            'appliance repair': [],
+            'tattoo': []
+        };
+
+        const consoleDiv = document.getElementById('console');
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            consoleDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        // Copy exact Levenshtein function
+        function calculateLevenshteinDistance(str1, str2) {
+            const len1 = str1.length;
+            const len2 = str2.length;
+            const matrix = Array(len1 + 1).fill(null).map(() => Array(len2 + 1).fill(0));
+
+            for (let i = 0; i <= len1; i++) matrix[i][0] = i;
+            for (let j = 0; j <= len2; j++) matrix[0][j] = j;
+
+            for (let i = 1; i <= len1; i++) {
+                for (let j = 1; j <= len2; j++) {
+                    const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j - 1] + cost
+                    );
+                }
+            }
+            return matrix[len1][len2];
+        }
+
+        function calculateSimilarityPercentage(str1, str2) {
+            const distance = calculateLevenshteinDistance(str1.toLowerCase(), str2.toLowerCase());
+            const maxLen = Math.max(str1.length, str2.length);
+            const similarityPercent = ((maxLen - distance) / maxLen) * 100;
+            return Math.round(similarityPercent);
+        }
+
+        function findBestServiceMatch(userQuery) {
+            if (!userQuery || userQuery === 'all') {
+                return { found: false, match: null, similarity: 0 };
+            }
+
+            const allServices = Object.keys(providerDatabase);
+            let bestMatch = null;
+            let bestSimilarity = 0;
+
+            log(`🔎 Searching for: "${userQuery}"`);
+            log(`📋 Checking against ${allServices.length} services...`);
+
+            for (let service of allServices) {
+                const similarity = calculateSimilarityPercentage(userQuery, service);
+                
+                if (similarity > bestSimilarity) {
+                    bestSimilarity = similarity;
+                    bestMatch = service;
+                }
+                
+                if (similarity > 30) {
+                    log(`   "${service}" → ${similarity}% match`);
+                }
+            }
+
+            log(`✨ Best match: "${bestMatch}" with ${bestSimilarity}% similarity`);
+
+            if (bestSimilarity >= 40) {
+                return { found: true, match: bestMatch, similarity: bestSimilarity };
+            }
+            
+            return { found: false, match: null, similarity: bestSimilarity };
+        }
+
+        function testAutocorrect() {
+            const input = document.getElementById('testInput').value.trim().toLowerCase();
+            const resultDiv = document.getElementById('result');
+            
+            consoleDiv.innerHTML = ''; // Clear console
+            log('🚀 Starting autocorrect test...');
+            log('━'.repeat(50));
+            
+            const matchResult = findBestServiceMatch(input);
+            
+            resultDiv.style.display = 'block';
+            
+            if (matchResult.found && matchResult.match !== input) {
+                resultDiv.innerHTML = `
+                    <div class="success">✓ AUTOCORRECT SUCCESS!</div>
+                    <p><strong>You typed:</strong> ${input}</p>
+                    <p><strong>Corrected to:</strong> ${matchResult.match}</p>
+                    <p><strong>Similarity:</strong> ${matchResult.similarity}%</p>
+                    <p><strong>Above threshold:</strong> YES (40%)</p>
+                    <hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;">
+                    <p style="font-size: 14px; color: #5f6368;">This would show on services.html as:</p>
+                    <div style="background: #f8f9fa; border-left: 4px solid #4A90E2; padding: 12px; margin-top: 8px; font-size: 14px;">
+                        Showing results for <strong>${matchResult.match}</strong> instead of <strong>${input}</strong>
+                    </div>
+                `;
+                log('✅ Test PASSED - Autocorrect working correctly!');
+            } else if (!matchResult.found) {
+                resultDiv.innerHTML = `
+                    <div class="error">✗ NO MATCH FOUND</div>
+                    <p><strong>You typed:</strong> ${input}</p>
+                    <p><strong>Best match:</strong> ${matchResult.match || 'none'}</p>
+                    <p><strong>Similarity:</strong> ${matchResult.similarity}%</p>
+                    <p><strong>Below threshold:</strong> YES (need 40%)</p>
+                `;
+                log('❌ Test FAILED - Below 40% threshold');
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="success">✓ EXACT OR CLOSE MATCH</div>
+                    <p><strong>You typed:</strong> ${input}</p>
+                    <p><strong>Match:</strong> ${matchResult.match}</p>
+                    <p><strong>Similarity:</strong> ${matchResult.similarity}%</p>
+                    <p><strong>No correction needed</strong></p>
+                `;
+                log('ℹ️ Input already matches existing service');
+            }
+        }
+
+        function quickTest(query) {
+            document.getElementById('testInput').value = query;
+            testAutocorrect();
+        }
+
+        // Run initial test
+        window.onload = () => {
+            log('✅ Test page loaded successfully');
+            log(`📦 Database contains ${Object.keys(providerDatabase).length} services`);
+            log('━'.repeat(50));
+            testAutocorrect();
+        };
+    </script>
+</body>
+</html>

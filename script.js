@@ -4,47 +4,60 @@ console.log('🎯 Task Masters Platform loaded successfully!');
 
 // Complete list of services with subcategories
 const servicesList = [
-    { name: 'Home Cleaning', keywords: ['cleaning', 'home cleaning', 'house cleaning', 'deep cleaning', 'regular cleaning', 'maintenance cleaning', 'maid service'], category: 'Cleaning' },
-    { name: 'Deep Cleaning', keywords: ['deep cleaning', 'thorough cleaning', 'intensive cleaning', 'detailed cleaning'], category: 'Cleaning' },
-    { name: 'Regular House Cleaning', keywords: ['regular cleaning', 'house cleaning', 'routine cleaning', 'weekly cleaning'], category: 'Cleaning' },
+    { name: 'Home Cleaning', keywords: ['cleaning', 'home cleaning', 'house cleaning', 'deep cleaning', 'regular cleaning', 'maintenance cleaning'], category: 'Cleaning' },
+    { name: 'Maid Service', keywords: ['maid', 'maid service', 'housekeeping', 'housekeeper', 'domestic help'], category: 'Cleaning' },
     { name: 'Plumbing', keywords: ['plumbing', 'plumber', 'pipe repair', 'leak fixing', 'water repair', 'drainage', 'plumbing service'], category: 'Plumbing' },
-    { name: 'Pipe Repair', keywords: ['pipe repair', 'pipe fixing', 'broken pipe', 'leaking pipe'], category: 'Plumbing' },
-    { name: 'Drain Cleaning', keywords: ['drain cleaning', 'clogged drain', 'blocked drain', 'drainage'], category: 'Plumbing' },
     { name: 'Electrical Work', keywords: ['electrical', 'electrician', 'wiring', 'electric repair', 'power', 'electricity'], category: 'Electrical' },
-    { name: 'Wiring Installation', keywords: ['wiring', 'electrical wiring', 'wire installation', 'rewiring'], category: 'Electrical' },
-    { name: 'Light Fixtures', keywords: ['light fixtures', 'lighting', 'lights', 'light installation', 'fixture repair'], category: 'Electrical' },
     { name: 'Carpentry', keywords: ['carpentry', 'carpenter', 'wood work', 'furniture', 'woodworking'], category: 'Carpentry' },
-    { name: 'Furniture Assembly', keywords: ['furniture assembly', 'furniture installation', 'assemble furniture', 'ikea assembly'], category: 'Carpentry' },
-    { name: 'Furniture Repair', keywords: ['furniture repair', 'fix furniture', 'furniture fixing', 'repair wood'], category: 'Carpentry' },
     { name: 'Painting', keywords: ['painting', 'painter', 'paint service', 'wall painting', 'house painting'], category: 'Painting' },
-    { name: 'Interior Painting', keywords: ['interior painting', 'indoor painting', 'room painting', 'wall paint'], category: 'Painting' },
-    { name: 'Exterior Painting', keywords: ['exterior painting', 'outdoor painting', 'house exterior', 'outside painting'], category: 'Painting' },
-    { name: 'Beauty & Salon', keywords: ['beauty', 'salon', 'hair', 'makeup', 'spa', 'beauty service', 'hair salon'], category: 'Beauty' },
-    { name: 'Hair Styling', keywords: ['hair styling', 'haircut', 'hair service', 'hairdresser', 'hair salon'], category: 'Beauty' },
-    { name: 'Makeup Service', keywords: ['makeup', 'makeup artist', 'bridal makeup', 'party makeup'], category: 'Beauty' },
-    { name: 'Spa Services', keywords: ['spa', 'massage', 'facial', 'spa service', 'relaxation'], category: 'Beauty' },
-    { name: 'Tutoring', keywords: ['tutoring', 'tutor', 'teaching', 'education', 'lessons', 'academic help'], category: 'Tutoring' },
-    { name: 'Math Tutoring', keywords: ['math tutoring', 'mathematics', 'math help', 'math teacher'], category: 'Tutoring' },
-    { name: 'English Tutoring', keywords: ['english tutoring', 'english teacher', 'language tutoring'], category: 'Tutoring' },
-    { name: 'Science Tutoring', keywords: ['science tutoring', 'science help', 'physics', 'chemistry', 'biology'], category: 'Tutoring' },
-    { name: 'Pest Control', keywords: ['pest control', 'exterminator', 'pest removal', 'bug control', 'insects'], category: 'Pest' },
-    { name: 'Termite Control', keywords: ['termite', 'termite control', 'termite treatment'], category: 'Pest' },
-    { name: 'AC Repair', keywords: ['ac repair', 'air conditioning', 'ac service', 'hvac', 'cooling', 'air conditioner'], category: 'AC' },
-    { name: 'AC Installation', keywords: ['ac installation', 'install air conditioner', 'new ac', 'ac setup'], category: 'AC' },
-    { name: 'AC Maintenance', keywords: ['ac maintenance', 'ac servicing', 'ac cleaning', 'ac checkup'], category: 'AC' },
-    { name: 'Babysitting', keywords: ['babysitting', 'babysitter', 'childcare', 'nanny', 'child care'], category: 'Babysitting' },
+    { name: 'Beauty & Salon', keywords: ['beauty', 'salon', 'hair', 'makeup', 'spa', 'beauty service'], category: 'Beauty' },
+    { name: 'Makeup Artist', keywords: ['makeup', 'makeup artist', 'bridal makeup', 'party makeup', 'mua'], category: 'Beauty' },
+    { name: 'Hairstylist', keywords: ['hairstylist', 'hair stylist', 'haircut', 'hair service', 'hairdresser', 'salon'], category: 'Beauty' },
+    { name: 'Barber', keywords: ['barber', 'barber shop', 'mens haircut', 'shave', 'beard trim'], category: 'Beauty' },
+    { name: 'Manicure Pedicure', keywords: ['manicure', 'pedicure', 'nails', 'nail art', 'nail service', 'mani pedi'], category: 'Beauty' },
+    { name: 'Tutoring', keywords: ['tutoring', 'tutor', 'teaching', 'education', 'lessons', 'academic help', 'home tutor'], category: 'Tutoring' },
+    { name: 'Pest Control', keywords: ['pest control', 'exterminator', 'pest removal', 'bug control', 'insects', 'fumigation'], category: 'Pest Control' },
+    { name: 'AC Repair', keywords: ['ac repair', 'air conditioning', 'ac service', 'hvac', 'cooling', 'air conditioner'], category: 'AC Repair' },
+    { name: 'Babysitting', keywords: ['babysitting', 'babysitter', 'childcare', 'nanny', 'child care', 'kids care'], category: 'Babysitting' },
     { name: 'Moving & Packing', keywords: ['moving', 'packing', 'movers', 'relocation', 'moving service', 'packers'], category: 'Moving' },
-    { name: 'Packing Services', keywords: ['packing', 'packing service', 'pack items', 'packing help'], category: 'Moving' },
     { name: 'Personal Training', keywords: ['personal training', 'fitness', 'gym trainer', 'workout', 'exercise', 'fitness coach'], category: 'Fitness' },
-    { name: 'Yoga Classes', keywords: ['yoga', 'yoga classes', 'yoga instructor', 'meditation'], category: 'Fitness' },
-    { name: 'Lawn Mowing', keywords: ['lawn mowing', 'lawn care', 'grass cutting', 'lawn service', 'gardening'], category: 'Gardening' },
-    { name: 'Gardening', keywords: ['gardening', 'garden maintenance', 'landscaping', 'plants'], category: 'Gardening' }
+    { name: 'Yoga Instructor', keywords: ['yoga', 'yoga instructor', 'yoga classes', 'yoga teacher', 'meditation'], category: 'Fitness' },
+    { name: 'Dog Sitting', keywords: ['dog sitting', 'dog sitter', 'dog care', 'pet sitting dog', 'dog walker'], category: 'Pet Care' },
+    { name: 'Cat Sitting', keywords: ['cat sitting', 'cat sitter', 'cat care', 'pet sitting cat'], category: 'Pet Care' },
+    { name: 'Pet Grooming', keywords: ['pet grooming', 'dog grooming', 'cat grooming', 'pet bath', 'grooming service'], category: 'Pet Care' },
+    { name: 'Massage', keywords: ['massage', 'body massage', 'spa massage', 'relaxation massage', 'therapeutic massage'], category: 'Massage' },
+    { name: 'Physiotherapy', keywords: ['physiotherapy', 'physio', 'physical therapy', 'rehabilitation', 'physio therapy'], category: 'Physiotherapy' },
+    { name: 'Dietitian', keywords: ['dietitian', 'nutritionist', 'diet plan', 'nutrition', 'meal planning'], category: 'Dietitian' },
+    { name: 'Concierge', keywords: ['concierge', 'personal assistant', 'lifestyle management', 'errand service'], category: 'Concierge' },
+    { name: 'Personal Chef', keywords: ['personal chef', 'home chef', 'private chef', 'cook', 'cooking service'], category: 'Personal Chef' },
+    { name: 'Catering', keywords: ['catering', 'catering service', 'event catering', 'food catering', 'party catering'], category: 'Catering' },
+    { name: 'Photographer', keywords: ['phot', 'photo', 'photographer', 'photography', 'photo shoot', 'photo service', 'pictures', 'camera'], category: 'Photographer' },
+    { name: 'Videographer', keywords: ['video', 'videographer', 'videography', 'video shoot', 'video service', 'cinematography'], category: 'Videographer' },
+    { name: 'Wedding Planner', keywords: ['wedding planner', 'wedding planning', 'wedding organizer', 'marriage planner'], category: 'Wedding Planner' },
+    { name: 'Event Planner', keywords: ['event planner', 'event planning', 'party planner', 'event organizer', 'event management'], category: 'Event Planner' },
+    { name: 'Wedding Decorator', keywords: ['wedding decorator', 'wedding decoration', 'marriage decoration', 'shaadi decorator'], category: 'Wedding Decorator' },
+    { name: 'Event Decorator', keywords: ['event decorator', 'party decorator', 'event decoration', 'party decoration'], category: 'Event Decorator' },
+    { name: 'Mehendi Artist', keywords: ['mehendi', 'mehndi', 'henna', 'mehendi artist', 'bridal mehendi', 'henna artist'], category: 'Mehendi Artist' },
+    { name: 'Tailor', keywords: ['tailor', 'tailoring', 'stitching', 'alteration', 'clothes stitching', 'dress making'], category: 'Tailor' },
+    { name: 'DJ', keywords: ['dj', 'disc jockey', 'music dj', 'party dj', 'wedding dj'], category: 'DJ' },
+    { name: 'Dance Teacher', keywords: ['dance teacher', 'dance instructor', 'dance classes', 'dance trainer', 'choreographer'], category: 'Dance Teacher' },
+    { name: 'Music Teacher', keywords: ['music teacher', 'music instructor', 'music classes', 'music lessons', 'music tutor'], category: 'Music Teacher' },
+    { name: 'Astrologer', keywords: ['astrologer', 'astrology', 'horoscope', 'jyotish', 'kundli', 'zodiac'], category: 'Astrologer' },
+    { name: 'Pandit', keywords: ['pandit', 'priest', 'puja', 'pooja', 'hindu priest', 'religious ceremony'], category: 'Pandit' },
+    { name: 'Interior Designer', keywords: ['interior designer', 'interior design', 'home design', 'interior decoration', 'space planning'], category: 'Interior Designer' },
+    { name: 'Gardener', keywords: ['gardener', 'gardening', 'landscaping', 'lawn care', 'garden maintenance', 'plants'], category: 'Gardener' },
+    { name: 'Car Wash', keywords: ['car wash', 'car cleaning', 'vehicle wash', 'auto wash', 'car detailing'], category: 'Car Wash' },
+    { name: 'Home Appliance Repair', keywords: ['appliance repair', 'home appliance', 'fridge repair', 'washing machine repair', 'appliance service'], category: 'Home Appliance Repair' },
+    { name: 'Tattoo Artist', keywords: ['tattoo', 'tattoo artist', 'tattooing', 'body art', 'ink'], category: 'Tattoo Artist' }
 ];
 
 // Search suggestion functionality
 function showSearchSuggestions(query) {
     const suggestionsDiv = document.getElementById('searchSuggestions');
-    if (!suggestionsDiv) return;
+    if (!suggestionsDiv) {
+        console.log('❌ searchSuggestions div not found!');
+        return;
+    }
     
     if (!query || query.length < 1) {
         suggestionsDiv.style.display = 'none';
@@ -52,18 +65,24 @@ function showSearchSuggestions(query) {
     }
     
     const queryLower = query.toLowerCase();
+    console.log('🔍 Searching for:', queryLower);
+    
     const matches = servicesList.filter(service => 
         service.keywords.some(keyword => keyword.includes(queryLower))
-    ).slice(0, 8); // Limit to 8 suggestions
+    );
     
-    if (matches.length === 0) {
+    console.log('✅ Found matches:', matches.length, matches.map(m => m.name));
+    
+    const limitedMatches = matches.slice(0, 8); // Limit to 8 suggestions
+    
+    if (limitedMatches.length === 0) {
         suggestionsDiv.style.display = 'none';
         return;
     }
     
     // Create suggestion items
     let html = '';
-    matches.forEach(service => {
+    limitedMatches.forEach(service => {
         html += `
             <div class="suggestion-item" onclick="selectSuggestion('${service.name.replace(/'/g, "\\'")}')"
                  style="padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px; transition: background 0.2s;"
