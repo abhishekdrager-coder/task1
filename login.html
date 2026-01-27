@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Task Masters</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body.dark-mode { background: #1a1a1a; color: #e0e0e0; }
+        body.dark-mode .modern-navbar { background: #0d1117 !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p { color: #b0b0b0; }
+        body.dark-mode .login-split-container { background: #0d1117; }
+        body.dark-mode .customer-side { background: #161b22; border-right: 1px solid #30363d; }
+        body.dark-mode .professional-side { background: #0d1117; }
+        body.dark-mode .info-card { background: #1c2128; border: 1px solid #30363d; }
+        body.dark-mode .footer { background: #0d1117; border-top: 1px solid #30363d; }
+        
+        .login-selection-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+        }
+        
+        .login-split-container {
+            background: white;
+            border-radius: 20px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+            overflow: hidden;
+        }
+        
+        /* Customer Side (Left) */
+        .customer-side {
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .customer-side h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .customer-side .subtitle {
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .auth-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .auth-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .register-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .register-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .auth-form {
+            display: none;
+            margin-bottom: 20px;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .form-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cancel-btn {
+            background: #f0f0f0;
+            color: #6c757d;
+        }
+        
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .form-toggle {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .form-toggle p {
+            color: #6c757d;
+            font-size: 0.95em;
+            margin: 0;
+        }
+        
+        .form-toggle a {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .form-toggle a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .divider span {
+            padding: 0 15px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .info-card {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .info-card h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+        
+        .info-card p {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin: 0;
+        }
+        
+        /* Professional Side (Right) */
+        .professional-side {
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            text-align: center;
+            color: white;
+        }
+        
+        .professional-side h2 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 2.2em;
+        }
+        
+        .professional-side p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .professional-login-btn {
+            padding: 18px 50px;
+            background: white;
+            color: #f5576c;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .professional-login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .professional-features {
+            margin-top: 40px;
+            text-align: left;
+        }
+        
+        .professional-features ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .professional-features li {
+            padding: 10px 0;
+            color: rgba(255,255,255,0.95);
+            font-size: 1em;
+        }
+        
+        .professional-features li:before {
+            content: "✓ ";
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .back-home {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .back-home a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .back-home a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        @media (max-width: 968px) {
+            .login-split-container {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+            
+            .customer-side,
+            .professional-side {
+                padding: 40px 30px;
+                border-right: none;
+            }
+            
+            .customer-side {
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .back-home {
+                top: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .customer-side h1 {
+                font-size: 2em;
+            }
+            
+            .professional-side h2 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+    <script>
+        (function() {
+            try {
+                const custSettings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                const provSettings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (custSettings.darkMode === true || provSettings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><h2>🎯 Task Masters</h2></a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="services-browse.html">Services</a>
+                <a href="index.html#about">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Selection Section -->
+    <section class="login-selection-section">
+        <div class="back-home">
+            <a href="index.html">← Back to Home</a>
+        </div>
+        
+        <div class="login-split-container">
+            <!-- Customer Side (Left) -->
+            <div class="customer-side">
+                <h1>Welcome!</h1>
+                <p class="subtitle">Access your account to book services</p>
+                
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input type="email" id="loginEmail" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required placeholder="Enter your password">
+                        </div>
+                        <div class="error-message" id="loginError"></div>
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn" onclick="hideAuthForms()">Cancel</button>
+                            <button type="submit" class="submit-btn">Login</button>
+                        </div>
+                        <div class="form-toggle">
+                            <p>Not a member yet? <a onclick="showRegisterForm()">Create an account here</a></p>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-form">
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label for="registerName">Full Name</label>
+                            <input type="text" id="registerName" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email Address</label>
+                            <input type="email" id="registerEmail" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" required placeholder="Create a password" minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerConfirmPassword">Confirm Password</label>
+                            <input type="password" id="registerConfirmPassword" required placeholder="Confirm your password" minlength="6">
+                        </div>
+                        <div class="error-message" id="registerError"></div>
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn" onclick="hideAuthForms()">Cancel</button>
+                            <button type="submit" class="submit-btn">Register</button>
+                        </div>
+                        <div class="form-toggle">
+                            <p>Already have an account? <a onclick="showLoginForm()">Login here</a></p>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Auth Options (Initially Visible) -->
+                <div class="auth-options" id="authOptions">
+                    <button class="auth-btn login-btn" onclick="showLoginForm()">Login to Your Account</button>
+                    <button class="auth-btn register-btn" onclick="showRegisterForm()">Create New Account</button>
+                </div>
+                
+                <div class="divider">
+                    <span>Why choose Task Masters?</span>
+                </div>
+                
+                <div class="info-cards">
+                    <div class="info-card">
+                        <h4>🎯 Trusted Professionals</h4>
+                        <p>Browse service providers reviewed and rated by our community</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>💳 Secure Payments</h4>
+                        <p>Your payment information is protected with enterprise-grade encryption</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>⭐ Top-Rated Services</h4>
+                        <p>Book with confidence knowing you're getting top-rated services</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>📱 Easy Management</h4>
+                        <p>Track bookings, manage favorites, and communicate seamlessly</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Professional Side (Right) -->
+            <div class="professional-side">
+                <h2>Are You a Professional?</h2>
+                <p>Join our network of trusted service providers and grow your business with Task Masters</p>
+                
+                <a href="service-provider-login.html" class="professional-login-btn">Professional Login</a>
+                
+                <div class="professional-features">
+                    <ul>
+                        <li>Access thousands of potential customers</li>
+                        <li>Manage your schedule and bookings easily</li>
+                        <li>Track earnings and get paid securely</li>
+                        <li>Build your reputation with reviews</li>
+                        <li>Flexible work on your own terms</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services-browse.html">Services</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="help.html">Help Center</a></li>
+                    <li><a href="safety.html">Safety</a></li>
+                    <li><a href="terms.html">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        function showLoginForm() {
+            document.getElementById('authOptions').style.display = 'none';
+            document.getElementById('loginForm').classList.add('active');
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('loginError').classList.remove('show');
+        }
+        
+        function showRegisterForm() {
+            document.getElementById('authOptions').style.display = 'none';
+            document.getElementById('registerForm').classList.add('active');
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerError').classList.remove('show');
+        }
+        
+        function hideAuthForms() {
+            document.getElementById('authOptions').style.display = 'flex';
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('registerError').classList.remove('show');
+        }
+        
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            console.log('Login attempt:', email);
+            
+            // Get all stored users
+            const storedUsers = JSON.parse(localStorage.getItem('customerUsers') || '[]');
+            console.log('Found users in database:', storedUsers.length);
+            console.log('Users:', storedUsers.map(u => u.email));
+            
+            if (storedUsers.length === 0) {
+                errorDiv.textContent = 'No account found. Please register first.';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            // Find user by email
+            const user = storedUsers.find(u => u.email === email);
+            
+            if (!user) {
+                errorDiv.textContent = 'No account found with this email. Please register first.';
+                errorDiv.classList.add('show');
+                console.log('User not found for email:', email);
+                return;
+            }
+            
+            // Check password
+            if (user.password === password) {
+                console.log('Login successful for:', user.email);
+                console.log('Setting user data:', user);
+                
+                // Clear any old user data first
+                localStorage.removeItem('customerUser');
+                
+                // Set current logged-in user with fresh data
+                localStorage.setItem('customerUser', JSON.stringify(user));
+                localStorage.setItem('customerLoggedIn', 'true');
+                
+                // Verify it was set correctly
+                const verifyUser = JSON.parse(localStorage.getItem('customerUser'));
+                console.log('Verified stored user:', verifyUser);
+                
+                // Small delay to ensure localStorage is updated
+                setTimeout(function() {
+                    // Redirect to dashboard
+                    window.location.href = 'customer-dashboard.html';
+                }, 100);
+            } else {
+                errorDiv.textContent = 'Invalid password. Please try again.';
+                errorDiv.classList.add('show');
+                console.log('Invalid password for:', email);
+            }
+        }
+        
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const errorDiv = document.getElementById('registerError');
+            
+            console.log('Registration attempt:', { name, email });
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Passwords do not match. Please try again.';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            // Get all stored users
+            const storedUsers = JSON.parse(localStorage.getItem('customerUsers') || '[]');
+            console.log('Existing users:', storedUsers.length);
+            
+            // Check if email already exists
+            const existingUser = storedUsers.find(u => u.email === email);
+            if (existingUser) {
+                errorDiv.textContent = 'An account with this email already exists. Please login.';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            // Create new user data
+            const newUser = {
+                id: Date.now(), // Unique ID
+                name: name,
+                email: email,
+                password: password,
+                registeredAt: new Date().toISOString()
+            };
+            
+            // Add to users array
+            storedUsers.push(newUser);
+            localStorage.setItem('customerUsers', JSON.stringify(storedUsers));
+            console.log('User registered successfully:', newUser.email);
+            console.log('Total users now:', storedUsers.length);
+            
+            // Clear any old user data first
+            localStorage.removeItem('customerUser');
+            
+            // Set as current logged-in user with fresh data
+            localStorage.setItem('customerUser', JSON.stringify(newUser));
+            localStorage.setItem('customerLoggedIn', 'true');
+            
+            // Verify it was set correctly
+            const verifyUser = JSON.parse(localStorage.getItem('customerUser'));
+            console.log('Verified stored user:', verifyUser);
+            
+            // Small delay to ensure localStorage is updated
+            setTimeout(function() {
+                // Redirect to dashboard
+                window.location.href = 'customer-dashboard.html';
+            }, 100);
+        }
+    </script>
+</body>
+</html>

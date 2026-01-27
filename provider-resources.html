@@ -28,6 +28,14 @@
             } catch(e) {}
         })();
     </script>
+    <script>
+        (function() {
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'service-provider-login.html';
+            }
+        })();
+    </script>
 </head>
 <body>
     <!-- Navigation Bar -->

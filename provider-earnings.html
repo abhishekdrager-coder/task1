@@ -14,6 +14,14 @@
         /* Force page to never cache */
         html { -webkit-transform: translateZ(0); transform: translateZ(0); }
     </style>
+    <script>
+        (function() {
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'service-provider-login.html';
+            }
+        })();
+    </script>
 </head>
 <body>
     <!-- Navigation -->

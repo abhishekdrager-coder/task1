@@ -6,6 +6,15 @@
     <title>Provider Dashboard - Task Masters</title>
     <link rel="stylesheet" href="styles.css?v=7.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Check if provider is logged in
+        (function() {
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'service-provider-login.html';
+            }
+        })();
+    </script>
 </head>
 <body>
     <!-- Modern Top Navigation -->
@@ -81,7 +90,7 @@
                     <i class="fas fa-chevron-right nav-arrow"></i>
                 </a>
                 <div class="sidebar-divider"></div>
-                <a href="index.html" class="modern-nav-item">
+                <a href="#" onclick="handleLogout('provider'); return false;" class="modern-nav-item">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                     <i class="fas fa-chevron-right nav-arrow"></i>
@@ -1406,8 +1415,23 @@
         </div>
     </div>
 
+    <script src="script.js"></script>
     <script src="dashboard.js?v=7.0"></script>
     <script src="calendar.js?v=7.0"></script>
     <script src="portfolio.js?v=1.0"></script>
+    
+    <script>
+        // Ensure handleLogout is defined and working
+        if (typeof handleLogout === 'undefined') {
+            console.log('handleLogout not found, defining it now');
+            function handleLogout(userType) {
+                // Clear all auth data
+                localStorage.removeItem(userType + 'Auth');
+                sessionStorage.removeItem(userType + 'Auth');
+                // Redirect to home
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
 </body>
 </html>

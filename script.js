@@ -287,11 +287,33 @@ function handleProviderLogin(event) {
 
 function handleProviderRegister(event) {
     event.preventDefault();
-    const email = document.querySelector('#registerTab input[type="email"]')?.value;
-    const rememberMe = true; // Auto-remember new registrations
+    
+    // Get form values using the IDs we added
+    const fullName = document.getElementById('regFullName')?.value;
+    const email = document.getElementById('regEmail')?.value;
+    const phone = document.getElementById('regPhone')?.value;
+    const password = document.getElementById('regPassword')?.value;
+    const category = document.getElementById('regCategory')?.value;
+    const experience = document.getElementById('regExperience')?.value;
+    const city = document.getElementById('regCity')?.value;
+    
+    // Create provider profile
+    const providerProfile = {
+        fullName: fullName,
+        email: email,
+        phone: phone,
+        category: category,
+        experience: experience,
+        city: city,
+        registeredAt: new Date().toISOString()
+    };
+    
+    // Save provider profile to localStorage
+    localStorage.setItem('providerProfile', JSON.stringify(providerProfile));
     
     // Save login state
-    Auth.login('provider', { email: email }, rememberMe);
+    const rememberMe = true; // Auto-remember new registrations
+    Auth.login('provider', { email: email, fullName: fullName }, rememberMe);
     
     window.location.href = 'provider.html';
 }

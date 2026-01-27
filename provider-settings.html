@@ -63,6 +63,14 @@
             }
         })();
     </script>
+    <script>
+        (function() {
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'service-provider-login.html';
+            }
+        })();
+    </script>
 </head>
 <body>
     <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0;">

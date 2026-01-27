@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="styles.css?v=15.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        (function() {
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'service-provider-login.html';
+            }
+        })();
+    </script>
     <style>
         * {
             margin: 0;
@@ -857,181 +865,6 @@
                 }
             }
         });
-    </script>
-</body>
-</html>
-                <div style="font-size: 2.5em; font-weight: bold; margin: 10px 0;" id="monthJobs">0</div>
-                <div style="font-size: 0.85em; opacity: 0.8;">Jobs completed</div>
-            </div>
-        </div>
-
-        <!-- All Charts in Single View -->
-        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
-            <h3 style="margin: 0 0 25px 0; color: #2c3e50;">📊 Sales by Day of Week</h3>
-            <canvas id="salesByDayChart" height="60"></canvas>
-        </div>
-
-        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
-            <h3 style="margin: 0 0 25px 0; color: #2c3e50;">📈 Monthly Performance</h3>
-            <canvas id="monthlyTrendChart" height="60"></canvas>
-        </div>
-
-        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
-            <h3 style="margin: 0 0 25px 0; color: #2c3e50;">🕐 Average Job Duration by Service</h3>
-            <canvas id="avgJobLengthChart" height="60"></canvas>
-        </div>
-
-        <!-- Top Customers Table -->
-        <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
-            <h3 style="margin: 0 0 25px 0; color: #2c3e50;">🌟 Top Customers by Business</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background: #f5f5f5; text-align: left;">
-                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Rank</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Customer Name</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Total Jobs</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Total Spent</th>
-                        <th style="padding: 15px; border-bottom: 2px solid #e0e0e0;">Avg Rating</th>
-                    </tr>
-                </thead>
-                <tbody id="topCustomersTable">
-                    <tr>
-                        <td colspan="5" style="padding: 20px; text-align: center; color: #999;">No customer data yet. Complete jobs to see your top customers!</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <script>
-        // Generate sample data for demonstration
-        const data = generateSampleData();
-
-        // Update summary cards
-        document.getElementById('totalJobs').textContent = data.totalJobs;
-        document.getElementById('totalEarnings').textContent = '$' + data.totalEarnings.toLocaleString();
-        document.getElementById('avgDuration').textContent = data.avgDuration + 'h';
-        document.getElementById('monthJobs').textContent = data.monthJobs;
-
-        // Sales by Day Chart (Line)
-        new Chart(document.getElementById('salesByDayChart'), {
-            type: 'line',
-            data: {
-                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                datasets: [{
-                    label: 'Jobs Completed',
-                    data: data.salesByDay,
-                    borderColor: 'rgba(102, 126, 234, 1)',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 5,
-                    pointHoverRadius: 7
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: true }
-                },
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-
-        // Monthly Trend Chart
-        new Chart(document.getElementById('monthlyTrendChart'), {
-            type: 'line',
-            data: {
-                labels: data.months,
-                datasets: [{
-                    label: 'Revenue ($)',
-                    data: data.monthlyRevenue,
-                    borderColor: 'rgba(102, 126, 234, 1)',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: true }
-                },
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-
-        // Average Job Length Chart (Line)
-        new Chart(document.getElementById('avgJobLengthChart'), {
-            type: 'line',
-            data: {
-                labels: data.serviceTypes.map(s => s.name),
-                datasets: [{
-                    label: 'Hours',
-                    data: data.avgJobLengths,
-                    borderColor: 'rgba(76, 175, 80, 1)',
-                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 5,
-                    pointHoverRadius: 7
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: true }
-                },
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-
-        // Top Customers Table
-        if (data.topCustomers.length > 0) {
-            const tbody = document.getElementById('topCustomersTable');
-            tbody.innerHTML = data.topCustomers.map((customer, index) => `
-                <tr style="border-bottom: 1px solid #f0f0f0;">
-                    <td style="padding: 15px; font-weight: bold; color: ${index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : index === 2 ? '#CD7F32' : '#666'};">
-                        ${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
-                    </td>
-                    <td style="padding: 15px;">${customer.name}</td>
-                    <td style="padding: 15px;">${customer.jobs}</td>
-                    <td style="padding: 15px; font-weight: 600;">$${customer.spent.toLocaleString()}</td>
-                    <td style="padding: 15px;">⭐ ${customer.rating.toFixed(1)}</td>
-                </tr>
-            `).join('');
-        }
-
-        function generateSampleData() {
-            // Return empty data - will be populated with real data from bookings
-            return {
-                totalJobs: 0,
-                totalEarnings: 0,
-                avgDuration: 0,
-                monthJobs: 0,
-                salesByDay: [0, 0, 0, 0, 0, 0, 0],
-                serviceTypes: [
-                    { name: 'Cleaning', value: 0 },
-                    { name: 'Plumbing', value: 0 },
-                    { name: 'Electrical', value: 0 },
-                    { name: 'Carpentry', value: 0 },
-                    { name: 'Other', value: 0 }
-                ],
-                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                monthlyRevenue: [0, 0, 0, 0, 0, 0],
-                avgJobLengths: [0, 0, 0, 0, 0],
-                topCustomers: []
-            };
-        }
     </script>
 
     <!-- Footer -->

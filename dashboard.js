@@ -908,3 +908,18 @@ function handleDroppedFile(file) {
     
     reader.readAsDataURL(file);
 }
+
+// Logout function
+function handleLogout(userType) {
+    if (userType === 'customer') {
+        // Clear customer login status
+        localStorage.removeItem('customerLoggedIn');
+        // Redirect to login page
+        window.location.href = 'login.html';
+    } else if (userType === 'provider') {
+        // Clear provider login status
+        localStorage.removeItem('providerLoggedIn');
+        // Redirect to provider login page
+        window.location.href = 'service-provider-login.html';
+    }
+}

@@ -51,8 +51,7 @@
                 <a href="services-browse.html">Services</a>
                 <a href="#how-it-works">How it Works</a>
                 <a href="#about">About</a>
-                <a href="service-provider-login.html" class="btn-provider" id="providerBtn">Become a Provider</a>
-                <button class="btn-login" id="loginBtn" onclick="showCustomerLogin()">Login</button>
+                <button class="btn-login" id="loginBtn" onclick="window.location.href='login.html'" style="padding: 12px 30px; font-size: 16px;">Login</button>
             </div>
         </div>
     </nav>
@@ -429,7 +428,7 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Customer Login</h2>
+            <h2>Login</h2>
             <form class="login-form" onsubmit="handleCustomerLogin(event)">
                 <input type="email" id="customerEmail" placeholder="Email Address" required />
                 <input type="password" id="customerPassword" placeholder="Password" required />

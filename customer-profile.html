@@ -73,6 +73,15 @@
                 console.error('Error loading dark mode:', e);
             }
         })();
+        
+        // Check if user is logged in
+        (function() {
+            const isLoggedIn = localStorage.getItem('customerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+            }
+        })();
     </script>
 </head>
 <body>
@@ -672,39 +681,23 @@
         // Load existing profile data
         function loadProfileData() {
             try {
-                const data = JSON.parse(localStorage.getItem('customerProfile') || '{}');
+                // Get the currently logged-in user data
+                const userData = JSON.parse(localStorage.getItem('customerUser') || '{}');
+                console.log('Loading profile for user:', userData);
                 
                 // Load basic info
-                if (data.name) document.getElementById('customerName').value = data.name;
-                if (data.phone) document.getElementById('customerPhone').value = data.phone;
-                if (data.location) document.getElementById('customerLocation').value = data.location;
+                if (userData.name) document.getElementById('customerName').value = userData.name;
+                if (userData.email) document.getElementById('customerEmail').value = userData.email;
+                if (userData.phone) document.getElementById('customerPhone').value = userData.phone;
+                if (userData.location) document.getElementById('customerLocation').value = userData.location;
                 
-                // Check for registered email from multiple sources
-                let registeredEmail = data.email;
-                if (!registeredEmail) {
-                    // Check if email was saved during registration
-                    const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
-                    registeredEmail = customerData.email;
-                }
-                if (!registeredEmail) {
-                    // Check if email was saved in user session
-                    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                    registeredEmail = userData.email;
-                }
-                
-                // Auto-fill email if found
-                if (registeredEmail) {
-                    document.getElementById('customerEmail').value = registeredEmail;
-                    validateField('email');
-                }
-                
-                // Load address fields
-                if (data.houseNumber) document.getElementById('houseNumber').value = data.houseNumber;
-                if (data.apartmentNumber) document.getElementById('apartmentNumber').value = data.apartmentNumber;
-                if (data.streetName) document.getElementById('streetName').value = data.streetName;
-                if (data.city) document.getElementById('city').value = data.city;
-                if (data.province) document.getElementById('province').value = data.province;
-                if (data.postalCode) document.getElementById('postalCode').value = data.postalCode;
+                // Load address details if they exist
+                if (userData.houseNumber) document.getElementById('houseNumber').value = userData.houseNumber;
+                if (userData.apartmentNumber) document.getElementById('apartmentNumber').value = userData.apartmentNumber;
+                if (userData.streetName) document.getElementById('streetName').value = userData.streetName;
+                if (userData.city) document.getElementById('city').value = userData.city;
+                if (userData.province) document.getElementById('province').value = userData.province;
+                if (userData.postalCode) document.getElementById('postalCode').value = userData.postalCode;
                 
                 // Hide error messages for filled required fields
                 validateField('customerName');
@@ -808,7 +801,12 @@
                 return false;
             }
             
-            const profileData = {
+            // Get the current user data
+            const currentUser = JSON.parse(localStorage.getItem('customerUser') || '{}');
+            
+            // Update user data with new profile info
+            const updatedUser = {
+                ...currentUser,
                 name: name,
                 email: email,
                 phone: document.getElementById('customerPhone').value.trim(),
@@ -821,8 +819,17 @@
                 postalCode: postalCode.toUpperCase()
             };
             
-            // Save to localStorage
-            localStorage.setItem('customerProfile', JSON.stringify(profileData));
+            // Save to current user
+            localStorage.setItem('customerUser', JSON.stringify(updatedUser));
+            
+            // Update in the users array
+            const allUsers = JSON.parse(localStorage.getItem('customerUsers') || '[]');
+            const userIndex = allUsers.findIndex(u => u.id === currentUser.id || u.email === currentUser.email);
+            if (userIndex !== -1) {
+                allUsers[userIndex] = updatedUser;
+                localStorage.setItem('customerUsers', JSON.stringify(allUsers));
+                console.log('Updated user in array:', updatedUser);
+            }
             
             alert('✅ Profile saved successfully!');
             

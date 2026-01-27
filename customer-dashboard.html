@@ -83,6 +83,69 @@
                 console.error('Error loading dark mode:', e);
             }
         })();
+        
+        // Check if user is logged in
+        (function() {
+            const isLoggedIn = localStorage.getItem('customerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+            }
+        })();
+        
+        // Load and display customer user data
+        window.addEventListener('DOMContentLoaded', function() {
+            // Force reload user data from localStorage
+            const userData = JSON.parse(localStorage.getItem('customerUser') || '{}');
+            console.log('Loading dashboard for user:', userData);
+            
+            if (!userData || !userData.name || !userData.email) {
+                console.error('No valid user data found, redirecting to login');
+                localStorage.removeItem('customerLoggedIn');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            console.log('User Name:', userData.name);
+            console.log('User Email:', userData.email);
+            
+            // Update all name displays
+            const displayName = document.getElementById('displayName');
+            if (displayName) {
+                displayName.textContent = userData.name;
+                console.log('Updated displayName to:', userData.name);
+            }
+            
+            const userNameNav = document.querySelector('.user-name-nav');
+            if (userNameNav) {
+                userNameNav.textContent = userData.name;
+                console.log('Updated userNameNav to:', userData.name);
+            }
+            
+            const dropdownName = document.querySelector('.user-dropdown h3');
+            if (dropdownName) {
+                dropdownName.textContent = userData.name;
+                console.log('Updated dropdownName to:', userData.name);
+            }
+            
+            // Update email display
+            const displayEmail = document.getElementById('displayEmail');
+            if (displayEmail) {
+                displayEmail.textContent = userData.email;
+                console.log('Updated displayEmail to:', userData.email);
+            }
+            
+            const dropdownEmail = document.querySelector('.user-dropdown p');
+            if (dropdownEmail) {
+                dropdownEmail.textContent = userData.email;
+                console.log('Updated dropdownEmail to:', userData.email);
+            }
+            
+            // Call the loadCustomerData function to handle other data
+            if (typeof loadCustomerData === 'function') {
+                loadCustomerData();
+            }
+        });
     </script></head>
 <body>
     <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0;">
@@ -123,7 +186,7 @@
                         <div style="padding: 20px; border-bottom: 1px solid #e9ecef; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <div style="width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8em;">👤</div>
-                                <div>
+                                <div style="flex: 1; min-width: 0;">
                                     <p style="margin: 0; color: white; font-weight: 600; font-size: 15px;">Customer</p>
                                     <p style="margin: 3px 0 0 0; color: rgba(255,255,255,0.8); font-size: 12px;">Service Customer</p>
                                 </div>
@@ -355,81 +418,71 @@
             }
         });
 
-        // Load customer data
+        // Load customer data - FIXED to use customerUser
         function loadCustomerData() {
             try {
-                const customerData = JSON.parse(localStorage.getItem('customerProfile') || '{}');
+                // Get the currently logged-in user data
+                const userData = JSON.parse(localStorage.getItem('customerUser') || '{}');
+                console.log('loadCustomerData: Loading user:', userData);
                 
-                if (customerData.name) {
+                if (userData.name) {
                     // Extract first name for the welcome message
-                    const firstName = customerData.name.split(' ')[0];
-                    document.getElementById('displayName').textContent = firstName;
+                    const firstName = userData.name.split(' ')[0];
+                    const displayNameEl = document.getElementById('displayName');
+                    if (displayNameEl) {
+                        displayNameEl.textContent = firstName;
+                        console.log('loadCustomerData: Set displayName to:', firstName);
+                    }
                 }
                 
-                if (customerData.email) {
-                    document.getElementById('displayEmail').textContent = customerData.email;
+                if (userData.email) {
+                    const displayEmailEl = document.getElementById('displayEmail');
+                    if (displayEmailEl) {
+                        displayEmailEl.textContent = userData.email;
+                        console.log('loadCustomerData: Set displayEmail to:', userData.email);
+                    }
                 }
                 
-                if (customerData.location) {
-                    document.getElementById('displayLocation').textContent = customerData.location;
+                // Check if location exists in user data
+                const locationEl = document.getElementById('displayLocation');
+                if (locationEl && userData.location) {
+                    locationEl.textContent = userData.location;
+                } else if (locationEl) {
+                    locationEl.textContent = 'Not set';
                 }
                 
                 // Load bookings data (placeholder)
                 const bookingsData = JSON.parse(localStorage.getItem('customerBookings') || '[]');
-                document.getElementById('activeBookings').textContent = bookingsData.filter(b => b.status === 'active').length || 0;
-                document.getElementById('completedBookings').textContent = bookingsData.filter(b => b.status === 'completed').length || 0;
+                const activeBookingsEl = document.getElementById('activeBookings');
+                const completedBookingsEl = document.getElementById('completedBookings');
+                
+                if (activeBookingsEl) {
+                    activeBookingsEl.textContent = bookingsData.filter(b => b.status === 'active').length || 0;
+                }
+                if (completedBookingsEl) {
+                    completedBookingsEl.textContent = bookingsData.filter(b => b.status === 'completed').length || 0;
+                }
                 
             } catch(e) {
                 console.error('Error loading customer data:', e);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCustomerData();
-        });
+        // DO NOT call loadCustomerData here - it's handled in the head script
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     loadCustomerData();
+        // });
 
-        window.onload = function() {
-            setTimeout(loadCustomerData, 100);
-        };
+        // DO NOT use window.onload - it conflicts with DOMContentLoaded in head
+        // window.onload = function() {
+        //     setTimeout(loadCustomerData, 100);
+        // };
         
-        // IMMEDIATE EXECUTION - Load data right away
-        (function() {
-            const data = JSON.parse(localStorage.getItem('customerProfile') || '{}');
-            
-            setTimeout(function() {
-                // Update name
-                if (data.name) {
-                    const firstName = data.name.split(' ')[0];
-                    const nameEl = document.getElementById('displayName');
-                    if (nameEl) {
-                        nameEl.textContent = firstName;
-                    }
-                }
-                
-                // Update email
-                if (data.email) {
-                    const emailEl = document.getElementById('displayEmail');
-                    if (emailEl) {
-                        emailEl.textContent = data.email;
-                    }
-                }
-                
-                // Update location
-                if (data.location) {
-                    const locEl = document.getElementById('displayLocation');
-                    if (locEl) {
-                        locEl.textContent = data.location;
-                    }
-                }
-                
-                // Update nav name
-                const navName = document.querySelector('.user-name-nav');
-                if (navName && data.name) {
-                    const firstName = data.name.split(' ')[0];
-                    navName.textContent = firstName;
-                }
-            }, 50);
-        })();
+        // REMOVED - This was loading from wrong source (customerProfile)
+        // (function() {
+        //     const data = JSON.parse(localStorage.getItem('customerProfile') || '{}');
+        //     ...old code removed...
+        // })();
     </script>
     
     <script src="dashboard.js"></script>

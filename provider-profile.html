@@ -73,6 +73,14 @@
                 console.error('Error loading dark mode:', e);
             }
         })();
+        
+        // Check if provider is logged in
+        (function() {
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'service-provider-login.html';
+            }
+        })();
     </script>
 </head>
 <body>

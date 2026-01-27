@@ -62,6 +62,14 @@
                 console.error('Error loading dark mode:', e);
             }
         })();
+        
+        // Check if user is logged in
+        (function() {
+            const isLoggedIn = localStorage.getItem('customerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'login.html';
+            }
+        })();
     </script>
 </head>
 <body>

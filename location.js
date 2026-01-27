@@ -142,8 +142,6 @@ const LocationService = {
         'L2V': { city: 'St. Catharines', province: 'Ontario', country: 'Canada', lat: 43.1594, lng: -79.2469 },
         'L2W': { city: 'St. Catharines', province: 'Ontario', country: 'Canada', lat: 43.1594, lng: -79.2469 },
         'L0S': { city: 'Niagara Falls', province: 'Ontario', country: 'Canada', lat: 43.0896, lng: -79.0849 },
-        'L2E': { city: 'Niagara Falls', province: 'Ontario', country: 'Canada', lat: 43.0896, lng: -79.0849 },
-        'L2G': { city: 'Niagara Falls', province: 'Ontario', country: 'Canada', lat: 43.0896, lng: -79.0849 },
         'L2H': { city: 'Niagara Falls', province: 'Ontario', country: 'Canada', lat: 43.0896, lng: -79.0849 },
         'L2J': { city: 'Niagara Falls', province: 'Ontario', country: 'Canada', lat: 43.0896, lng: -79.0849 },
         'L3K': { city: 'Welland', province: 'Ontario', country: 'Canada', lat: 42.9834, lng: -79.2482 },
