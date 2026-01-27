@@ -197,6 +197,22 @@ console.log('   - wasAutoCorrected:', wasAutoCorrected);
 // Load page
 window.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Page loaded, calling loadServiceProviders()');
+    
+    // Populate location field with user's actual location
+    const locationInput = document.getElementById('locationInput');
+    const userLocation = LocationService.getLocation();
+    
+    if (locationInput) {
+        if (userLocation) {
+            locationInput.value = LocationService.formatLocation(userLocation);
+            console.log('📍 Location field populated:', locationInput.value);
+        } else {
+            locationInput.value = 'Set your location';
+            locationInput.style.color = '#999';
+            console.log('⚠️ No location set');
+        }
+    }
+    
     loadServiceProviders();
 });
 
@@ -256,9 +272,12 @@ function loadServiceProviders() {
         locationBanner.innerHTML = `
             <div style="display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 24px;">📍</span>
-                <span style="font-weight: 600;">Showing providers near: ${LocationService.formatLocation(userLocation)}</span>
+                <div>
+                    <div style="font-weight: 600; font-size: 16px;">Your Area: ${LocationService.formatLocation(userLocation)}</div>
+                    <div style="font-size: 13px; opacity: 0.9; margin-top: 4px;">Showing ${formattedService.toLowerCase()} providers in ${userLocation.city}</div>
+                </div>
             </div>
-            <button onclick="changeLocation()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 14px;">
+            <button onclick="changeLocation()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
                 Change Location
             </button>
         `;

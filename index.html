@@ -461,10 +461,29 @@
                     <span>Use My Current Location</span>
                 </button>
                 
+                <p style="color: #999; font-size: 12px; text-align: center; margin: -5px 0 5px 0; line-height: 1.4;">
+                    Your browser will ask for permission to access your location
+                </p>
+                
                 <div style="text-align: center; color: #999; font-size: 14px; margin: 10px 0;">OR</div>
                 
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 10px;">Enter Postal Code / ZIP Code</label>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 10px;">🏙️ Search by City</label>
+                    <div style="position: relative;">
+                        <input type="text" id="citySearchInput" placeholder="e.g., Toronto, Vancouver, New York" 
+                            style="width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;"
+                            oninput="searchCities(this.value)" 
+                            onfocus="searchCities(this.value)"
+                            autocomplete="off" />
+                        <div id="citySuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #4A90E2; border-top: none; border-radius: 0 0 8px 8px; max-height: 250px; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000;"></div>
+                    </div>
+                    <div id="citySearchResult" style="margin-top: 10px; font-size: 14px;"></div>
+                </div>
+
+                <div style="text-align: center; color: #999; font-size: 14px; margin: 10px 0;">OR</div>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 10px;">📮 Enter Postal Code / ZIP Code</label>
                     <div style="display: flex; gap: 10px;">
                         <input type="text" id="postalCodeInput" placeholder="e.g., M5H 2N2 or 10001" 
                             style="flex: 1; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;"
@@ -714,7 +733,23 @@
 
         // Location Functions
         function checkAndShowLocationModal() {
-            if (!LocationService.hasLocation()) {
+            // Check if user has 'always' permission and update location
+            const trackAlways = localStorage.getItem('trackLocationAlways');
+            const hasLocation = LocationService.hasLocation();
+            
+            if (trackAlways === 'true' && hasLocation) {
+                // Silently update location in background
+                LocationService.requestPreciseLocation()
+                    .then(location => {
+                        console.log('🔄 Location updated automatically:', LocationService.formatLocation(location));
+                        updateLocationDisplay();
+                    })
+                    .catch(error => {
+                        console.log('⚠️ Auto-update failed, using stored location');
+                    });
+            }
+            
+            if (!hasLocation) {
                 console.log('📍 No location set, showing modal...');
                 setTimeout(() => {
                     document.getElementById('locationModal').style.display = 'flex';
@@ -768,21 +803,136 @@
             const modal = document.getElementById('locationModal');
             const resultDiv = document.getElementById('postalCodeResult');
             
-            try {
-                resultDiv.innerHTML = '<div style="color: #2196F3;">🔄 Requesting location permission...</div>';
+            // Check if site is running on HTTPS (required for geolocation)
+            if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && !window.location.hostname.startsWith('127.0.0.1')) {
+                resultDiv.innerHTML = `
+                    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                        <div style="color: #856404; font-weight: 600; margin-bottom: 8px;">🔒 HTTPS Required</div>
+                        <div style="color: #856404; font-size: 14px; line-height: 1.5;">
+                            Browser location access requires a secure (HTTPS) connection. Please enter your postal code instead.
+                        </div>
+                    </div>
+                `;
                 
+                // Focus on postal code input
+                const postalInput = document.getElementById('postalCodeInput');
+                if (postalInput) {
+                    setTimeout(() => {
+                        postalInput.focus();
+                        postalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                }
+                return;
+            }
+            
+            // Check if geolocation is supported
+            if (!navigator.geolocation) {
+                resultDiv.innerHTML = `
+                    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                        <div style="color: #856404; font-weight: 600; margin-bottom: 8px;">⚠️ Not Supported</div>
+                        <div style="color: #856404; font-size: 14px; line-height: 1.5;">
+                            Your browser doesn't support geolocation. Please enter your postal code instead.
+                        </div>
+                    </div>
+                `;
+                
+                // Focus on postal code input
+                const postalInput = document.getElementById('postalCodeInput');
+                if (postalInput) {
+                    setTimeout(() => {
+                        postalInput.focus();
+                        postalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                }
+                return;
+            }
+            
+            // CRITICAL FIX: Request browser geolocation IMMEDIATELY on user click
+            // Browsers require geolocation API to be called directly from user gesture
+            try {
+                resultDiv.innerHTML = '<div style="color: #2196F3;">🔄 Requesting location permission from your browser...</div>';
+                
+                // Call the browser's geolocation API DIRECTLY
                 const location = await LocationService.requestPreciseLocation();
                 
-                resultDiv.innerHTML = `<div style="color: #28a745; font-weight: 600;">✅ Location set: ${LocationService.formatLocation(location)}</div>`;
+                // Success! Show options for remembering preference
+                resultDiv.innerHTML = `
+                    <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                        <div style="color: #155724; font-weight: 600; margin-bottom: 8px;">✅ Location Detected</div>
+                        <div style="color: #155724; font-size: 14px; margin-bottom: 15px;">
+                            ${LocationService.formatLocation(location)}
+                        </div>
+                        <div style="color: #155724; font-size: 13px; margin-top: 10px;">
+                            Would you like us to remember this for next time?
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button onclick="saveLocationPreference('always')" 
+                                    style="flex: 1; background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Yes, Remember
+                            </button>
+                            <button onclick="saveLocationPreference('once')" 
+                                    style="flex: 1; background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                Just This Once
+                            </button>
+                        </div>
+                    </div>
+                `;
                 
+                // Auto-close after 3 seconds if user doesn't choose
                 setTimeout(() => {
-                    modal.style.display = 'none';
-                    updateLocationDisplay();
-                }, 1500);
+                    if (modal.style.display !== 'none') {
+                        saveLocationPreference('once');
+                    }
+                }, 3000);
                 
             } catch (error) {
-                resultDiv.innerHTML = `<div style="color: #dc3545;">❌ ${error.message}. Please enter your postal code instead.</div>`;
+                console.log('❌ Geolocation error:', error);
+                
+                // Handle different error types
+                let errorMessage = '';
+                let errorIcon = '⚠️';
+                
+                if (error.code === 1) {
+                    errorMessage = 'You denied location access in your browser. Please enter your postal code instead or refresh and allow location when prompted.';
+                    errorIcon = '🚫';
+                } else if (error.code === 2) {
+                    errorMessage = 'Location unavailable. Your device could not determine your location. Please enter your postal code instead.';
+                } else if (error.code === 3) {
+                    errorMessage = 'Location request timed out. Please check your internet connection or enter your postal code instead.';
+                } else {
+                    errorMessage = error.message || 'Unable to get location. Please enter your postal code instead.';
+                }
+                
+                resultDiv.innerHTML = `
+                    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                        <div style="color: #856404; font-weight: 600; margin-bottom: 8px;">${errorIcon} Location Not Available</div>
+                        <div style="color: #856404; font-size: 14px; line-height: 1.5;">${errorMessage}</div>
+                    </div>
+                `;
+                
+                // Focus on postal code input
+                const postalInput = document.getElementById('postalCodeInput');
+                if (postalInput) {
+                    setTimeout(() => {
+                        postalInput.focus();
+                        postalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                }
             }
+        }
+
+        function saveLocationPreference(preference) {
+            const modal = document.getElementById('locationModal');
+            
+            // Store preference
+            localStorage.setItem('locationPermission', preference);
+            localStorage.setItem('trackLocationAlways', preference === 'always' ? 'true' : 'false');
+            
+            // Close modal and update display
+            modal.style.display = 'none';
+            updateLocationDisplay();
+            
+            console.log('📍 Location preference saved:', preference);
         }
 
         function submitPostalCode() {
@@ -857,6 +1007,195 @@
                 if (navLinks && menuToggle) {
                     navLinks.classList.remove('active');
                     menuToggle.classList.remove('active');
+                }
+            });
+        });
+
+        // City Search Functionality with Autocomplete and Spell Correction
+        let allCities = [];
+        
+        // Extract unique cities from postal code database
+        function buildCityDatabase() {
+            const cityMap = new Map();
+            const db = LocationService.postalCodeDatabase;
+            
+            for (let code in db) {
+                const entry = db[code];
+                const city = entry.city;
+                const region = entry.province || entry.state;
+                const country = entry.country;
+                const key = `${city}|${region}|${country}`;
+                
+                if (!cityMap.has(key)) {
+                    cityMap.set(key, {
+                        city: city,
+                        region: region,
+                        country: country,
+                        lat: entry.lat,
+                        lng: entry.lng,
+                        postalCode: code
+                    });
+                }
+            }
+            
+            allCities = Array.from(cityMap.values());
+            console.log('📍 City database built:', allCities.length, 'unique cities');
+        }
+        
+        // Calculate Levenshtein distance for spell correction
+        function levenshteinDistance(str1, str2) {
+            const len1 = str1.length;
+            const len2 = str2.length;
+            const matrix = Array(len1 + 1).fill(null).map(() => Array(len2 + 1).fill(0));
+            
+            for (let i = 0; i <= len1; i++) matrix[i][0] = i;
+            for (let j = 0; j <= len2; j++) matrix[0][j] = j;
+            
+            for (let i = 1; i <= len1; i++) {
+                for (let j = 1; j <= len2; j++) {
+                    const cost = str1[i - 1].toLowerCase() === str2[j - 1].toLowerCase() ? 0 : 1;
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j - 1] + cost
+                    );
+                }
+            }
+            
+            return matrix[len1][len2];
+        }
+        
+        // Search cities with fuzzy matching
+        function searchCities(query) {
+            const suggestionsDiv = document.getElementById('citySuggestions');
+            const resultDiv = document.getElementById('citySearchResult');
+            
+            if (!query || query.trim().length < 2) {
+                suggestionsDiv.style.display = 'none';
+                resultDiv.innerHTML = '';
+                return;
+            }
+            
+            const searchTerm = query.trim().toLowerCase();
+            let matches = [];
+            
+            // Find matches with scoring
+            allCities.forEach(cityData => {
+                const cityLower = cityData.city.toLowerCase();
+                const distance = levenshteinDistance(searchTerm, cityLower);
+                const maxLen = Math.max(searchTerm.length, cityLower.length);
+                const similarity = ((maxLen - distance) / maxLen) * 100;
+                
+                // Boost exact prefix matches
+                let score = similarity;
+                if (cityLower.startsWith(searchTerm)) {
+                    score += 50;
+                }
+                
+                // Include partial matches
+                if (cityLower.includes(searchTerm)) {
+                    score += 25;
+                }
+                
+                // Only include if reasonable match
+                if (score >= 40 || cityLower.includes(searchTerm)) {
+                    matches.push({
+                        ...cityData,
+                        score: score,
+                        distance: distance
+                    });
+                }
+            });
+            
+            // Sort by score (higher is better)
+            matches.sort((a, b) => b.score - a.score);
+            
+            // Limit to top 10 results
+            matches = matches.slice(0, 10);
+            
+            if (matches.length === 0) {
+                suggestionsDiv.style.display = 'none';
+                resultDiv.innerHTML = `<div style="color: #856404; background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    ⚠️ No cities found matching "${query}". Try a different spelling.
+                </div>`;
+                return;
+            }
+            
+            // Display suggestions
+            let html = '';
+            matches.forEach((match, index) => {
+                const displayText = `${match.city}, ${match.region}, ${match.country}`;
+                html += `
+                    <div onclick="selectCity('${match.city}', '${match.region}', '${match.country}', ${match.lat}, ${match.lng}, '${match.postalCode}')" 
+                         style="padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #eee; transition: background 0.2s;"
+                         onmouseover="this.style.background='#f0f7ff'"
+                         onmouseout="this.style.background='white'">
+                        <div style="font-weight: 600; color: #333;">${match.city}</div>
+                        <div style="font-size: 13px; color: #666;">${match.region}, ${match.country}</div>
+                    </div>
+                `;
+            });
+            
+            suggestionsDiv.innerHTML = html;
+            suggestionsDiv.style.display = 'block';
+            resultDiv.innerHTML = '';
+            
+            // Show spell correction hint if needed
+            if (matches[0].distance > 0 && matches[0].distance <= 3) {
+                resultDiv.innerHTML = `<div style="color: #0c5460; background: #d1ecf1; padding: 8px; border-radius: 5px; margin-top: 10px; font-size: 13px;">
+                    💡 Did you mean "<strong>${matches[0].city}</strong>"?
+                </div>`;
+            }
+        }
+        
+        // Select a city from suggestions
+        function selectCity(city, region, country, lat, lng, postalCode) {
+            const modal = document.getElementById('locationModal');
+            const suggestionsDiv = document.getElementById('citySuggestions');
+            const resultDiv = document.getElementById('citySearchResult');
+            const cityInput = document.getElementById('citySearchInput');
+            
+            // Set location
+            const locationData = {
+                type: 'city',
+                city: city,
+                region: region,
+                country: country,
+                lat: lat,
+                lng: lng,
+                postalCode: postalCode,
+                timestamp: Date.now()
+            };
+            
+            LocationService.saveLocation(locationData);
+            
+            // Update UI
+            cityInput.value = `${city}, ${region}`;
+            suggestionsDiv.style.display = 'none';
+            resultDiv.innerHTML = `<div style="color: #155724; background: #d4edda; padding: 10px; border-radius: 5px; margin-top: 10px; font-weight: 600;">
+                ✅ Location set: ${city}, ${region}, ${country}
+            </div>`;
+            
+            // Close modal after 1.5 seconds
+            setTimeout(() => {
+                modal.style.display = 'none';
+                updateLocationDisplay();
+            }, 1500);
+        }
+        
+        // Build city database when location service is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                buildCityDatabase();
+            }, 100);
+            
+            // Close suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                const cityInput = document.getElementById('citySearchInput');
+                const suggestionsDiv = document.getElementById('citySuggestions');
+                
+                if (cityInput && suggestionsDiv && !cityInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+                    suggestionsDiv.style.display = 'none';
                 }
             });
         });
