@@ -117,6 +117,14 @@ task1/
 - **Verified Services**: All service providers are verified
 - **Secure Platform**: Safe and trusted marketplace
 
+## 💻 Development with GitHub Codespaces
+
+Working in GitHub Codespaces? See [CODESPACES_GUIDE.md](./CODESPACES_GUIDE.md) for:
+- Managing context window limits
+- Creating fresh Codespace environments
+- Best practices for development workflow
+- Troubleshooting common issues
+
 ## 📞 Support
 
 For questions or issues, please refer to the project documentation or contact the development team.
