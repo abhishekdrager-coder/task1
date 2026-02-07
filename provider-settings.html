@@ -56,12 +56,22 @@
                 const settings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
                 if (settings.darkMode === true) {
                     document.documentElement.classList.add('dark-mode');
-                    document.body.classList.add('dark-mode');
                 }
             } catch(e) {
                 console.error('Error loading dark mode:', e);
             }
         })();
+        // Apply to body once DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {
+                console.error('Error applying dark mode to body:', e);
+            }
+        });
     </script>
     <script>
         (function() {

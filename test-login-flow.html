@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login Flow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Login Flow Test</h1>
+    
+    <div class="section">
+        <h2>Step 1: Set Login State</h2>
+        <button onclick="setLoginState()">Simulate Login</button>
+        <button onclick="clearLoginState()">Clear Login</button>
+        <div id="setStatus"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Step 2: Check Current State</h2>
+        <button onclick="checkLoginState()">Check State</button>
+        <div id="checkStatus"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Step 3: Navigation Test</h2>
+        <p>After simulating login, click these links to test navigation:</p>
+        <a href="index.html" style="display: inline-block; padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; margin: 5px;">Go to Home</a>
+        <a href="customer-dashboard.html" style="display: inline-block; padding: 10px 20px; background: #17a2b8; color: white; text-decoration: none; border-radius: 5px; margin: 5px;">Go to Dashboard</a>
+    </div>
+    
+    <div class="section">
+        <h2>All localStorage Data</h2>
+        <button onclick="showAllStorage()">Show All Storage</button>
+        <div id="allStorage"></div>
+    </div>
+    
+    <script>
+        function setLoginState() {
+            const testUser = {
+                name: 'Test User',
+                email: 'test@example.com',
+                password: 'test123'
+            };
+            
+            localStorage.setItem('customerUser', JSON.stringify(testUser));
+            localStorage.setItem('customerLoggedIn', 'true');
+            
+            document.getElementById('setStatus').innerHTML = '<div class="status success">✅ Login state set successfully!</div>';
+            checkLoginState();
+        }
+        
+        function clearLoginState() {
+            localStorage.removeItem('customerUser');
+            localStorage.removeItem('customerLoggedIn');
+            
+            document.getElementById('setStatus').innerHTML = '<div class="status info">🗑️ Login state cleared</div>';
+            checkLoginState();
+        }
+        
+        function checkLoginState() {
+            const customerLoggedIn = localStorage.getItem('customerLoggedIn');
+            const customerUser = localStorage.getItem('customerUser');
+            
+            let html = '<div class="status info">';
+            html += '<strong>customerLoggedIn:</strong> ' + (customerLoggedIn || 'null') + '<br>';
+            html += '<strong>customerUser:</strong> ' + (customerUser ? 'EXISTS' : 'null') + '<br>';
+            
+            if (customerLoggedIn === 'true') {
+                html += '<br><strong style="color: green;">✅ USER IS LOGGED IN</strong>';
+            } else {
+                html += '<br><strong style="color: red;">❌ USER IS NOT LOGGED IN</strong>';
+            }
+            
+            html += '</div>';
+            document.getElementById('checkStatus').innerHTML = html;
+        }
+        
+        function showAllStorage() {
+            let html = '<div class="status info">';
+            html += '<strong>All localStorage keys:</strong><br><br>';
+            
+            if (localStorage.length === 0) {
+                html += 'No data in localStorage';
+            } else {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+                    html += '<strong>' + key + ':</strong> ' + (value.length > 100 ? value.substring(0, 100) + '...' : value) + '<br>';
+                }
+            }
+            
+            html += '</div>';
+            document.getElementById('allStorage').innerHTML = html;
+        }
+        
+        // Auto-check on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkLoginState();
+        });
+    </script>
+</body>
+</html>

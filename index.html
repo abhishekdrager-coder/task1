@@ -32,6 +32,35 @@
     </script>
 </head>
 <body>
+    <!-- DEBUG BANNER - Shows current login state (HIDDEN) -->
+    <div id="debugBanner" style="position: fixed; top: 0; left: 0; right: 0; background: #000; color: #0f0; padding: 5px 15px; font-family: monospace; font-size: 12px; z-index: 99999; display: none; justify-content: space-between;">
+        <span id="debugStatus">Loading...</span>
+        <button onclick="document.getElementById('debugBanner').style.display='none'" style="background: #333; color: #fff; border: none; padding: 2px 8px; cursor: pointer;">X</button>
+    </div>
+    <script>
+        // Immediate check on page load - before DOMContentLoaded
+        (function() {
+            const isLoggedIn = localStorage.getItem('customerLoggedIn');
+            const hasUser = !!localStorage.getItem('customerUser');
+            console.log('🔍 INDEX.HTML - IMMEDIATE CHECK');
+            console.log('customerLoggedIn:', isLoggedIn);
+            console.log('customerUser exists:', hasUser);
+            
+            setTimeout(function() {
+                const banner = document.getElementById('debugStatus');
+                if (banner) {
+                    if (isLoggedIn === 'true') {
+                        banner.textContent = '✅ LOGGED IN | customerLoggedIn=' + isLoggedIn + ' | customerUser=' + (hasUser ? 'EXISTS' : 'MISSING');
+                        banner.parentElement.style.background = '#004400';
+                    } else {
+                        banner.textContent = '❌ NOT LOGGED IN | customerLoggedIn=' + (isLoggedIn || 'null') + ' | customerUser=' + (hasUser ? 'EXISTS' : 'MISSING');
+                        banner.parentElement.style.background = '#440000';
+                    }
+                }
+            }, 50);
+        })();
+    </script>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -52,6 +81,24 @@
                 <a href="#how-it-works">How it Works</a>
                 <a href="#about">About</a>
                 <button class="btn-login" id="loginBtn" onclick="window.location.href='login.html'" style="padding: 12px 30px; font-size: 16px;">Login</button>
+                <script>
+                    // IMMEDIATE login check - runs synchronously right after button is created
+                    (function() {
+                        const isCustomerLoggedIn = localStorage.getItem('customerLoggedIn') === 'true';
+                        const isProviderLoggedIn = localStorage.getItem('providerLoggedIn') === 'true';
+                        const btn = document.getElementById('loginBtn');
+                        
+                        if (btn && isCustomerLoggedIn) {
+                            btn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" id="dashboardBtn" style="text-decoration: none; display: inline-block; padding: 12px 30px; font-size: 16px;">My Dashboard</a>';
+                            console.log('✅ IMMEDIATE: Updated button to My Dashboard (customer)');
+                        } else if (btn && isProviderLoggedIn) {
+                            btn.outerHTML = '<a href="provider.html" class="btn-login" id="dashboardBtn" style="text-decoration: none; display: inline-block; padding: 12px 30px; font-size: 16px;">My Dashboard</a>';
+                            console.log('✅ IMMEDIATE: Updated button to My Dashboard (provider)');
+                        } else {
+                            console.log('ℹ️ IMMEDIATE: Keeping Login button');
+                        }
+                    })();
+                </script>
             </div>
         </div>
     </nav>
@@ -708,26 +755,13 @@
             });
         })();
 
-        // Update navigation based on login status
+        // Navigation login status is now handled IMMEDIATELY inline after the button is created
+        // This DOMContentLoaded only handles the location modal
         window.addEventListener('DOMContentLoaded', () => {
-            const customerAuth = Auth.isLoggedIn('customer');
-            const providerAuth = Auth.isLoggedIn('provider');
-            
-            const loginBtn = document.getElementById('loginBtn');
-            const providerBtn = document.getElementById('providerBtn');
-            
-            if (customerAuth) {
-                // Replace login button with dashboard link
-                loginBtn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
-                // Keep provider button as-is for customers
-            } else if (providerAuth) {
-                // Replace both buttons for providers
-                loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
-                providerBtn.style.display = 'none';
-            }
-            
             // Check and show location modal if not set
-            checkAndShowLocationModal();
+            setTimeout(() => {
+                checkAndShowLocationModal();
+            }, 200);
         });
 
         // Location Functions

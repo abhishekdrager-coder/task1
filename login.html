@@ -390,6 +390,29 @@
     </script>
 </head>
 <body>
+    <!-- DEBUG BANNER - Shows current login state (HIDDEN) -->
+    <div id="debugBanner" style="position: fixed; top: 0; left: 0; right: 0; background: #000; color: #0f0; padding: 5px 15px; font-family: monospace; font-size: 12px; z-index: 99999; display: none; justify-content: space-between;">
+        <span id="debugStatus">Loading...</span>
+        <button onclick="document.getElementById('debugBanner').style.display='none'" style="background: #333; color: #fff; border: none; padding: 2px 8px; cursor: pointer;">X</button>
+    </div>
+    <script>
+        (function() {
+            const isLoggedIn = localStorage.getItem('customerLoggedIn');
+            const hasUser = !!localStorage.getItem('customerUser');
+            console.log('🔍 LOGIN.HTML - CHECK');
+            console.log('customerLoggedIn:', isLoggedIn);
+            console.log('customerUser exists:', hasUser);
+            
+            setTimeout(function() {
+                const banner = document.getElementById('debugStatus');
+                if (banner) {
+                    banner.textContent = 'LOGIN PAGE | customerLoggedIn=' + (isLoggedIn || 'null') + ' | customerUser=' + (hasUser ? 'EXISTS' : 'MISSING');
+                    banner.parentElement.style.background = '#000044';
+                }
+            }, 50);
+        })();
+    </script>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">

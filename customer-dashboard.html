@@ -77,19 +77,44 @@
                 const settings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
                 if (settings.darkMode === true) {
                     document.documentElement.classList.add('dark-mode');
-                    document.body.classList.add('dark-mode');
                 }
             } catch(e) {
                 console.error('Error loading dark mode:', e);
             }
         })();
+        // Apply to body once DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('customerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {
+                console.error('Error applying dark mode to body:', e);
+            }
+        });
+        
+        // DEBUG: Add beforeunload to check if storage is being cleared during navigation
+        window.addEventListener('beforeunload', function() {
+            console.log('🚨 BEFOREUNLOAD - Customer Dashboard');
+            console.log('customerLoggedIn at unload:', localStorage.getItem('customerLoggedIn'));
+            console.log('customerUser exists at unload:', !!localStorage.getItem('customerUser'));
+        });
         
         // Check if user is logged in
         (function() {
+            console.log('🔍 Customer Dashboard - Checking login status...');
             const isLoggedIn = localStorage.getItem('customerLoggedIn');
+            const customerUser = localStorage.getItem('customerUser');
+            console.log('customerLoggedIn:', isLoggedIn);
+            console.log('customerUser exists:', !!customerUser);
+            
             if (isLoggedIn !== 'true') {
+                console.log('❌ Not logged in - redirecting to login page');
                 // Redirect to login page if not logged in
                 window.location.href = 'login.html';
+            } else {
+                console.log('✅ User is logged in');
             }
         })();
         
@@ -99,10 +124,21 @@
             const userData = JSON.parse(localStorage.getItem('customerUser') || '{}');
             console.log('Loading dashboard for user:', userData);
             
-            if (!userData || !userData.name || !userData.email) {
-                console.error('No valid user data found, redirecting to login');
-                localStorage.removeItem('customerLoggedIn');
+            // Only redirect if not logged in at all
+            if (localStorage.getItem('customerLoggedIn') !== 'true') {
+                console.error('Not logged in, redirecting to login');
                 window.location.href = 'login.html';
+                return;
+            }
+            
+            // If logged in but missing user data, show warning but stay logged in
+            if (!userData || !userData.name || !userData.email) {
+                console.warn('User data incomplete, but keeping session active');
+            }
+            
+            // If logged in but missing data, keep them logged in
+            if (!userData || !userData.name || !userData.email) {
+                console.warn('User logged in but missing profile data');
                 return;
             }
             
@@ -148,6 +184,35 @@
         });
     </script></head>
 <body>
+    <!-- DEBUG BANNER - Shows current login state (HIDDEN) -->
+    <div id="debugBanner" style="position: fixed; top: 0; left: 0; right: 0; background: #000; color: #0f0; padding: 5px 15px; font-family: monospace; font-size: 12px; z-index: 99999; display: none; justify-content: space-between;">
+        <span id="debugStatus">Loading...</span>
+        <button onclick="document.getElementById('debugBanner').style.display='none'" style="background: #333; color: #fff; border: none; padding: 2px 8px; cursor: pointer;">X</button>
+    </div>
+    <script>
+        // Immediate check on dashboard load
+        (function() {
+            const isLoggedIn = localStorage.getItem('customerLoggedIn');
+            const hasUser = !!localStorage.getItem('customerUser');
+            console.log('🔍 CUSTOMER-DASHBOARD.HTML - IMMEDIATE CHECK');
+            console.log('customerLoggedIn:', isLoggedIn);
+            console.log('customerUser exists:', hasUser);
+            
+            setTimeout(function() {
+                const banner = document.getElementById('debugStatus');
+                if (banner) {
+                    if (isLoggedIn === 'true') {
+                        banner.textContent = '✅ DASHBOARD - LOGGED IN | customerLoggedIn=' + isLoggedIn + ' | customerUser=' + (hasUser ? 'EXISTS' : 'MISSING');
+                        banner.parentElement.style.background = '#004400';
+                    } else {
+                        banner.textContent = '❌ DASHBOARD - NOT LOGGED IN | customerLoggedIn=' + (isLoggedIn || 'null') + ' | customerUser=' + (hasUser ? 'EXISTS' : 'MISSING');
+                        banner.parentElement.style.background = '#440000';
+                    }
+                }
+            }, 50);
+        })();
+    </script>
+    
     <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0;">
         <div class="nav-container">
             <div class="nav-logo">
@@ -225,7 +290,11 @@
                 <h2 style="margin: 0 0 10px 0; font-size: 2em; color: #2c3e50;">Welcome <span id="displayName">Customer</span>! 👋</h2>
                 <p id="displayEmail" style="margin: 0 0 20px 0; font-size: 1.2em; color: #7f8c8d; font-weight: 500;">customer@email.com</p>
                 <div style="display: inline-block; background: #f0f4ff; padding: 12px 24px; border-radius: 12px;">
-                    <p style="margin: 0; color: #667eea; font-weight: 600;"><i class="fas fa-map-marker-alt"></i> <span id="displayLocation">Vancouver, BC</span></p>
+                    <p style="margin: 0; color: #667eea; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-map-marker-alt"></i> 
+                        <span id="displayLocation">Not set</span>
+                        <i class="fas fa-pencil-alt" onclick="openLocationModal()" style="opacity: 0.3; cursor: pointer; font-size: 0.9em; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.3'"></i>
+                    </p>
                 </div>
             </div>
 
@@ -443,12 +512,30 @@
                     }
                 }
                 
-                // Check if location exists in user data
+                // Check if location exists - priority: userLocation > customerUser.location
                 const locationEl = document.getElementById('displayLocation');
-                if (locationEl && userData.location) {
-                    locationEl.textContent = userData.location;
-                } else if (locationEl) {
-                    locationEl.textContent = 'Not set';
+                if (locationEl) {
+                    // First check userLocation from homepage
+                    const userLocation = localStorage.getItem('userLocation');
+                    if (userLocation) {
+                        try {
+                            const locData = JSON.parse(userLocation);
+                            const locationText = locData.city ? `${locData.city}${locData.province ? ', ' + locData.province : ''}` : 'Not set';
+                            locationEl.textContent = locationText;
+                            // Save to customerUser for persistence
+                            if (locData.city) {
+                                userData.location = locationText;
+                                localStorage.setItem('customerUser', JSON.stringify(userData));
+                            }
+                        } catch(e) {
+                            console.error('Error parsing userLocation:', e);
+                            locationEl.textContent = userData.location || 'Not set';
+                        }
+                    } else if (userData.location) {
+                        locationEl.textContent = userData.location;
+                    } else {
+                        locationEl.textContent = 'Not set';
+                    }
                 }
                 
                 // Load bookings data (placeholder)
@@ -483,9 +570,75 @@
         //     const data = JSON.parse(localStorage.getItem('customerProfile') || '{}');
         //     ...old code removed...
         // })();
+
+        // Location Modal Functions
+        function openLocationModal() {
+            document.getElementById('locationEditModal').style.display = 'flex';
+        }
+
+        function closeLocationModal() {
+            document.getElementById('locationEditModal').style.display = 'none';
+            document.getElementById('locationInput').value = '';
+            document.getElementById('locationError').style.display = 'none';
+        }
+
+        function saveLocation() {
+            const locationInput = document.getElementById('locationInput').value.trim();
+            const errorEl = document.getElementById('locationError');
+            
+            if (!locationInput) {
+                errorEl.textContent = 'Please enter a location';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            // Save to customerUser
+            const userData = JSON.parse(localStorage.getItem('customerUser') || '{}');
+            userData.location = locationInput;
+            localStorage.setItem('customerUser', JSON.stringify(userData));
+
+            // Update display
+            const displayLocationEl = document.getElementById('displayLocation');
+            if (displayLocationEl) {
+                displayLocationEl.textContent = locationInput;
+            }
+
+            // Close modal
+            closeLocationModal();
+        }
     </script>
     
     <script src="dashboard.js"></script>
+
+    <!-- Location Edit Modal -->
+    <div id="locationEditModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 40px; border-radius: 20px; max-width: 500px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            <h2 style="color: #667eea; margin-bottom: 20px; font-size: 1.8em;">📍 Update Your Location</h2>
+            <p style="color: #666; margin-bottom: 25px;">Enter your city or full address to help us show relevant services near you.</p>
+            
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="locationInput" placeholder="e.g., Toronto, ON or Vancouver, BC" 
+                       style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 1em; box-sizing: border-box;"
+                       onkeypress="if(event.key==='Enter') saveLocation()">
+                <div id="locationError" style="display: none; color: #e74c3c; margin-top: 10px; font-size: 0.9em;"></div>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button onclick="saveLocation()" 
+                        style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: transform 0.2s;"
+                        onmouseover="this.style.transform='scale(1.02)'" 
+                        onmouseout="this.style.transform='scale(1)'">
+                    Save Location
+                </button>
+                <button onclick="closeLocationModal()" 
+                        style="flex: 1; background: #f0f0f0; color: #666; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#e0e0e0'" 
+                        onmouseout="this.style.background='#f0f0f0'">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
