@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch (e) {}
+        })();
+        
+        (function() {
             const isLoggedIn = localStorage.getItem('providerLoggedIn');
             if (isLoggedIn !== 'true') {
                 window.location.href = 'service-provider-login.html';
@@ -15,6 +25,21 @@
         })();
     </script>
     <style>
+        body.dark-mode { background: #0a0e1a; color: #e0e8ff; }
+        body.dark-mode .modern-navbar { background: rgba(20, 40, 80, 0.4) !important; border-bottom: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .zone-update-container { background: #0a0e1a; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p, body.dark-mode label { color: #e0e8ff; }
+        body.dark-mode .zone-form, body.dark-mode .city-item, body.dark-mode .confirmation-box { background: rgba(20, 40, 80, 0.4) !important; border: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: rgba(30, 50, 90, 0.4); color: #ffffff; border: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode button { background: rgba(102, 126, 234, 0.8) !important; color: #ffffff; }
+        body.dark-mode button:hover { background: rgba(102, 126, 234, 1) !important; }
+        body.dark-mode .footer { background: rgba(20, 40, 80, 0.4); border-top: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e8ff; }
+        body.dark-mode .dropdown-menu { background: rgba(20, 40, 80, 0.95) !important; border: 1px solid rgba(102, 126, 234, 0.3) !important; }
+        body.dark-mode .dropdown-menu a { color: #e0e8ff !important; }
+        body.dark-mode .dropdown-menu a:hover { background: rgba(30, 50, 90, 0.6) !important; }
+        
         * {
             margin: 0;
             padding: 0;
@@ -274,14 +299,15 @@
     <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
         <div class="nav-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
             <div class="nav-logo">
-                <a href="provider.html" style="text-decoration: none;">
+                <a href="index.html" style="text-decoration: none;">
                     <div class="logo-wrapper" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                         <span class="logo-icon" style="font-size: 2.5em;">🎯</span>
                         <span class="logo-text" style="font-size: 32px; font-weight: 700; color: #ffffff;">Task Masters</span>
                     </div>
                 </a>
             </div>
-            <div class="nav-actions" style="display: flex; align-items: center; gap: 30px;">
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 15px;">
+                <a href="index.html" class="nav-btn" style="display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: rgba(255,255,255,0.1); border-radius: 25px; text-decoration: none; color: white; font-weight: 600; font-size: 15px; cursor: pointer;"><i class="fas fa-home"></i> Home</a>
                 <a href="provider.html" class="nav-btn" style="display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 25px; text-decoration: none; color: white; font-weight: 600; font-size: 15px; cursor: pointer;">← Back to Dashboard</a>
             </div>
         </div>

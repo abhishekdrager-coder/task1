@@ -13,8 +13,47 @@
     <style>
         /* Force page to never cache */
         html { -webkit-transform: translateZ(0); transform: translateZ(0); }
+        
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: #0a0e1a;
+            color: #ffffff;
+        }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4 {
+            color: #ffffff !important;
+        }
+        body.dark-mode p, body.dark-mode span, body.dark-mode li {
+            color: #e0e8ff !important;
+        }
+        body.dark-mode [style*="background: #ffffff"],
+        body.dark-mode [style*="background:#ffffff"],
+        body.dark-mode [style*="background: white"],
+        body.dark-mode [style*="background:white"] {
+            background: rgba(20, 40, 80, 0.4) !important;
+        }
+        body.dark-mode [style*="color: #374151"],
+        body.dark-mode [style*="color:#374151"],
+        body.dark-mode [style*="color: #9ca3af"],
+        body.dark-mode [style*="color:#9ca3af"] {
+            color: #ffffff !important;
+        }
+        body.dark-mode .navbar {
+            background: rgba(20, 40, 80, 0.95) !important;
+        }
+        body.dark-mode [style*="background: #f0fdf4"] {
+            background: rgba(30, 50, 90, 0.6) !important;
+        }
     </style>
     <script>
+        (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch (e) {}
+        })();
         (function() {
             const isLoggedIn = localStorage.getItem('providerLoggedIn');
             if (isLoggedIn !== 'true') {
@@ -28,14 +67,15 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <a href="provider.html" style="text-decoration: none;">
+                <a href="index.html" style="text-decoration: none;">
                     <div class="logo-wrapper">
                         <span class="logo-icon">🎯</span>
                         <span class="logo-text">Task Masters</span>
                     </div>
                 </a>
             </div>
-            <div class="nav-actions">
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 15px;">
+                <a href="index.html" class="nav-btn" style="display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: rgba(102, 126, 234, 0.2); border-radius: 25px; text-decoration: none; color: white; font-weight: 600; font-size: 15px;"><i class="fas fa-home"></i> Home</a>
                 <a href="provider.html" class="nav-btn" style="display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 25px; text-decoration: none; color: white; font-weight: 600; font-size: 15px;">← Back to Dashboard</a>
             </div>
         </div>
@@ -213,7 +253,8 @@
             // Add empty cells for days before month starts
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.style.background = '#ffffff';
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                emptyCell.style.background = isDarkMode ? 'rgba(20, 40, 80, 0.4)' : '#ffffff';
                 emptyCell.style.minHeight = '90px';
                 calendarDays.appendChild(emptyCell);
             }
@@ -231,8 +272,9 @@
                 const isToday = isCurrentMonth && day === today.getDate();
                 const isPast = new Date(year, month, day) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
                 
+                const isDarkMode = document.body.classList.contains('dark-mode');
                 const dayCell = document.createElement('div');
-                dayCell.style.background = '#ffffff';
+                dayCell.style.background = isDarkMode ? 'rgba(20, 40, 80, 0.4)' : '#ffffff';
                 dayCell.style.minHeight = '90px';
                 dayCell.style.padding = '8px';
                 dayCell.style.position = 'relative';
@@ -244,9 +286,9 @@
                 if (isToday) {
                     dateNumberStyle += 'background: #3b82f6; color: white; font-weight: 700;';
                 } else if (isPast) {
-                    dateNumberStyle += 'color: #9ca3af;';
+                    dateNumberStyle += isDarkMode ? 'color: #c0c0c0;' : 'color: #9ca3af;';
                 } else {
-                    dateNumberStyle += 'color: #374151;';
+                    dateNumberStyle += isDarkMode ? 'color: #ffffff;' : 'color: #374151;';
                 }
                 
                 // Build cell content
@@ -268,10 +310,12 @@
                     
                     // Hover effect
                     dayCell.onmouseenter = function() {
-                        this.style.background = '#f0fdf4';
+                        const isDarkMode = document.body.classList.contains('dark-mode');
+                        this.style.background = isDarkMode ? 'rgba(30, 50, 90, 0.6)' : '#f0fdf4';
                     };
                     dayCell.onmouseleave = function() {
-                        this.style.background = '#ffffff';
+                        const isDarkMode = document.body.classList.contains('dark-mode');
+                        this.style.background = isDarkMode ? 'rgba(20, 40, 80, 0.4)' : '#ffffff';
                     };
                 }
                 

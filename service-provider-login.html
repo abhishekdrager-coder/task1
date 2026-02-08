@@ -6,14 +6,16 @@
     <title>Service Provider Login - Task Masters</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        body.dark-mode { background: #1a1a1a; color: #e0e0e0; }
-        body.dark-mode .modern-navbar { background: #0d1117 !important; }
-        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
-        body.dark-mode p { color: #b0b0b0; }
-        body.dark-mode .login-container, body.dark-mode form { background: #0d1117; border: 1px solid #30363d; }
-        body.dark-mode input { background: #161b22; color: #e0e0e0; border: 1px solid #30363d; }
-        body.dark-mode .footer { background: #0d1117; border-top: 1px solid #30363d; }
-        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e0e0; }
+        body.dark-mode { background: #0a0e1a; color: #ffffff; }
+        body.dark-mode .modern-navbar { background: rgba(20, 40, 80, 0.95) !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4 { color: #ffffff; }
+        body.dark-mode p, body.dark-mode span, body.dark-mode label { color: #e0e8ff; }
+        body.dark-mode .login-container, body.dark-mode form { background: rgba(20, 40, 80, 0.4); border: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode input { background: rgba(30, 50, 90, 0.4); color: #ffffff; border: 2px solid rgba(102, 126, 234, 0.4); }
+        body.dark-mode input:focus { border-color: rgba(102, 126, 234, 0.8); background: rgba(30, 50, 90, 0.5); }
+        body.dark-mode .footer { background: rgba(15, 30, 60, 0.5); border-top: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e8ff; }
+        body.dark-mode [style*="background: white"], body.dark-mode [style*="background:white"] { background: rgba(20, 40, 80, 0.4) !important; }
     </style>
     <script>
         (function() {
@@ -39,8 +41,8 @@
                 <a href="index.html">Home</a>
                 <a href="services-browse.html">Services</a>
                 <a href="index.html#about">About</a>
-                <a href="customer-dashboard.html" class="btn-provider" id="customerBtn" style="background: #28a745;">Customer Dashboard</a>
-                <button class="btn-login" id="loginBtn" onclick="window.location.href='login.html'">Login</button>
+                <a href="customer-dashboard.html" class="btn-provider" id="customerBtn" style="background: #28a745; display: none;">Customer Dashboard</a>
+                <button class="btn-login" id="loginBtn" onclick="window.location.href='login.html'" style="padding: 12px 30px; font-size: 16px;">Login</button>
             </div>
         </div>
     </nav>
@@ -81,58 +83,14 @@
 
                 <!-- Register Form -->
                 <div id="registerTab" class="tab-content">
-                    <form class="provider-form" onsubmit="handleProviderRegister(event)">
-                        <div class="form-group">
-                            <label>Full Name *</label>
-                            <input type="text" id="regFullName" required placeholder="John Doe" />
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address *</label>
-                            <input type="email" id="regEmail" required placeholder="your@email.com" />
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Number *</label>
-                            <input type="tel" id="regPhone" required placeholder="+1 (555) 123-4567" />
-                        </div>
-                        <div class="form-group">
-                            <label>Password *</label>
-                            <input type="password" id="regPassword" required placeholder="Create a strong password" />
-                        </div>
-                        <div class="form-group">
-                            <label>Service Category *</label>
-                            <select id="regCategory" required>
-                                <option value="">Select your expertise</option>
-                                <option value="cleaning">Home Cleaning</option>
-                                <option value="plumbing">Plumbing</option>
-                                <option value="electrical">Electrical Work</option>
-                                <option value="carpentry">Carpentry</option>
-                                <option value="painting">Painting</option>
-                                <option value="beauty">Beauty & Salon</option>
-                                <option value="tutoring">Tutoring</option>
-                                <option value="pest">Pest Control</option>
-                                <option value="ac">AC Repair</option>
-                                <option value="babysitting">Babysitting</option>
-                                <option value="moving">Moving & Packing</option>
-                                <option value="fitness">Personal Training</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Years of Experience *</label>
-                            <input type="number" id="regExperience" required placeholder="e.g., 5" min="0" />
-                        </div>
-                        <div class="form-group">
-                            <label>City *</label>
-                            <input type="text" id="regCity" required placeholder="Your city" />
-                        </div>
-                        <div class="form-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="regTerms" required />
-                                I agree to the <a href="terms.html">Terms & Conditions</a>
-                            </label>
-                        </div>
-                        <button type="submit" class="btn-submit-full">Create Account</button>
-                        <p class="info-text">✓ 0% Commission from us • ✓ Flexible schedule • ✓ Weekly payments</p>
-                    </form>
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <h2 style="margin-bottom: 15px;">Ready to Join Task Masters?</h2>
+                        <p style="margin-bottom: 25px; color: #7f8c8d;">Complete our detailed registration form to become a verified service provider</p>
+                        <button type="button" class="btn-submit-full" onclick="window.location.href='service-provider-register.html'" style="max-width: 400px; margin: 0 auto;">
+                            Complete Registration Form
+                        </button>
+                        <p class="info-text" style="margin-top: 20px;">✓ 0% Commission from us • ✓ Flexible schedule • ✓ Grow your business</p>
+                    </div>
                 </div>
             </div>
 
@@ -147,7 +105,7 @@
                     <div class="benefit-icon">💰</div>
                     <div>
                         <h3>Earn More</h3>
-                        <p>Set your own rates and earn up to $5,000/month</p>
+                        <p>Set your own rates and maximize your earnings</p>
                     </div>
                 </div>
                 <div class="benefit-item">
@@ -162,13 +120,6 @@
                     <div>
                         <h3>Steady Work</h3>
                         <p>Access to thousands of customers daily</p>
-                    </div>
-                </div>
-                <div class="benefit-item">
-                    <div class="benefit-icon">🛡️</div>
-                    <div>
-                        <h3>Insurance Coverage</h3>
-                        <p>Protected while you work</p>
                     </div>
                 </div>
                 <div class="benefit-item">
@@ -243,23 +194,135 @@
 
     <script src="script.js"></script>
     <script>
+        // Provider Login Function
+        function handleProviderLogin(event) {
+            event.preventDefault();
+            console.log('🔍 Login function called');
+            
+            const email = document.getElementById('providerEmail')?.value;
+            const password = document.getElementById('providerPassword')?.value;
+            const rememberMe = document.getElementById('providerRememberMe')?.checked || false;
+            
+            console.log('Email:', email);
+            console.log('Password length:', password?.length);
+            
+            if (!email || !password) {
+                alert('❌ Please enter both email and password');
+                return false;
+            }
+            
+            // Check if provider exists in localStorage
+            const storedProviders = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+            console.log('Stored providers count:', storedProviders.length);
+            
+            const provider = storedProviders.find(p => p.email === email);
+            
+            if (!provider) {
+                alert('❌ No account found with this email. Please register first.');
+                return false;
+            }
+            
+            if (provider.password !== password) {
+                alert('❌ Incorrect password. Please try again.');
+                return false;
+            }
+            
+            // Save provider data and login state
+            localStorage.setItem('providerProfile', JSON.stringify(provider));
+            localStorage.setItem('providerLoggedIn', 'true');
+            
+            console.log('✅ Login successful, redirecting...');
+            alert('✅ Login successful! Redirecting to dashboard...');
+            
+            // Redirect to dashboard
+            setTimeout(() => {
+                window.location.href = 'provider.html';
+            }, 500);
+            
+            return false;
+        }
+        
+        // Provider Register Function
+        function handleProviderRegister(event) {
+            event.preventDefault();
+            console.log('🔍 Register function called');
+            
+            // Get form values
+            const fullName = document.getElementById('regFullName')?.value;
+            const email = document.getElementById('regEmail')?.value;
+            const phone = document.getElementById('regPhone')?.value;
+            const password = document.getElementById('regPassword')?.value;
+            const category = document.getElementById('regCategory')?.value || 'General';
+            const experience = document.getElementById('regExperience')?.value || '1 year';
+            const city = document.getElementById('regCity')?.value || 'Not specified';
+            
+            if (!fullName || !email || !phone || !password) {
+                alert('❌ Please fill in all required fields');
+                return false;
+            }
+            
+            // Check if email already exists
+            const storedProviders = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+            if (storedProviders.find(p => p.email === email)) {
+                alert('❌ An account with this email already exists. Please login instead.');
+                return false;
+            }
+            
+            // Create provider profile
+            const providerProfile = {
+                fullName: fullName,
+                email: email,
+                phone: phone,
+                password: password,
+                category: category,
+                experience: experience,
+                city: city,
+                registeredAt: new Date().toISOString()
+            };
+            
+            // Save to providerUsers array
+            storedProviders.push(providerProfile);
+            localStorage.setItem('providerUsers', JSON.stringify(storedProviders));
+            
+            // Save provider profile to localStorage
+            localStorage.setItem('providerProfile', JSON.stringify(providerProfile));
+            
+            // Save login state
+            localStorage.setItem('providerLoggedIn', 'true');
+            
+            console.log('✅ Registration successful, redirecting...');
+            alert('✅ Registration successful! Redirecting to your dashboard...');
+            
+            setTimeout(() => {
+                window.location.href = 'provider.html';
+            }, 500);
+            
+            return false;
+        }
+        
+        // Tab switching
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('registerTab').classList.remove('active');
+            
+            if (tabName === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('loginTab').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('registerTab').classList.add('active');
+            }
+        }
+        
         // Update navigation based on login status
         window.addEventListener('DOMContentLoaded', () => {
-            const customerAuth = Auth.isLoggedIn('customer');
-            const providerAuth = Auth.isLoggedIn('provider');
-            
-            const loginBtn = document.getElementById('loginBtn');
-            const customerBtn = document.getElementById('customerBtn');
-            
-            if (loginBtn && customerBtn) {
-                if (providerAuth) {
-                    // If provider is logged in, show their dashboard link
-                    loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
-                    customerBtn.style.display = 'none';
-                } else if (customerAuth) {
-                    // If customer is logged in, they can still become provider
-                    loginBtn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" style="text-decoration: none; display: inline-block; background: #28a745;">Customer Dashboard</a>';
-                }
+            // Check if already logged in
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            if (isLoggedIn === 'true') {
+                console.log('⚠️ Already logged in as provider');
             }
         });
     </script>

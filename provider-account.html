@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Information - Task Masters</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body.dark-mode { background: #0a0e1a; color: #ffffff; }
+        body.dark-mode .modern-navbar { background: rgba(20, 40, 80, 0.95) !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #ffffff; }
+        body.dark-mode p { color: #e0e8ff; }
+        body.dark-mode .account-container { background: rgba(15, 30, 60, 0.4); border: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .account-header { background: linear-gradient(135deg, rgba(20, 40, 80, 0.5) 0%, rgba(30, 50, 90, 0.5) 100%); }
+        body.dark-mode .section-card { background: rgba(20, 40, 80, 0.4); border: 1px solid rgba(102, 126, 234, 0.3); box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1); }
+        body.dark-mode .info-label { color: #c8d4ff; }
+        body.dark-mode .info-value { background: rgba(30, 50, 90, 0.4); color: #ffffff; border-color: rgba(102, 126, 234, 0.2); }
+        body.dark-mode .info-value.empty { color: #8899cc; }
+        body.dark-mode .info-value:not(.editing):hover { background: rgba(30, 50, 90, 0.6); border-color: rgba(102, 126, 234, 0.5); }
+        body.dark-mode .info-value.editing { background: rgba(30, 50, 90, 0.5); border-color: rgba(102, 126, 234, 0.6); }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: rgba(20, 40, 80, 0.5); color: #ffffff; border: 2px solid rgba(102, 126, 234, 0.4); }
+        body.dark-mode input:focus, body.dark-mode select:focus, body.dark-mode textarea:focus { border-color: rgba(102, 126, 234, 0.8); background: rgba(20, 40, 80, 0.6); }
+        body.dark-mode .alert-info { background: linear-gradient(135deg, rgba(20, 60, 100, 0.4) 0%, rgba(30, 70, 110, 0.4) 100%); border-left-color: rgba(102, 126, 234, 0.6); color: #e0e8ff; }
+        body.dark-mode .status-badge { color: #ffffff; }
+        body.dark-mode .document-item { background: rgba(30, 50, 90, 0.3); border: 1px solid rgba(102, 126, 234, 0.2); }
+        body.dark-mode .btn-save { background: linear-gradient(135deg, rgba(40, 167, 69, 0.8) 0%, rgba(32, 201, 151, 0.8) 100%); }
+        body.dark-mode .btn-cancel { background: linear-gradient(135deg, rgba(108, 117, 125, 0.8) 0%, rgba(73, 80, 87, 0.8) 100%); }
+        body.dark-mode .footer { background: rgba(15, 30, 60, 0.5); border-top: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e8ff; }
+        body.dark-mode small { color: #a0b0d0; }
+
+        .modern-navbar {
+            background: #2c3e50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            padding: 20px 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo a {
+            text-decoration: none;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2.5em;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        body.dark-mode .nav-btn {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+        }
+
+        body.dark-mode .nav-btn:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 1) 0%, rgba(118, 75, 162, 1) 100%);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .account-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px 40px;
+        }
+
+        .account-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        .account-header h1 {
+            margin: 0;
+            color: white;
+            font-size: 2.5em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .account-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.95;
+            font-size: 1.1em;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .section-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        body.dark-mode .section-card:hover {
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .section-card h2 {
+            margin: 0 0 25px 0;
+            color: #2c3e50;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .section-card h2 i {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.dark-mode .section-card h2 {
+            color: #ffffff;
+            border-bottom-color: rgba(102, 126, 234, 0.3);
+        }
+
+        body.dark-mode .section-card h2 i {
+            background: linear-gradient(135deg, #8899ff 0%, #aa88dd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .info-item {
+            position: relative;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            display: block;
+        }
+
+        .info-value-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-size: 1.05em;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            flex: 1;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .info-value:not(.editing):hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+        }
+
+        .info-value:not(.editing)::after {
+            content: '✏️';
+            position: absolute;
+            right: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+        }
+
+        .info-value:not(.editing):hover::after {
+            opacity: 1;
+        }
+
+        .info-value.empty {
+            color: #adb5bd;
+            font-style: italic;
+        }
+
+        .info-value.editing {
+            background: white;
+            border-color: #667eea;
+        }
+
+        .info-value input,
+        .info-value select,
+        .info-value textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .info-value input:focus,
+        .info-value select:focus,
+        .info-value textarea:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .info-value textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .document-item:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        body.dark-mode .document-item:hover {
+            background: rgba(30, 50, 90, 0.5);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .document-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .document-icon {
+            font-size: 2.5em;
+        }
+
+        .document-details h4 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .document-details h4 {
+            color: #ffffff;
+        }
+
+        .document-details p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        body.dark-mode .document-details p {
+            color: #a0b0d0;
+        }
+
+        .btn-upload {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        body.dark-mode .btn-upload {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+        }
+
+        body.dark-mode .btn-upload:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 1) 0%, rgba(118, 75, 162, 1) 100%);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.6);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-verified {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+        }
+
+        .status-missing {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            color: #1565c0;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        body.dark-mode .action-buttons {
+            background: rgba(20, 40, 80, 0.3);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        body.dark-mode #registrationWarning {
+            background: linear-gradient(135deg, rgba(50, 70, 30, 0.4) 0%, rgba(60, 80, 40, 0.4) 100%) !important;
+            border-left-color: rgba(255, 193, 7, 0.7) !important;
+            color: #ffe9a6 !important;
+        }
+
+        body.dark-mode #registrationWarning strong,
+        body.dark-mode #registrationWarning p {
+            color: #ffe9a6 !important;
+        }
+
+        body.dark-mode #registrationWarning a {
+            color: #8899ff !important;
+        }
+
+        body.dark-mode #debugInfo {
+            background: rgba(30, 50, 90, 0.3) !important;
+            color: #e0e8ff !important;
+        }
+
+        body.dark-mode button {
+            background: rgba(23, 162, 184, 0.8) !important;
+            color: #ffffff !important;
+        }
+
+        body.dark-mode button:hover {
+            background: rgba(23, 162, 184, 1) !important;
+        }
+
+        .btn-save, .btn-cancel {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .account-container {
+                padding: 0 15px 30px;
+            }
+
+            .account-header {
+                padding: 25px;
+            }
+
+            .account-header h1 {
+                font-size: 1.8em;
+            }
+
+            .section-card {
+                padding: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-save, .btn-cancel {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="modern-navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <div class="logo-wrapper">
+                        <span class="logo-icon">🎯</span>
+                        <span class="logo-text">Task Masters</span>
+                    </div>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <a href="index.html" class="nav-btn" style="margin-right: 10px;"><i class="fas fa-home"></i> Home</a>
+                <a href="provider.html" class="nav-btn">← Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Account Information Section -->
+    <div class="account-container">
+        <div class="account-header">
+            <h1><i class="fas fa-user-circle"></i> Account Information</h1>
+            <p>Manage your professional account details. Click on any field to edit it directly.</p>
+        </div>
+
+        <div id="registrationWarning" class="alert-info" style="display: none; background: linear-gradient(135deg, #fff3cd 0%, #ffe9a6 100%); border-left: 5px solid #ffc107;">
+            <strong><i class="fas fa-exclamation-triangle" style="color: #ff9800;"></i> Registration Incomplete:</strong> 
+            <p style="margin: 10px 0 0 0;">You haven't completed the full registration process yet. Please complete the <a href="service-provider-register.html" style="color: #667eea; text-decoration: underline; font-weight: 600;">registration form</a> to add your legal information, tax details (SIN, GST), and verification documents. This is required to accept bookings and receive payments.</p>
+        </div>
+
+        <div class="alert-info">
+            <strong><i class="fas fa-info-circle"></i> Your Current Information:</strong> Below you can see all your saved account details. Click on any field to edit it directly. Your changes will only be saved when you click "Save All Changes" at the bottom.
+            <div id="debugInfo" style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.5); border-radius: 5px; font-size: 0.85em; display: none;"></div>
+            <button onclick="showStoredData()" style="margin-top: 10px; padding: 8px 16px; background: #17a2b8; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em;">
+                🔍 Show What's Stored in Browser
+            </button>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="section-card">
+            <h2><i class="fas fa-user"></i> Personal Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Legal First Name</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-legalFirstName" onclick="toggleEdit('legalFirstName')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-legalFirstName" style="display: none;">
+                            <input type="text" id="input-legalFirstName" onblur="saveField('legalFirstName')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Legal Middle Name</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-legalMiddleName" onclick="toggleEdit('legalMiddleName')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-legalMiddleName" style="display: none;">
+                            <input type="text" id="input-legalMiddleName" onblur="saveField('legalMiddleName')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Legal Last Name</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-legalLastName" onclick="toggleEdit('legalLastName')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-legalLastName" style="display: none;">
+                            <input type="text" id="input-legalLastName" onblur="saveField('legalLastName')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Preferred Name</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-preferredName" onclick="toggleEdit('preferredName')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-preferredName" style="display: none;">
+                            <input type="text" id="input-preferredName" onblur="saveField('preferredName')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Email Address</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-email" onclick="toggleEdit('email')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-email" style="display: none;">
+                            <input type="email" id="input-email" onblur="saveField('email')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Phone Number</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-phone" onclick="toggleEdit('phone')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-phone" style="display: none;">
+                            <input type="tel" id="input-phone" onblur="saveField('phone')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Date of Birth</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-dateOfBirth" onclick="toggleEdit('dateOfBirth')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-dateOfBirth" style="display: none;">
+                            <input type="date" id="input-dateOfBirth" onblur="saveField('dateOfBirth')" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Information -->
+        <div class="section-card">
+            <h2><i class="fas fa-home"></i> Address Information</h2>
+            <div class="info-grid">
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <div class="info-label">Street Address</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-streetAddress" onclick="toggleEdit('streetAddress')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-streetAddress" style="display: none;">
+                            <input type="text" id="input-streetAddress" onblur="saveField('streetAddress')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Apartment/Unit Number</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-unitNumber" onclick="toggleEdit('unitNumber')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-unitNumber" style="display: none;">
+                            <input type="text" id="input-unitNumber" onblur="saveField('unitNumber')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">City</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-city" onclick="toggleEdit('city')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-city" style="display: none;">
+                            <input type="text" id="input-city" onblur="saveField('city')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Province/Territory</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-province" onclick="toggleEdit('province')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-province" style="display: none;">
+                            <select id="input-province" onblur="saveField('province')">
+                                <option value="">Select Province/Territory</option>
+                                <option value="AB">Alberta</option>
+                                <option value="BC">British Columbia</option>
+                                <option value="MB">Manitoba</option>
+                                <option value="NB">New Brunswick</option>
+                                <option value="NL">Newfoundland and Labrador</option>
+                                <option value="NS">Nova Scotia</option>
+                                <option value="ON">Ontario</option>
+                                <option value="PE">Prince Edward Island</option>
+                                <option value="QC">Quebec</option>
+                                <option value="SK">Saskatchewan</option>
+                                <option value="NT">Northwest Territories</option>
+                                <option value="NU">Nunavut</option>
+                                <option value="YT">Yukon</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Postal Code</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-postalCode" onclick="toggleEdit('postalCode')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-postalCode" style="display: none;">
+                            <input type="text" id="input-postalCode" onblur="saveField('postalCode')" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tax & Legal Information -->
+        <div class="section-card">
+            <h2><i class="fas fa-file-invoice"></i> Tax & Legal Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Social Insurance Number (SIN)</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-sinNumber" onclick="toggleEdit('sinNumber')" title="Click to edit">***-***-***</div>
+                        <div class="info-value editing" id="edit-sinNumber" style="display: none;">
+                            <input type="text" id="input-sinNumber" placeholder="***-***-***" maxlength="11" onblur="saveField('sinNumber')" />
+                        </div>
+                    </div>
+                    <small style="color: #6c757d;">Your SIN is encrypted and secure</small>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">GST/HST Number</div>
+                    <div class="info-value-wrapper">
+                        <div class="info-value" id="view-gstNumber" onclick="toggleEdit('gstNumber')" title="Click to edit">-</div>
+                        <div class="info-value editing" id="edit-gstNumber" style="display: none;">
+                            <input type="text" id="input-gstNumber" onblur="saveField('gstNumber')" />
+                        </div>
+                    </div>
+                    <small style="color: #6c757d;">If applicable</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents -->
+        <div class="section-card">
+            <h2><i class="fas fa-folder-open"></i> Verification Documents</h2>
+            <div class="document-item">
+                <div class="document-info">
+                    <div class="document-icon">📄</div>
+                    <div class="document-details">
+                        <h4>Proof of Eligibility to Work in Canada</h4>
+                        <p id="workEligibilityStatus">Status: <span class="status-badge status-pending">Pending Upload</span></p>
+                        <p id="workEligibilityName" style="margin-top: 5px; font-style: italic;"></p>
+                    </div>
+                </div>
+                <input type="file" id="workEligibilityUpload" accept="image/*,.pdf" style="display: none;" onchange="handleDocUpload(this, 'workEligibility')" />
+                <button class="btn-upload" onclick="document.getElementById('workEligibilityUpload').click()">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+            </div>
+
+            <div class="document-item">
+                <div class="document-info">
+                    <div class="document-icon">📷</div>
+                    <div class="document-details">
+                        <h4>Government-Issued Photo ID #1</h4>
+                        <p id="photoId1Status">Status: <span class="status-badge status-pending">Pending Upload</span></p>
+                        <p id="photoId1Name" style="margin-top: 5px; font-style: italic;"></p>
+                    </div>
+                </div>
+                <input type="file" id="photoId1Upload" accept="image/*,.pdf" style="display: none;" onchange="handleDocUpload(this, 'photoId1')" />
+                <button class="btn-upload" onclick="document.getElementById('photoId1Upload').click()">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+            </div>
+
+            <div class="document-item">
+                <div class="document-info">
+                    <div class="document-icon">🆔</div>
+                    <div class="document-details">
+                        <h4>Government-Issued ID #2</h4>
+                        <p id="photoId2Status">Status: <span class="status-badge status-pending">Pending Upload</span></p>
+                        <p id="photoId2Name" style="margin-top: 5px; font-style: italic;"></p>
+                    </div>
+                </div>
+                <input type="file" id="photoId2Upload" accept="image/*,.pdf" style="display: none;" onchange="handleDocUpload(this, 'photoId2')" />
+                <button class="btn-upload" onclick="document.getElementById('photoId2Upload').click()">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+            </div>
+        </div>
+
+        <!-- Account Status -->
+        <div class="section-card">
+            <h2><i class="fas fa-check-circle"></i> Account Status</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Registration Date</div>
+                    <div class="info-value" id="registeredAt">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Account Status</div>
+                    <div class="info-value" id="accountStatus">
+                        <span class="status-badge status-pending">Pending Verification</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-save" onclick="saveChanges()">
+                <i class="fas fa-save"></i> Save All Changes
+            </button>
+            <button class="btn-cancel" onclick="cancelAllEdits()">
+                <i class="fas fa-times"></i> Cancel All Changes
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🎯 Task Masters</h3>
+                <p>Your trusted service marketplace</p>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="index.html#about">About Us</a>
+                <a href="careers.html">Careers</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="safety.html">Safety</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <a href="contact.html">Email Us</a>
+                <a href="contact.html">Call: 1800-TASK-HELP</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        let editedFields = {};
+        let originalData = {};
+
+        // Show what's stored in localStorage
+        function showStoredData() {
+            const providerProfile = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            const providerUsers = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+            
+            let message = '📦 DATA STORED IN BROWSER:\n\n';
+            message += '=== Provider Profile ===\n';
+            message += JSON.stringify(providerProfile, null, 2);
+            message += '\n\n=== All Provider Users (' + providerUsers.length + ') ===\n';
+            message += JSON.stringify(providerUsers, null, 2);
+            
+            console.log(message);
+            
+            const fieldsWithData = Object.keys(providerProfile).filter(key => providerProfile[key] && providerProfile[key] !== '');
+            
+            alert(`📊 STORED DATA SUMMARY\n\n` +
+                  `Total fields in profile: ${Object.keys(providerProfile).length}\n` +
+                  `Fields with data: ${fieldsWithData.length}\n\n` +
+                  `Fields: ${fieldsWithData.join(', ')}\n\n` +
+                  `✅ Check browser console (F12) for full details`);
+        }
+
+        // Toggle edit mode for individual field
+        function toggleEdit(fieldName) {
+            const viewElement = document.getElementById(`view-${fieldName}`);
+            const editElement = document.getElementById(`edit-${fieldName}`);
+            const inputElement = document.getElementById(`input-${fieldName}`);
+
+            // Switch to edit mode
+            viewElement.style.display = 'none';
+            editElement.style.display = 'block';
+            
+            // Focus on input
+            if (inputElement) {
+                setTimeout(() => inputElement.focus(), 100);
+            }
+        }
+
+        // Format field value for display
+        function formatFieldValue(fieldName, value) {
+            if (!value || value === '') {
+                return 'Not provided yet';
+            }
+            
+            // Special formatting for certain fields
+            if (fieldName === 'sinNumber') {
+                return '***-***-' + (value.length >= 3 ? value.slice(-3) : '***');
+            } else if (fieldName === 'dateOfBirth') {
+                try {
+                    const date = new Date(value);
+                    return date.toLocaleDateString('en-CA');
+                } catch(e) {
+                    return value;
+                }
+            } else if (fieldName === 'province') {
+                const provinceNames = {
+                    'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba',
+                    'NB': 'New Brunswick', 'NL': 'Newfoundland and Labrador',
+                    'NS': 'Nova Scotia', 'ON': 'Ontario', 'PE': 'Prince Edward Island',
+                    'QC': 'Quebec', 'SK': 'Saskatchewan', 'NT': 'Northwest Territories',
+                    'NU': 'Nunavut', 'YT': 'Yukon'
+                };
+                return provinceNames[value] || value;
+            }
+            
+            return value;
+        }
+
+        // Save field after editing (called on blur)
+        function saveField(fieldName) {
+            const viewElement = document.getElementById(`view-${fieldName}`);
+            const editElement = document.getElementById(`edit-${fieldName}`);
+            const inputElement = document.getElementById(`input-${fieldName}`);
+            
+            // Get the new value
+            const newValue = inputElement ? inputElement.value : '';
+            const oldValue = originalData[fieldName] || '';
+            
+            // Update the view element with formatted value
+            if (viewElement) {
+                const formattedValue = formatFieldValue(fieldName, newValue);
+                viewElement.textContent = formattedValue;
+                
+                // Update empty class
+                if (!newValue || newValue === '') {
+                    viewElement.classList.add('empty');
+                } else {
+                    viewElement.classList.remove('empty');
+                }
+            }
+            
+            // Switch back to view mode
+            viewElement.style.display = 'block';
+            editElement.style.display = 'none';
+            
+            // Check if value changed
+            if (newValue !== oldValue) {
+                // Mark as edited
+                editedFields[fieldName] = true;
+                console.log(`Field "${fieldName}" changed: "${oldValue}" → "${newValue}"`);
+            } else {
+                // Remove from edited fields if value unchanged
+                delete editedFields[fieldName];
+            }
+        }
+
+        // Load and display account information
+        function loadAccountInfo() {
+            const providerProfile = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            originalData = {...providerProfile};
+
+            console.log('=== LOADING ACCOUNT INFO ===');
+            console.log('Full provider profile:', JSON.stringify(providerProfile, null, 2));
+            console.log('Available keys:', Object.keys(providerProfile));
+            
+            // Check if this is registration data or just profile data
+            const hasRegistrationData = providerProfile.legalFirstName || providerProfile.sinNumber || providerProfile.gstNumber;
+            const hasOnlyProfileData = providerProfile.businessName && !hasRegistrationData;
+            
+            if (hasOnlyProfileData) {
+                // Show prominent warning that registration is not complete
+                const warningDiv = document.getElementById('registrationWarning');
+                if (warningDiv) {
+                    warningDiv.style.display = 'block';
+                }
+                
+                // Show message in debug area too
+                const debugDiv = document.getElementById('debugInfo');
+                if (debugDiv) {
+                    debugDiv.innerHTML = `<strong style="color: #ff9800;">⚠️ Only profile data found.</strong> Registration fields are empty. Please complete <a href="service-provider-register.html" style="color: #667eea; text-decoration: underline;">registration form</a>.`;
+                    debugDiv.style.backgroundColor = '#fff3cd';
+                    debugDiv.style.borderColor = '#ffc107';
+                    debugDiv.style.display = 'block';
+                }
+                console.warn('⚠️ Only profile data found, registration not completed');
+            } else if (hasRegistrationData) {
+                // Hide warning if registration is complete
+                const warningDiv = document.getElementById('registrationWarning');
+                if (warningDiv) {
+                    warningDiv.style.display = 'none';
+                }
+            }
+            
+            // Show debug info
+            const debugDiv = document.getElementById('debugInfo');
+            if (debugDiv && Object.keys(providerProfile).length > 0 && !hasOnlyProfileData) {
+                const fieldCount = Object.keys(providerProfile).filter(key => providerProfile[key]).length;
+                debugDiv.innerHTML = `<strong>Debug:</strong> Found ${fieldCount} fields with data from registration form.`;
+                debugDiv.style.display = 'block';
+            }
+
+            // Handle legacy registrations (fullName instead of separate names)
+            if (providerProfile.fullName && !providerProfile.legalFirstName) {
+                console.log('Converting legacy fullName to separate fields');
+                const nameParts = providerProfile.fullName.split(' ');
+                if (nameParts.length === 3) {
+                    providerProfile.legalFirstName = nameParts[0];
+                    providerProfile.legalMiddleName = nameParts[1];
+                    providerProfile.legalLastName = nameParts[2];
+                } else if (nameParts.length === 2) {
+                    providerProfile.legalFirstName = nameParts[0];
+                    providerProfile.legalLastName = nameParts[1];
+                } else {
+                    providerProfile.legalFirstName = providerProfile.fullName;
+                }
+                providerProfile.preferredName = providerProfile.fullName;
+            }
+
+            // Define all fields
+            const fields = [
+                'legalFirstName', 'legalMiddleName', 'legalLastName', 'preferredName',
+                'email', 'phone', 'dateOfBirth', 'streetAddress', 'unitNumber',
+                'city', 'province', 'postalCode', 'sinNumber', 'gstNumber'
+            ];
+
+            // Populate view mode with actual data
+            fields.forEach(field => {
+                const viewElement = document.getElementById(`view-${field}`);
+                const inputElement = document.getElementById(`input-${field}`);
+                
+                if (viewElement && inputElement) {
+                    let value = providerProfile[field] || '';
+                    
+                    console.log(`Field "${field}": "${value}" (${value ? 'HAS DATA' : 'EMPTY'})`);
+                    
+                    // Special formatting for certain fields
+                    if (field === 'sinNumber' && value) {
+                        viewElement.textContent = '***-***-' + (value.length >= 3 ? value.slice(-3) : '***');
+                        viewElement.classList.remove('empty');
+                    } else if (field === 'dateOfBirth' && value) {
+                        try {
+                            const date = new Date(value);
+                            viewElement.textContent = date.toLocaleDateString('en-CA');
+                            viewElement.classList.remove('empty');
+                        } catch(e) {
+                            viewElement.textContent = value;
+                            viewElement.classList.remove('empty');
+                        }
+                    } else if (field === 'province' && value) {
+                        // Show full province name
+                        const provinceNames = {
+                            'AB': 'Alberta', 'BC': 'British Columbia', 'MB': 'Manitoba',
+                            'NB': 'New Brunswick', 'NL': 'Newfoundland and Labrador',
+                            'NS': 'Nova Scotia', 'ON': 'Ontario', 'PE': 'Prince Edward Island',
+                            'QC': 'Quebec', 'SK': 'Saskatchewan', 'NT': 'Northwest Territories',
+                            'NU': 'Nunavut', 'YT': 'Yukon'
+                        };
+                        viewElement.textContent = provinceNames[value] || value;
+                        viewElement.classList.remove('empty');
+                    } else if (!value || value === '') {
+                        viewElement.textContent = 'Not provided yet';
+                        viewElement.classList.add('empty');
+                    } else {
+                        viewElement.textContent = value;
+                        viewElement.classList.remove('empty');
+                    }
+                    
+                    // Set input value
+                    inputElement.value = value;
+                }
+            });
+
+            console.log('=== ACCOUNT INFO LOADED ===');
+
+            // Registration date
+            if (providerProfile.registeredAt) {
+                try {
+                    const date = new Date(providerProfile.registeredAt);
+                    const regDateElement = document.getElementById('registeredAt');
+                    if (regDateElement) {
+                        regDateElement.textContent = date.toLocaleDateString('en-CA') + ' at ' + date.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' });
+                    }
+                } catch(e) {
+                    console.error('Error formatting registration date:', e);
+                }
+            } else {
+                const regDateElement = document.getElementById('registeredAt');
+                if (regDateElement) {
+                    regDateElement.textContent = 'Not available';
+                }
+            }
+
+            // Account status
+            const status = providerProfile.status || 'pending_verification';
+            const statusBadge = document.querySelector('#accountStatus .status-badge');
+            if (statusBadge) {
+                if (status === 'verified') {
+                    statusBadge.className = 'status-badge status-verified';
+                    statusBadge.textContent = 'Verified';
+                } else if (status === 'pending_verification' || status === 'pending') {
+                    statusBadge.className = 'status-badge status-pending';
+                    statusBadge.textContent = 'Pending Verification';
+                } else {
+                    statusBadge.className = 'status-badge status-pending';
+                    statusBadge.textContent = status || 'Pending';
+                }
+            }
+
+            // Load document status
+            loadDocumentStatus(providerProfile);
+        }
+
+        function loadDocumentStatus(profile) {
+            const docs = [
+                { key: 'workEligibilityDoc', statusId: 'workEligibilityStatus', nameId: 'workEligibilityName' },
+                { key: 'photoId1', statusId: 'photoId1Status', nameId: 'photoId1Name' },
+                { key: 'photoId2', statusId: 'photoId2Status', nameId: 'photoId2Name' }
+            ];
+
+            docs.forEach(doc => {
+                const fileName = profile[doc.key];
+                const statusEl = document.getElementById(doc.statusId);
+                const nameEl = document.getElementById(doc.nameId);
+
+                if (fileName) {
+                    statusEl.innerHTML = 'Status: <span class="status-badge status-verified">Uploaded</span>';
+                    nameEl.textContent = 'File: ' + fileName;
+                } else {
+                    statusEl.innerHTML = 'Status: <span class="status-badge status-pending">Pending Upload</span>';
+                    nameEl.textContent = '';
+                }
+            });
+        }
+
+        function cancelAllEdits() {
+            if (Object.keys(editedFields).length === 0) {
+                showInfoMessage('No changes to cancel.');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to cancel all changes?')) {
+                return;
+            }
+
+            // Reload page to reset all fields
+            location.reload();
+        }
+
+        // Show info message that auto-closes
+        function showInfoMessage(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+                color: white;
+                padding: 25px 40px;
+                border-radius: 15px;
+                box-shadow: 0 8px 32px rgba(23, 162, 184, 0.4);
+                z-index: 10000;
+                font-size: 1.2em;
+                font-weight: 600;
+                text-align: center;
+            `;
+            alertDiv.innerHTML = `
+                <div style="margin-bottom: 10px; font-size: 2em;">ℹ️</div>
+                <div>${message}</div>
+            `;
+            document.body.appendChild(alertDiv);
+
+            // Auto-remove after 2.5 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 2500);
+        }
+
+        function saveChanges() {
+            if (Object.keys(editedFields).length === 0) {
+                showInfoMessage('No changes to save.<br>Click on any field to edit it.');
+                return;
+            }
+
+            const fields = [
+                'legalFirstName', 'legalMiddleName', 'legalLastName', 'preferredName',
+                'email', 'phone', 'dateOfBirth', 'streetAddress', 'unitNumber',
+                'city', 'province', 'postalCode', 'sinNumber', 'gstNumber'
+            ];
+
+            const providerProfile = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            const updatedProfile = {...providerProfile};
+
+            // Collect updated values from input fields
+            let changedCount = 0;
+            fields.forEach(field => {
+                const inputElement = document.getElementById(`input-${field}`);
+                if (inputElement) {
+                    const newValue = inputElement.value;
+                    const oldValue = originalData[field] || '';
+                    
+                    if (newValue !== oldValue) {
+                        updatedProfile[field] = newValue;
+                        changedCount++;
+                        console.log(`Updated ${field}: "${oldValue}" -> "${newValue}"`);
+                    }
+                }
+            });
+
+            if (changedCount === 0) {
+                showInfoMessage('No actual changes detected.');
+                return;
+            }
+
+            // Update timestamp
+            updatedProfile.lastUpdated = new Date().toISOString();
+
+            // Save to localStorage
+            localStorage.setItem('providerProfile', JSON.stringify(updatedProfile));
+            console.log('Saved updated profile:', updatedProfile);
+
+            // Update providerUsers array
+            const storedProviders = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+            const emailToFind = originalData.email || updatedProfile.email;
+            const index = storedProviders.findIndex(p => p.email === emailToFind);
+            
+            if (index !== -1) {
+                storedProviders[index] = updatedProfile;
+                localStorage.setItem('providerUsers', JSON.stringify(storedProviders));
+                console.log('Updated providerUsers array');
+            } else {
+                console.warn('Provider not found in providerUsers array');
+            }
+
+            // Show brief success message and redirect
+            const alertDiv = document.createElement('div');
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                color: white;
+                padding: 25px 40px;
+                border-radius: 15px;
+                box-shadow: 0 8px 32px rgba(40, 167, 69, 0.4);
+                z-index: 10000;
+                font-size: 1.2em;
+                font-weight: 600;
+                text-align: center;
+            `;
+            alertDiv.innerHTML = `
+                <div style="margin-bottom: 10px; font-size: 2em;">✅</div>
+                <div>Changes saved successfully!</div>
+                <div style="font-size: 0.9em; margin-top: 8px; opacity: 0.9;">Redirecting to dashboard...</div>
+            `;
+            document.body.appendChild(alertDiv);
+
+            // Redirect after brief delay
+            setTimeout(() => {
+                window.location.href = 'provider.html';
+            }, 1200);
+        }
+
+        function handleDocUpload(input, docType) {
+            const file = input.files[0];
+            if (file) {
+                const providerProfile = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+                
+                // Map doc types to profile keys
+                const docKeyMap = {
+                    'workEligibility': 'workEligibilityDoc',
+                    'photoId1': 'photoId1',
+                    'photoId2': 'photoId2'
+                };
+
+                providerProfile[docKeyMap[docType]] = file.name;
+                localStorage.setItem('providerProfile', JSON.stringify(providerProfile));
+
+                // Update providerUsers array
+                const storedProviders = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+                const index = storedProviders.findIndex(p => p.email === providerProfile.email);
+                if (index !== -1) {
+                    storedProviders[index] = providerProfile;
+                    localStorage.setItem('providerUsers', JSON.stringify(storedProviders));
+                }
+
+                alert('✅ Document uploaded successfully!');
+                loadAccountInfo();
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('providerLoggedIn');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Load data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if logged in
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            if (isLoggedIn !== 'true') {
+                alert('Please login first');
+                window.location.href = 'service-provider-login.html';
+                return;
+            }
+
+            // Check if profile exists
+            const providerProfile = JSON.parse(localStorage.getItem('providerProfile') || '{}');
+            console.log('Current provider profile:', providerProfile);
+            
+            if (!providerProfile.email && !providerProfile.fullName) {
+                console.warn('No profile data found. User may need to complete registration.');
+                // Still load the page but all fields will show "Not provided yet"
+            }
+
+            loadAccountInfo();
+        });
+    </script>
+</body>
+</html>

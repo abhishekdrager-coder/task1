@@ -23,7 +23,6 @@ A comprehensive service marketplace connecting customers with skilled service pr
 - Flexible work schedule
 - Set your own rates
 - Access to large customer base
-- Weekly payments
 - Insurance coverage
 
 ## Services Offered

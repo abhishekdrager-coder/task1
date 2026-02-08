@@ -6,6 +6,32 @@
     <title>Customer Dashboard - Task Masters</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <style>
+        body.dark-mode { background: #0a0e1a; color: #e0e8ff; }
+        body.dark-mode .modern-navbar { background: rgba(20, 40, 80, 0.4) !important; border-bottom: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .icon-dashboard-container { background: #0a0e1a; }
+        body.dark-mode .icon-dashboard-header h1 { color: #ffffff; }
+        body.dark-mode .icon-dashboard-header p { color: #e0e8ff; }
+        body.dark-mode .icon-menu-grid .icon-menu-card { background: rgba(20, 40, 80, 0.4) !important; border: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .icon-menu-grid .icon-menu-card h3 { color: #ffffff; }
+        body.dark-mode .icon-menu-grid .icon-menu-card p { color: #e0e8ff; }
+        body.dark-mode .footer { background: rgba(20, 40, 80, 0.4); border-top: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e8ff; }
+        body.dark-mode .dropdown-menu { background: rgba(20, 40, 80, 0.95) !important; border: 1px solid rgba(102, 126, 234, 0.3) !important; }
+        body.dark-mode .dropdown-menu a { color: #e0e8ff !important; }
+        body.dark-mode .dropdown-menu a:hover { background: rgba(30, 50, 90, 0.6) !important; }
+    </style>
 </head>
 <body>
     <!-- Modern Top Navigation -->

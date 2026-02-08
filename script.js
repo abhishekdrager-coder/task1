@@ -277,12 +277,41 @@ function showTab(tabName) {
 function handleProviderLogin(event) {
     event.preventDefault();
     const email = document.getElementById('providerEmail')?.value;
+    const password = document.getElementById('providerPassword')?.value;
     const rememberMe = document.getElementById('providerRememberMe')?.checked || false;
     
-    // Save login state
+    if (!email || !password) {
+        alert('❌ Please enter both email and password');
+        return;
+    }
+    
+    // Check if provider exists in localStorage
+    const storedProviders = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+    const provider = storedProviders.find(p => p.email === email);
+    
+    if (!provider) {
+        alert('❌ No account found with this email. Please register first.');
+        return;
+    }
+    
+    if (provider.password !== password) {
+        alert('❌ Incorrect password. Please try again.');
+        return;
+    }
+    
+    // Save provider data and login state
+    localStorage.setItem('providerProfile', JSON.stringify(provider));
+    localStorage.setItem('providerLoggedIn', 'true');
+    
+    // Also save using Auth system
     Auth.login('provider', { email: email }, rememberMe);
     
-    window.location.href = 'provider.html';
+    alert('✅ Login successful! Redirecting to dashboard...');
+    
+    // Redirect to dashboard
+    setTimeout(() => {
+        window.location.href = 'provider.html';
+    }, 500);
 }
 
 function handleProviderRegister(event) {
@@ -297,25 +326,47 @@ function handleProviderRegister(event) {
     const experience = document.getElementById('regExperience')?.value;
     const city = document.getElementById('regCity')?.value;
     
+    if (!fullName || !email || !phone || !password) {
+        alert('❌ Please fill in all required fields');
+        return;
+    }
+    
+    // Check if email already exists
+    const storedProviders = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+    if (storedProviders.find(p => p.email === email)) {
+        alert('❌ An account with this email already exists. Please login instead.');
+        return;
+    }
+    
     // Create provider profile
     const providerProfile = {
         fullName: fullName,
         email: email,
         phone: phone,
+        password: password,
         category: category,
         experience: experience,
         city: city,
         registeredAt: new Date().toISOString()
     };
     
+    // Save to providerUsers array
+    storedProviders.push(providerProfile);
+    localStorage.setItem('providerUsers', JSON.stringify(storedProviders));
+    
     // Save provider profile to localStorage
     localStorage.setItem('providerProfile', JSON.stringify(providerProfile));
     
     // Save login state
+    localStorage.setItem('providerLoggedIn', 'true');
     const rememberMe = true; // Auto-remember new registrations
     Auth.login('provider', { email: email, fullName: fullName }, rememberMe);
     
-    window.location.href = 'provider.html';
+    alert('✅ Registration successful! Redirecting to your dashboard...');
+    
+    setTimeout(() => {
+        window.location.href = 'provider.html';
+    }, 500);
 }
 
 // Logout function (to be called from logout buttons)

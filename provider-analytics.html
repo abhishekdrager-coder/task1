@@ -9,6 +9,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         (function() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('providerSettings') || '{}');
+                if (settings.darkMode === true) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.body.classList.add('dark-mode');
+                }
+            } catch (e) {}
+        })();
+        
+        (function() {
             const isLoggedIn = localStorage.getItem('providerLoggedIn');
             if (isLoggedIn !== 'true') {
                 window.location.href = 'service-provider-login.html';
@@ -16,6 +26,20 @@
         })();
     </script>
     <style>
+        body.dark-mode { background: #0a0e1a; color: #e0e8ff; }
+        body.dark-mode .modern-navbar { background: rgba(20, 40, 80, 0.4) !important; border-bottom: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .analytics-container { background: #0a0e1a; }
+        body.dark-mode .analytics-header h1, body.dark-mode .analytics-header h2 { color: #ffffff; }
+        body.dark-mode .analytics-header p { color: #e0e8ff; }
+        body.dark-mode .stats-grid, body.dark-mode .stat-card, body.dark-mode .chart-container { background: rgba(20, 40, 80, 0.4) !important; border: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode h2, body.dark-mode h3, body.dark-mode h4 { color: #ffffff; }
+        body.dark-mode p, body.dark-mode span, body.dark-mode label { color: #e0e8ff; }
+        body.dark-mode .footer { background: rgba(20, 40, 80, 0.4); border-top: 1px solid rgba(102, 126, 234, 0.3); }
+        body.dark-mode .footer h3, body.dark-mode .footer h4, body.dark-mode .footer p, body.dark-mode .footer a { color: #e0e8ff; }
+        body.dark-mode .dropdown-menu { background: rgba(20, 40, 80, 0.95) !important; border: 1px solid rgba(102, 126, 234, 0.3) !important; }
+        body.dark-mode .dropdown-menu a { color: #e0e8ff !important; }
+        body.dark-mode .dropdown-menu a:hover { background: rgba(30, 50, 90, 0.6) !important; }
+        
         * {
             margin: 0;
             padding: 0;
@@ -421,6 +445,9 @@
                     <button class="date-range-btn" onclick="setDateRange('90d')">90 Days</button>
                     <button class="date-range-btn" onclick="setDateRange('1y')">1 Year</button>
                 </div>
+                <a href="index.html" class="back-btn" style="margin-right: 10px;">
+                    <i class="fas fa-home"></i> Home
+                </a>
                 <a href="provider.html" class="back-btn">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>

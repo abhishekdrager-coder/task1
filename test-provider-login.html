@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Provider Login</title>
+    <style>
+        body { font-family: Arial; padding: 40px; max-width: 600px; margin: 0 auto; }
+        .section { background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 10px; }
+        button { padding: 10px 20px; background: #667eea; color: white; border: none; cursor: pointer; border-radius: 5px; margin: 5px; }
+        input { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Provider Login Tester</h1>
+    
+    <div class="section">
+        <h2>Step 1: Create Test Provider</h2>
+        <button onclick="createTestProvider()">Create Test Provider Account</button>
+        <div id="createStatus"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Step 2: Check Current State</h2>
+        <button onclick="checkState()">Check Login State</button>
+        <div id="stateStatus"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Step 3: Test Manual Login</h2>
+        <input type="email" id="testEmail" placeholder="Email" value="test@provider.com">
+        <input type="password" id="testPassword" placeholder="Password" value="password123">
+        <button onclick="testLogin()">Test Login</button>
+        <div id="loginStatus"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Step 4: Go to Dashboard</h2>
+        <a href="provider.html" style="display: inline-block; padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px;">Open Provider Dashboard</a>
+    </div>
+    
+    <script>
+        function createTestProvider() {
+            const testProvider = {
+                fullName: 'Test Provider',
+                email: 'test@provider.com',
+                phone: '+1234567890',
+                password: 'password123',
+                category: 'Plumbing',
+                experience: '5 years',
+                city: 'Toronto',
+                registeredAt: new Date().toISOString()
+            };
+            
+            const providers = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+            const exists = providers.find(p => p.email === testProvider.email);
+            
+            if (!exists) {
+                providers.push(testProvider);
+                localStorage.setItem('providerUsers', JSON.stringify(providers));
+                document.getElementById('createStatus').innerHTML = '<div class="status success">✅ Test provider created!<br>Email: test@provider.com<br>Password: password123</div>';
+            } else {
+                document.getElementById('createStatus').innerHTML = '<div class="status success">✅ Test provider already exists!<br>Email: test@provider.com<br>Password: password123</div>';
+            }
+        }
+        
+        function checkState() {
+            const isLoggedIn = localStorage.getItem('providerLoggedIn');
+            const profile = localStorage.getItem('providerProfile');
+            const users = localStorage.getItem('providerUsers');
+            
+            let html = '<div class="status">';
+            html += '<strong>providerLoggedIn:</strong> ' + (isLoggedIn || 'null') + '<br>';
+            html += '<strong>providerProfile:</strong> ' + (profile ? 'EXISTS' : 'null') + '<br>';
+            html += '<strong>providerUsers count:</strong> ' + (users ? JSON.parse(users).length : '0') + '<br>';
+            html += '</div>';
+            
+            document.getElementById('stateStatus').innerHTML = html;
+        }
+        
+        function testLogin() {
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            const storedProviders = JSON.parse(localStorage.getItem('providerUsers') || '[]');
+            const provider = storedProviders.find(p => p.email === email);
+            
+            if (!provider) {
+                document.getElementById('loginStatus').innerHTML = '<div class="status error">❌ No account found with email: ' + email + '</div>';
+                return;
+            }
+            
+            if (provider.password !== password) {
+                document.getElementById('loginStatus').innerHTML = '<div class="status error">❌ Incorrect password</div>';
+                return;
+            }
+            
+            // Successful login
+            localStorage.setItem('providerProfile', JSON.stringify(provider));
+            localStorage.setItem('providerLoggedIn', 'true');
+            
+            document.getElementById('loginStatus').innerHTML = '<div class="status success">✅ Login successful!<br>providerLoggedIn set to: true<br>You can now go to the dashboard.</div>';
+        }
+        
+        // Auto-check on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkState();
+        });
+    </script>
+</body>
+</html>
