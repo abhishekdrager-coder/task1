@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provider Resources - Task Masters</title>
+    <title>Provider Resources - BeverHub</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -41,11 +41,13 @@
 <body>
     <!-- Navigation Bar -->
     <nav class="modern-navbar" style="background: #2c3e50; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <a href="index.html" style="text-decoration: none;">
-            <div class="logo" style="display: flex; align-items: center; gap: 15px;">
-                <i class="fas fa-bullseye" style="color: white; font-size: 2.5em;"></i>
-                <span class="logo-text" style="color: white; font-size: 32px; font-weight: bold;">Task Masters</span>
-            </div>
+        <a href="index.html" class="beverhub-logo">
+            <span class="logo-mascot">🦫</span>
+            <span class="logo-brand">
+                <span class="logo-name"><span class="bever">Bever</span><span class="hub">hub</span></span>
+                <span class="logo-underline"></span>
+                <span class="logo-tagline"></span>
+            </span>
         </a>
         
         <div style="display: flex; gap: 30px; align-items: center;">
@@ -63,20 +65,7 @@
     </div>
 
     <script src="script.js"></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const customerAuth = Auth.isLoggedIn('customer');
-            const providerAuth = Auth.isLoggedIn('provider');
-            const loginBtn = document.getElementById('loginBtn');
-            const providerBtn = document.getElementById('providerBtn');
-            
-            if (customerAuth) {
-                loginBtn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
-            } else if (providerAuth) {
-                loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
-                providerBtn.style.display = 'none';
-            }
-        });
-    </script>
+    <script src="dark-mode.js"></script>
+    <script src="logo.js"></script>
 </body>
 </html>

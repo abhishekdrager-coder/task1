@@ -1,4 +1,4 @@
-# Security Policy for Task Masters
+# Security Policy for BeverHub
 
 ## 🔒 Current Security Status
 

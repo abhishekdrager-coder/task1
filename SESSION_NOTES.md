@@ -1,4 +1,4 @@
-# SESSION NOTES — Task Masters Project
+# SESSION NOTES — BeverHub Project
 ### Last Updated: February 7, 2026
 ### Reference file for continuing work after clearing chat history
 
@@ -24,7 +24,7 @@
 
 ## 1. PROJECT OVERVIEW
 
-**Task Masters** — A service marketplace platform (competitor to TaskRabbit, Sitly, Urban Company).
+**BeverHub** — A service marketplace platform (competitor to TaskRabbit, Sitly, Urban Company).
 - Connects **customers** with **service providers**
 - Frontend-only demo/prototype for portfolio & learning
 - Hosted on **GitHub Pages** (static site, no backend)
@@ -481,15 +481,15 @@ Provider Dashboard (provider.html)
 |------|------|---------|
 | 2026-02-07 | `84d933d6` | Fix: Hide debug banner and improve login persistence |
 | 2026-01-27 | `ba9280a3` | Update welcome message to show professional name |
-| 2026-01-27 | `26b600a7` | Deploy Task Masters to GitHub Pages |
+| 2026-01-27 | `26b600a7` | Deploy BeverHub to GitHub Pages |
 | 2026-01-25 | `cfa15b8c` | Fix postal code mappings: Cambridge, Surrey, comprehensive Canada/USA |
-| 2026-01-25 | `55f15a91` | Deploy Task Masters to GitHub Pages |
-| 2026-01-21 | `ed04228d` | Deploy Task Masters to GitHub Pages |
+| 2026-01-25 | `55f15a91` | Deploy BeverHub to GitHub Pages |
+| 2026-01-21 | `ed04228d` | Deploy BeverHub to GitHub Pages |
 | 2026-01-20 | `be481c36` | New analytics page, zone update page, UI improvements - v19.0 |
 | 2026-01-19 | `097e0500` | Auto-deploy |
 | 2026-01-19 | `2d5b9ff5` | Auto-deploy |
 | 2026-01-19 | `1999f974` | Auto-deploy |
-| 2026-01-19 | `c1b8bdc1` | Deploy Task Masters to GitHub Pages |
+| 2026-01-19 | `c1b8bdc1` | Deploy BeverHub to GitHub Pages |
 
 **Current HEAD**: `84d933d626fda268649f901d81c6a17907e0d0ad`
 

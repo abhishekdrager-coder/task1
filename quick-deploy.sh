@@ -1,7 +1,7 @@
 #!/bin/bash
 # One-command secure deployment to GitHub Pages
 git add . && \
-git commit -m "Deploy Task Masters to GitHub Pages - $(date +%Y-%m-%d)" && \
+git commit -m "Deploy BeverHub to GitHub Pages - $(date +%Y-%m-%d)" && \
 git push origin main && \
 echo "" && \
 echo "✅ Successfully deployed!" && \

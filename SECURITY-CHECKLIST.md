@@ -135,7 +135,7 @@ Your project is:
 
 ```bash
 git add .
-git commit -m "Initial deployment - Task Masters demo"
+git commit -m "Initial deployment - BeverHub demo"
 git push origin main
 ```
 

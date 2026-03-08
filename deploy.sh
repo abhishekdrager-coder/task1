@@ -46,7 +46,7 @@ git status --short
 echo ""
 read -p "Enter commit message (or press Enter for default): " commit_msg
 if [ -z "$commit_msg" ]; then
-    commit_msg="Deploy Task Masters to GitHub Pages"
+    commit_msg="Deploy BeverHub to GitHub Pages"
 fi
 
 git commit -m "$commit_msg"

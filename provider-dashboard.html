@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provider Dashboard - Task Masters</title>
+    <title>Provider Dashboard - BeverHub</title>
     <link rel="stylesheet" href="styles.css?v=7.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -21,11 +21,13 @@
     <nav class="modern-navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <a href="#" onclick="showSection('overview'); return false;">
-                    <div class="logo-wrapper">
-                        <span class="logo-icon">🎯</span>
-                        <span class="logo-text">Task Masters</span>
-                    </div>
+                <a href="#" onclick="showSection('overview'); return false;" class="beverhub-logo">
+                    <span class="logo-mascot">🦫</span>
+                    <span class="logo-brand">
+                        <span class="logo-name"><span class="bever">Bever</span><span class="hub">hub</span></span>
+                        <span class="logo-underline"></span>
+                        <span class="logo-tagline"></span>
+                    </span>
                 </a>
             </div>
             <div class="nav-actions">
@@ -240,7 +242,7 @@
                             <div class="stat-value">$0</div>
                             <div class="stat-trend">
                                 <span class="trend-icon">🎉</span>
-                                <span class="highlight-text">0% Commission from Task Masters!</span>
+                                <span class="highlight-text">0% Commission from BeverHub!</span>
                             </div>
                         </div>
                         <div class="stat-icon-large">💰</div>
@@ -357,7 +359,7 @@
                                         <div class="timeline-dot"></div>
                                         <div class="timeline-content">
                                             <p class="timeline-title">Profile Created</p>
-                                            <p class="timeline-time">Welcome to Task Masters! 🎉</p>
+                                            <p class="timeline-time">Welcome to BeverHub! 🎉</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1423,15 +1425,25 @@
     <script>
         // Ensure handleLogout is defined and working
         if (typeof handleLogout === 'undefined') {
-            console.log('handleLogout not found, defining it now');
             function handleLogout(userType) {
-                // Clear all auth data
                 localStorage.removeItem(userType + 'Auth');
                 sessionStorage.removeItem(userType + 'Auth');
-                // Redirect to home
+                localStorage.removeItem(userType + 'LoggedIn');
+                sessionStorage.removeItem(userType + 'LoggedIn');
+                if (userType === 'provider') {
+                    localStorage.removeItem('providerProfile');
+                    localStorage.removeItem('providerServices');
+                    localStorage.removeItem('providerPortfolio');
+                    localStorage.removeItem('providerAvailability');
+                }
+                localStorage.removeItem('rememberMeData');
+                localStorage.setItem('justLoggedOut', 'true');
                 window.location.href = 'index.html';
+                return false;
             }
         }
     </script>
+    <script src="dark-mode.js"></script>
+    <script src="logo.js"></script>
 </body>
 </html>

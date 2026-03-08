@@ -1,6 +1,6 @@
-// Task Masters - Service Marketplace Platform with Persistent Login
+// BeverHub - Service Marketplace Platform with Persistent Login
 
-console.log('🎯 Task Masters Platform loaded successfully!');
+console.log('🏠 BeverHub Platform loaded successfully!');
 
 // Complete list of services with subcategories
 const servicesList = [
@@ -153,8 +153,29 @@ const Auth = {
     
     // Logout user
     logout: function(userType) {
+        // Remove auth tokens
         localStorage.removeItem(`${userType}Auth`);
         sessionStorage.removeItem(`${userType}Auth`);
+        localStorage.removeItem(`${userType}LoggedIn`);
+        sessionStorage.removeItem(`${userType}LoggedIn`);
+        
+        // Remove user-specific data
+        if (userType === 'provider') {
+            localStorage.removeItem('providerProfile');
+            localStorage.removeItem('providerServices');
+            localStorage.removeItem('providerPortfolio');
+            localStorage.removeItem('providerAvailability');
+        } else if (userType === 'customer') {
+            localStorage.removeItem('customerProfile');
+            localStorage.removeItem('customerUser');
+        }
+        
+        // Clear Remember Me data
+        localStorage.removeItem('rememberMeData');
+        
+        // Signal that we just logged out
+        localStorage.setItem('justLoggedOut', 'true');
+        
         window.location.href = 'index.html';
     },
     
@@ -164,6 +185,40 @@ const Auth = {
         // They will see "My Dashboard" link instead of login button
     }
 };
+
+// Universal login button state handler - works on ALL pages
+// Checks current auth state and updates login/dashboard button accordingly
+function updateLoginButtonState() {
+    var loginBtn = document.getElementById('loginBtn');
+    var providerBtn = document.getElementById('providerBtn');
+    
+    // Also check for container-based button (index.html)
+    var loginBtnContainer = document.getElementById('loginBtnContainer');
+    
+    var isCustomerLoggedIn = localStorage.getItem('customerLoggedIn') === 'true';
+    var isProviderLoggedIn = localStorage.getItem('providerLoggedIn') === 'true';
+    var customerAuth = Auth.isLoggedIn('customer');
+    var providerAuth = Auth.isLoggedIn('provider');
+    var loggedIn = isCustomerLoggedIn || isProviderLoggedIn || customerAuth || providerAuth;
+    
+    if (loginBtn && loggedIn) {
+        var dashUrl = (isCustomerLoggedIn || customerAuth) ? 'customer-dashboard.html' : 'provider.html';
+        loginBtn.outerHTML = '<a href="' + dashUrl + '" class="btn-login" id="loginBtn" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
+        if (providerBtn && (isProviderLoggedIn || providerAuth)) {
+            providerBtn.style.display = 'none';
+        }
+    } else if (loginBtn && !loggedIn) {
+        // If button is an <a> tag (was changed to "My Dashboard"), restore to Login button
+        if (loginBtn.tagName === 'A' && loginBtn.textContent.trim() === 'My Dashboard') {
+            loginBtn.outerHTML = '<button id="loginBtn" class="btn-login" onclick="openModal()">Login</button>';
+            if (providerBtn) providerBtn.style.display = '';
+        }
+    }
+}
+
+// Run on DOMContentLoaded and pageshow (handles bfcache)
+window.addEventListener('DOMContentLoaded', updateLoginButtonState);
+window.addEventListener('pageshow', updateLoginButtonState);
 
 // Add Enter key listener for search input and check auth on page load
 window.addEventListener('DOMContentLoaded', () => {
@@ -306,12 +361,22 @@ function handleProviderLogin(event) {
     // Also save using Auth system
     Auth.login('provider', { email: email }, rememberMe);
     
-    alert('✅ Login successful! Redirecting to dashboard...');
+    // Handle Remember Me
+    if (rememberMe) {
+        const loginData = {
+            userType: 'provider',
+            user: provider,
+            timestamp: Date.now(),
+            expiresIn: 30 * 24 * 60 * 60 * 1000 // 30 days
+        };
+        localStorage.setItem('rememberMeData', JSON.stringify(loginData));
+        console.log('✅ Remember me activated - session saved for 30 days');
+    } else {
+        localStorage.removeItem('rememberMeData');
+    }
     
     // Redirect to dashboard
-    setTimeout(() => {
-        window.location.href = 'provider.html';
-    }, 500);
+    window.location.href = 'provider.html';
 }
 
 function handleProviderRegister(event) {
@@ -362,16 +427,15 @@ function handleProviderRegister(event) {
     const rememberMe = true; // Auto-remember new registrations
     Auth.login('provider', { email: email, fullName: fullName }, rememberMe);
     
-    alert('✅ Registration successful! Redirecting to your dashboard...');
-    
-    setTimeout(() => {
-        window.location.href = 'provider.html';
-    }, 500);
+    window.location.href = 'provider.html';
 }
 
 // Logout function (to be called from logout buttons)
 function handleLogout(userType) {
     Auth.logout(userType);
+    // Clear Remember Me data
+    localStorage.removeItem('rememberMeData');
+    return false;
 }
 
 // Close modal when clicking outside
@@ -382,16 +446,22 @@ window.onclick = function(event) {
     }
 }
 
-// Smooth scroll
+// Smooth scroll - only for anchors with actual section targets (not bare '#')
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    const href = anchor.getAttribute('href');
+    if (!href || href === '#') return; // Skip bare '#' links (logout, etc.)
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+        try {
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        } catch(err) {
+            // Invalid selector, ignore
         }
     });
 });

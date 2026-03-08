@@ -1,4 +1,4 @@
-# 🎯 Task Masters - Service Marketplace Platform
+# � BeverHub - Service Marketplace Platform
 
 [![GitHub Pages](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge&logo=github)](https://abhishekdrager-coder.github.io/task1/)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
@@ -183,5 +183,5 @@ For questions or issues:
 
 **⚠️ Disclaimer**: This is a demo/prototype for portfolio purposes. Not suitable for production use without significant backend development and security implementation.
 
-© 2026 Task Masters. Educational Project.
+© 2026 BeverHub. Educational Project.
 
