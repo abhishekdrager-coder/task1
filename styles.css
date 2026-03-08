@@ -39,6 +39,86 @@ body {
     text-decoration: none;
 }
 
+/* ===== Beverhub Logo Styles ===== */
+.beverhub-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.beverhub-logo:hover {
+    transform: scale(1.04);
+}
+.beverhub-logo .logo-mascot {
+    font-size: 2.2em;
+    line-height: 1;
+}
+.beverhub-logo .logo-brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+.beverhub-logo .logo-name {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+.beverhub-logo .logo-name .bever {
+    color: #1a3a5c;
+}
+.beverhub-logo .logo-name .hub {
+    color: #E86A33;
+}
+.beverhub-logo .logo-underline {
+    height: 3px;
+    background: linear-gradient(90deg, #E86A33, #F4A261);
+    border-radius: 2px;
+    margin-top: 2px;
+}
+.beverhub-logo .logo-tagline {
+    font-size: 10px;
+    color: #888;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+    display: none;
+}
+/* Provider logo variant */
+.beverhub-logo.provider-logo .logo-mascot {
+    font-size: 2em;
+    background: linear-gradient(135deg, #E86A33, #c0392b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.beverhub-logo.provider-logo .logo-tagline {
+    display: block;
+    color: #4A90E2;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+/* White navbar variant (for modern-navbar with dark bg) */
+.modern-navbar .beverhub-logo .logo-name .bever {
+    color: #ffffff;
+}
+.modern-navbar .beverhub-logo .logo-name .hub {
+    color: #F4A261;
+}
+.modern-navbar .beverhub-logo .logo-tagline {
+    color: rgba(255,255,255,0.7);
+}
+/* Dark mode adjustments */
+.dark-mode .beverhub-logo .logo-name .bever {
+    color: #ffffff;
+}
+.dark-mode .beverhub-logo .logo-tagline {
+    color: rgba(224,232,255,0.6);
+}
+
 .nav-links {
     display: flex;
     gap: 30px;
@@ -209,8 +289,8 @@ body {
 
 /* Commission Badge */
 .commission-badge {
-    background: rgba(255, 255, 255, 0.95);
-    color: #667eea;
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    color: #ffffff;
     padding: 15px 30px;
     border-radius: 50px;
     display: inline-flex;
@@ -219,8 +299,22 @@ body {
     font-weight: 700;
     font-size: 1.1em;
     margin-bottom: 40px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 20px rgba(74, 144, 226, 0.4);
     animation: pulse 2s infinite;
+}
+
+/* Commission Badge - Dark Mode */
+.dark-mode .commission-badge {
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 5px 20px rgba(74, 144, 226, 0.5) !important;
+}
+.dark-mode .commission-badge .badge-text {
+    color: #ffffff !important;
+}
+.dark-mode .commission-badge .badge-icon {
+    color: #ffffff !important;
 }
 
 @keyframes pulse {

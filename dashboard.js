@@ -347,10 +347,14 @@ function saveAvailability(event) {
 
 // Logout
 function logout() {
-    // Optionally clear data on logout
-    // localStorage.removeItem('providerProfile');
-    // localStorage.removeItem('availabilityData');
-    // localStorage.removeItem('advancedSchedule');
+    // Clear ALL provider session data
+    ['providerAuth','providerLoggedIn','providerProfile','providerServices',
+     'providerPortfolio','providerAvailability'].forEach(function(key) {
+        localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
+    });
+    localStorage.removeItem('rememberMeData');
+    localStorage.setItem('justLoggedOut', 'true');
     window.location.href = 'index.html';
 }
 
@@ -912,14 +916,28 @@ function handleDroppedFile(file) {
 // Logout function
 function handleLogout(userType) {
     if (userType === 'customer') {
-        // Clear customer login status
+        localStorage.removeItem('customerAuth');
+        sessionStorage.removeItem('customerAuth');
         localStorage.removeItem('customerLoggedIn');
-        // Redirect to login page
-        window.location.href = 'login.html';
+        sessionStorage.removeItem('customerLoggedIn');
+        localStorage.removeItem('customerProfile');
+        localStorage.removeItem('customerUser');
     } else if (userType === 'provider') {
-        // Clear provider login status
+        localStorage.removeItem('providerAuth');
+        sessionStorage.removeItem('providerAuth');
         localStorage.removeItem('providerLoggedIn');
-        // Redirect to provider login page
-        window.location.href = 'service-provider-login.html';
+        sessionStorage.removeItem('providerLoggedIn');
+        localStorage.removeItem('providerProfile');
+        localStorage.removeItem('providerServices');
+        localStorage.removeItem('providerPortfolio');
+        localStorage.removeItem('providerAvailability');
     }
+    
+    // Clear Remember Me data
+    localStorage.removeItem('rememberMeData');
+    
+    // Signal logout and redirect
+    localStorage.setItem('justLoggedOut', 'true');
+    window.location.href = 'index.html';
+    return false;
 }

@@ -5,7 +5,7 @@
 ### Step 1: Commit Your Code
 ```bash
 git add .
-git commit -m "Initial commit - Task Masters demo"
+git commit -m "Initial commit - BeverHub demo"
 git push origin main
 ```
 
@@ -109,8 +109,8 @@ Add your live link to README.md:
 ### 3. SEO Optimization (Optional)
 Add to each HTML `<head>`:
 ```html
-<meta name="description" content="Task Masters - Connect with trusted service providers">
-<meta property="og:title" content="Task Masters">
+<meta name="description" content="BeverHub - Connect with trusted service providers">
+<meta property="og:title" content="BeverHub">
 <meta property="og:description" content="Your trusted service marketplace">
 <meta property="og:image" content="https://your-site.com/logo.png">
 ```

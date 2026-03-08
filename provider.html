@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provider Dashboard - Task Masters</title>
+    <title>Provider Dashboard - BeverHub</title>
     <link rel="stylesheet" href="styles.css?v=19.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <style>
         /* Dark Mode Styles */
@@ -152,16 +152,38 @@
                 window.location.href = 'service-provider-login.html';
             }
         })();
+
+        function forceProviderLogout() {
+            // Clear ALL provider session data
+            localStorage.removeItem('providerAuth');
+            sessionStorage.removeItem('providerAuth');
+            localStorage.removeItem('providerLoggedIn');
+            sessionStorage.removeItem('providerLoggedIn');
+            localStorage.removeItem('providerProfile');
+            localStorage.removeItem('providerServices');
+            localStorage.removeItem('providerPortfolio');
+            localStorage.removeItem('providerAvailability');
+            localStorage.removeItem('rememberMeData');
+
+            // Signal that we just logged out (index.html reads this)
+            localStorage.setItem('justLoggedOut', 'true');
+
+            // Navigate to home
+            window.location.href = 'index.html';
+            return false;
+        }
     </script></head>
 <body>
     <nav class="modern-navbar" style="background: #2c3e50; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 20px 0;">
         <div class="nav-container" style="max-width: 1600px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between;">
             <div class="nav-logo">
-                <a href="index.html" style="text-decoration: none;">
-                    <div class="logo-wrapper" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                        <span class="logo-icon" style="font-size: 2em;">🎯</span>
-                        <span class="logo-text" style="font-size: 24px; font-weight: 700; color: #ffffff;">Task Masters</span>
-                    </div>
+                <a href="index.html" class="beverhub-logo">
+                    <span class="logo-mascot">🦫</span>
+                    <span class="logo-brand">
+                        <span class="logo-name"><span class="bever">Bever</span><span class="hub">hub</span></span>
+                        <span class="logo-underline"></span>
+                        <span class="logo-tagline"></span>
+                    </span>
                 </a>
             </div>
             
@@ -196,7 +218,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="#" onclick="handleLogout('provider'); return false;" style="display: flex; align-items: center; gap: 10px; padding: 12px 24px; text-decoration: none; color: #ffffff; background: rgba(220, 53, 69, 0.2); border-radius: 10px; transition: all 0.3s; font-weight: 500;" onmouseover="this.style.background='rgba(220, 53, 69, 0.3)'" onmouseout="this.style.background='rgba(220, 53, 69, 0.2)'">
+                <a href="#" onclick="return forceProviderLogout();" style="display: flex; align-items: center; gap: 10px; padding: 12px 24px; text-decoration: none; color: #ffffff; background: rgba(220, 53, 69, 0.2); border-radius: 10px; transition: all 0.3s; font-weight: 500;" onmouseover="this.style.background='rgba(220, 53, 69, 0.3)'" onmouseout="this.style.background='rgba(220, 53, 69, 0.2)'">
                     <i class="fas fa-sign-out-alt" style="font-size: 18px;"></i>
                     <span>Logout</span>
                 </a>
@@ -1260,7 +1282,7 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>🎯 Task Masters</h3>
+                <h3>� BeverHub</h3>
                 <p>Your trusted service marketplace</p>
             </div>
             <div class="footer-section">
@@ -1283,10 +1305,12 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+            <p>&copy; 2026 BeverHub. All rights reserved.</p>
         </div>
     </footer>
     
     <script src="script.js"></script>
+    <script src="dark-mode.js"></script>
+    <script src="logo.js"></script>
 </body>
 </html>

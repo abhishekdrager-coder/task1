@@ -2,33 +2,52 @@
 
 # Quick launch script - Starts server and opens browser automatically
 # Usage: ./quick-launch.sh [port]
+# If no port specified or port is busy, will auto-find an available port
 
 PORT=${1:-8000}  # Default to port 8000 if not specified
 
-echo "🚀 Starting local server on port ${PORT}..."
+# Function to find an available port
+find_available_port() {
+    local start_port=$1
+    local test_port=$start_port
+    
+    while [ $test_port -lt 9000 ]; do
+        if ! lsof -Pi :${test_port} -sTCP:LISTEN -t >/dev/null 2>&1; then
+            echo $test_port
+            return 0
+        fi
+        test_port=$((test_port + 1))
+    done
+    
+    echo $start_port
+}
+
+echo "🚀 Starting local server..."
 echo ""
 
 # Check if port is already in use
 if lsof -Pi :${PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
     echo "⚠️  Port ${PORT} is already in use!"
-    echo ""
     
     # Find what's running on that port
-    PROCESS=$(lsof -Pi :${PORT} -sTCP:LISTEN -t | xargs ps -p | tail -n 1)
+    PROCESS=$(lsof -Pi :${PORT} -sTCP:LISTEN -t | xargs ps -p 2>/dev/null | tail -n 1)
     echo "Currently running: ${PROCESS}"
     echo ""
     
-    read -p "Do you want to open it anyway? (y/n): " -n 1 -r
+    # Auto-find available port
+    NEW_PORT=$(find_available_port $((PORT + 1)))
+    echo "🔍 Found available port: ${NEW_PORT}"
+    PORT=$NEW_PORT
     echo ""
-    
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        URL="http://localhost:${PORT}"
-        echo "🌐 Opening: ${URL}"
-        "$BROWSER" "$URL" 2>/dev/null || xdg-open "$URL" 2>/dev/null || open "$URL" 2>/dev/null || echo "Please open: ${URL}"
-    fi
-else
+fi
+
+# Start the server
+if true; then
+
+# Start the server
+if true; then
     # Start the server in background
-    echo "Starting Python HTTP server..."
+    echo "Starting Python HTTP server on port ${PORT}..."
     python3 -m http.server ${PORT} > /dev/null 2>&1 &
     SERVER_PID=$!
     
@@ -39,7 +58,7 @@ else
     if ps -p $SERVER_PID > /dev/null; then
         echo "✅ Server started successfully (PID: ${SERVER_PID})"
         URL="http://localhost:${PORT}"
-        echo "🌐 Opening: ${URL}"
+        echo "🌐 URL: ${URL}"
         echo ""
         
         # Open in browser
@@ -47,6 +66,7 @@ else
         
         echo ""
         echo "📝 Server is running in background"
+        echo "   Port: ${PORT}"
         echo "   To stop: kill ${SERVER_PID}"
         echo "   Or run: pkill -f 'python3 -m http.server'"
         echo ""

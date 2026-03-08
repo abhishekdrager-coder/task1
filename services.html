@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Services - Task Masters</title>
+    <title>Browse Services - BeverHub</title>
     <link rel="stylesheet" href="styles.css">
     <script src="location.js"></script>
     <style>
@@ -33,7 +33,14 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <a href="index.html"><h2>🎯 Task Masters</h2></a>
+                <a href="index.html" class="beverhub-logo">
+                    <span class="logo-mascot">🦫</span>
+                    <span class="logo-brand">
+                        <span class="logo-name"><span class="bever">Bever</span><span class="hub">hub</span></span>
+                        <span class="logo-underline"></span>
+                        <span class="logo-tagline"></span>
+                    </span>
+                </a>
             </div>
             
             <!-- Mobile Menu Toggle -->
@@ -219,7 +226,7 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>🎯 Task Masters</h3>
+                <h3>� BeverHub</h3>
                 <p>Your trusted service marketplace</p>
             </div>
             <div class="footer-section">
@@ -242,7 +249,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Task Masters. All rights reserved.</p>
+            <p>&copy; 2026 BeverHub. All rights reserved.</p>
         </div>
     </footer>
 
@@ -256,21 +263,7 @@
             console.log('   - userTypedQuery:', typeof userTypedQuery !== 'undefined' ? userTypedQuery : 'NOT DEFINED');
             console.log('   - wasAutoCorrected:', typeof wasAutoCorrected !== 'undefined' ? wasAutoCorrected : 'NOT DEFINED');
             
-            // Update navigation based on login status
-            const customerAuth = Auth.isLoggedIn('customer');
-            const providerAuth = Auth.isLoggedIn('provider');
-            
-            const loginBtn = document.getElementById('loginBtn');
-            const providerBtn = document.getElementById('providerBtn');
-            
-            if (loginBtn && providerBtn) {
-                if (customerAuth) {
-                    loginBtn.outerHTML = '<a href="customer-dashboard.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
-                } else if (providerAuth) {
-                    loginBtn.outerHTML = '<a href="provider.html" class="btn-login" style="text-decoration: none; display: inline-block;">My Dashboard</a>';
-                    providerBtn.style.display = 'none';
-                }
-            }
+            // Login button state is now handled by script.js updateLoginButtonState()
         });
 
         // Mobile menu toggle
@@ -506,5 +499,7 @@
             updatePriceRange();
         });
     </script>
+    <script src="dark-mode.js"></script>
+    <script src="logo.js"></script>
 </body>
 </html>
