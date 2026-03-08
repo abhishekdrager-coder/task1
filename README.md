@@ -72,6 +72,15 @@ A comprehensive service marketplace connecting customers with skilled service pr
 ## 🚀 Getting Started
 
 ### Local Development
+
+#### Option A – One-command launcher (auto-detects port)
+```bash
+# Start the server and get your launch link in one step
+./launch.sh
+```
+The script checks whether a server is already listening and prints the exact URL to paste in your browser. If no server is running it starts one automatically on the first available port (default 8000).
+
+#### Option B – Manual terminal commands
 ```bash
 # Clone the repository
 git clone https://github.com/abhishekdrager-coder/task1.git
@@ -80,9 +89,18 @@ cd task1
 # Start a local server
 python3 -m http.server 8000
 
-# Open in browser
-open http://localhost:8000
+# Open in browser – paste this link
+echo "http://localhost:8000"
 ```
+
+#### Check which port is already listening
+```bash
+# List all locally listening ports (pick the one serving this project)
+lsof -iTCP -sTCP:LISTEN -P | grep python
+# or
+ss -tlnp | grep python
+```
+Then open `http://localhost:<PORT>` in your browser.
 
 ### GitHub Pages Deployment
 See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
